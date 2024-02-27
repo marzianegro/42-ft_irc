@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:19:01 by mnegro            #+#    #+#             */
-/*   Updated: 2024/02/27 18:04:32 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/02/27 18:20:57 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	main(void) {
 	if (serverSocket == -1) {
 		std::cout << "An error occured during server socket creation\n";
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "Server socket created\n";
 	}
 
 	// 2. defining server address
@@ -44,12 +46,16 @@ int	main(void) {
 	if (bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
 		std::cout << std::strerror(errno) << '\n';
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "Server socket bound\n";
 	}
 
 	// 4. listening for connections
 	if (listen(serverSocket, 5) == -1) {
 		std::cout << std::strerror(errno) << '\n';
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "Server socket now listening\n";
 	}
 
 	// 5. accepting a client connection
@@ -57,6 +63,8 @@ int	main(void) {
 	if (clientSocket == -1) {
 		std::cout << "An error occured during client socket creation\n";
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "Client socket accepted\n";
 	}
 
 	// 6. receiving data from the client
@@ -67,7 +75,7 @@ int	main(void) {
 	} else if (bytesRead == 0) {
 		std::cout << "Connection closed by remote side\n";
 	} else {
-		std::cout << "Message from client: " << buffer << '\n';
+		std::cout << "Message received from client: " << buffer;
 	}
 
 	// 7. closing the server socket

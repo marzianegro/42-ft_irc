@@ -6,7 +6,7 @@
 #    By: mnegro <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/24 18:25:00 by mnegro            #+#    #+#              #
-#    Updated: 2024/02/27 18:12:38 by mnegro           ###   ########.fr        #
+#    Updated: 2024/02/27 18:18:52 by mnegro           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,8 @@ OBJS = ${SRCS:.cpp=.o}
 	@echo "${YELLOW}Compiling:${WHITE} $< ${DEF_COLOR}"
 	${CC} ${CFLAGS} -c $< -o $@
 
+all:	${NAME_C} ${NAME_S}
+
 ${NAME_C}: ${OBJS}
 	${CC} ${CFLAGS} -o ${NAME_C} client.o
 	@echo "Rule '${GREEN}all${DEF_COLOR}' for ${NAME_C} executed successfully!"
@@ -42,7 +44,6 @@ ${NAME_S}: ${OBJS}
 	${CC} ${CFLAGS} -o ${NAME_S} server.o
 	@echo "Rule '${GREEN}all${DEF_COLOR}' for ${NAME_S} executed successfully!"
 
-all:	${NAME_S} ${NAME_C}
 
 clean:
 	${RM} ${OBJS}

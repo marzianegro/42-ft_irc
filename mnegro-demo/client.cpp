@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:18:55 by mnegro            #+#    #+#             */
-/*   Updated: 2024/02/27 18:02:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/02/27 18:22:16 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	main(void) {
 	if (clientSocket == -1) {
 		std::cout << "An error occured during client socket creation\n";
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "Client socket created\n";
 	}
 
 	// 2. defining server address
@@ -37,6 +39,8 @@ int	main(void) {
 	if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
 		std::cout << std::strerror(errno) << '\n';
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "Client socket connected to server\n";
 	}
 
 	// 4. sending data to server
@@ -46,7 +50,7 @@ int	main(void) {
 		std::cout << "An error occured while sending message to server\n";
 		exit (EXIT_FAILURE);
 	} else {
-		std::cout << "Message was successfully sent to server\n";
+		std::cout << "Message sent to server: " << message;
 	}
 
 	// 5. closing the client socket
