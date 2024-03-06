@@ -1,0 +1,19 @@
+HOW TO PROCEED
+
+first things first, i need to perform a check on the arguments to make sure they're 3, respectively ./ircserv <port> <password>. if this requirement
+isn't met, i throw an error, otherwise, i save <port> in a variable "port" (after converting it from string to int) with an adequate type,
+and <password> in a pw variable with the type std::string, so that it can store both characters and numbers.
+
+it would be a good idea to also add a check to ensure that the port number is within the valid range of 0 to 65535, to prevent potential issues
+later on. remember that port numbers below 1024 are considered "well-known" ports and typically require special permissions to bind to, so your
+program might not be able to use these ports unless it's run with elevated privileges.
+
+then, i have to create the server socket with socket(), define the server address with the sockaddr_in structure, bind the server socket with bind(),
+and then make the server listen for connections with listen().
+
+next, i create an epoll instance with epoll_create1() to be able to handle multiple connections, then i create the event and events[] structures of
+type epoll_event and add the server socket to the epoll instance. then, in a loop, i add the client socket to the epoll instance only if the password
+check passes, otherwise i close the client socket and move on to the next connection.
+
+i believe my next step is going to be handling the clients' data. to do that, i was thinking of creating a Client class so that, for every client
+that gets added with int clientSocket = events[i].data.fd; i create an object with all the data necessary.
