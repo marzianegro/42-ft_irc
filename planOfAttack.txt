@@ -1,19 +1,26 @@
-HOW TO PROCEED
+----------
+PLAN OF ATTACK
+----------
 
-first things first, i need to perform a check on the arguments to make sure they're 3, respectively ./ircserv <port> <password>. if this requirement
-isn't met, i throw an error, otherwise, i save <port> in a variable "port" (after converting it from string to int) with an adequate type,
-and <password> in a pw variable with the type std::string, so that it can store both characters and numbers.
+STEP BY STEP PROCEDURE
+First things first, I need to perform a check on the arguments to make sure they're 3 and, respectively, ./ircserv <port> <password>. If this requirement
+isn't met, I throw an error and exit the program, otherwise I save <port> in a variable of type in_port_t after converting it from char* to int with atoi,
+and <password> in a variable of type std::string, so that it can store both characters and numbers.
+I also add a check to ensure that the port number is within the valid range of 0 to 65535, to prevent potential issues later on. Also, port numbers below
+1024 are considered "well-known" ports and typically require special permissions to bind to (meaning the program might not be able to use these ports
+unless it's run with elevated privileges), so I throw a warning to signal this.
 
-it would be a good idea to also add a check to ensure that the port number is within the valid range of 0 to 65535, to prevent potential issues
-later on. remember that port numbers below 1024 are considered "well-known" ports and typically require special permissions to bind to, so your
-program might not be able to use these ports unless it's run with elevated privileges.
-
-then, i have to create the server socket with socket(), define the server address with the sockaddr_in structure, bind the server socket with bind(),
+Then, I have to create the server socket with socket(), define the server address with the sockaddr_in structure, bind the server socket with bind(),
 and then make the server listen for connections with listen().
 
-next, i create an epoll instance with epoll_create1() to be able to handle multiple connections, then i create the event and events[] structures of
-type epoll_event and add the server socket to the epoll instance. then, in a loop, i add the client socket to the epoll instance only if the password
-check passes, otherwise i close the client socket and move on to the next connection.
+Next, I create an epoll instance with epoll_create1() to be able to handle multiple connections, then I create the event and events[] structures of
+type epoll_event and add the server socket to the epoll instance. Then, in a loop, I add the client socket to the epoll instance and use epoll_wait() to
+be able to handle multiple events. However, the epoll_wait() function is blocking by default, which means it will wait until there is an event
+to report, but I need to ensure that epoll_wait() is non-blocking, so I pass it a timeout of 0, which will cause epoll_wait() to return immediately,
+even if there are no events to report. Even after all this, the operations performed on the file descriptors that epoll_wait() returns
+(like read(), write(), accept(), etc.) can still block if the file descriptors are in blocking mode, so, to make these operations non-blocking,
+I use the fcntl() function to set the O_NONBLOCK flag on the file descriptors.
 
-i believe my next step is going to be handling the clients' data. to do that, i was thinking of creating a Client class so that, for every client
-that gets added with int clientSocket = events[i].data.fd; i create an object with all the data necessary.
+The next step is handling the clients' data. To do that, I create a Client class so that, for every client that gets added, I create an object with all
+the necessary data.
+

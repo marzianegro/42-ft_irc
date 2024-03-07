@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:58:07 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/06 18:43:24 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/07 11:58:10 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 class	Client {
 
 public:
+	Client(); // ocf default constructor
+	Client(const Client &src); // ocf copy constructor
+	~Client(); // ocf destructor
+
+	Client&	operator=(const Client &src); // ocf copy assignment operator
 
 private:
 	std::string	_nickname; 	// Each client is distinguished from other clients by a unique nickname.
@@ -30,5 +35,5 @@ private:
 	int							_socket; // client's socket file descriptor so we can read from and write to it
 	bool						_isAuthorized; // whether the pw was correct or not
 	std::vector<std::string>	_channels; // list of channels the client is currently in
-	bool						_isOperator; // whether the client is an operator or a regular user
+	bool						_isOperator; // if the client is an operator instead of a regular user
 };
