@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/07 11:58:08 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/07 12:43:01 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ public:
 
 	Server&	operator=(const Server &src); // ocf copy assignment operator
 
-	// getters
-	in_port_t	getPort();
+	in_port_t	getPort() const;
 
-	// setters
-	void	setPort(in_port_t port);
-	void	setPw(std::string pw);
+	void	setPort(const in_port_t &port);
+	void	setPw(const std::string &pw);
 
 	void	startServer();
 	void	startEpoll();

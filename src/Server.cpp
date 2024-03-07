@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/07 11:57:06 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/07 12:43:31 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ Server&	Server::operator=(const Server &src) {
 	return (*this);
 }
 
-void	Server::setPort(in_port_t port) {
+void	Server::setPort(const in_port_t &port) {
 	this->_port = port;
 }
 
-void	Server::setPw(std::string pw) {
+void	Server::setPw(const std::string &pw) {
 	this->_pw = pw;
 }
 
-in_port_t	Server::getPort() {
+in_port_t	Server::getPort() const {
 	return (this->_port);
 }
 
