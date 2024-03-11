@@ -1,0 +1,19 @@
+ev_nums: 1
+ev_nums: 1
+msg: CAP LS 302
+ev_nums: 1
+msg: PASS foo
+ev_nums: 1
+msg: NICK cosimo
+USER cosimo 0 * :realname
+ev_nums: 1
+ev_nums: 1
+msg: CAP LS 302
+ev_nums: 1
+msg: PASS :foo
+ev_nums: 1
+msg: NICK ggiannit
+ev_nums: 1
+msg: USER ggiannit 8 * :ggiannit
+ev_nums: 1
+msg: JOIN #ciao
