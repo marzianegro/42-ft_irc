@@ -56,6 +56,9 @@
 		"unordered_map": "cpp",
 		"variant": "cpp",
 		"algorithm": "cpp",
-		"cerrno": "cpp"
+		"cerrno": "cpp",
+		"execution": "cpp",
+		"__tree": "cpp",
+		"map": "cpp"
 	}
 }

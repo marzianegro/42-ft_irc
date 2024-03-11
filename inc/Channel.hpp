@@ -6,21 +6,22 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/07 12:43:10 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/11 22:21:08 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 class Client;
 
 class	Channel {
 
 public:
-	Channel(); // ocf default constructor
-	Channel(const std::string &name);
+	Channel(const Client &operator, const std::string &name);
+	Channel(const Client &operator, const std::string &name, const std::string &key);
 	Channel(const Channel &src); // ocf copy constructor
 	~Channel(); // ocf destructor
 
@@ -47,8 +48,11 @@ public:
 	void	lMode(); // -l
 
 private:
+	Channel(); // ocf default constructor
+
 	std::string				_name;
 	std::string				_topic;
-	Client*					_operator;
+	std::string				_key;
+	std::vector<Client*>	_operators;
 	std::vector<Client*>	_clients;
 };

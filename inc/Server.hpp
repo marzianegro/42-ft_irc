@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/07 12:43:01 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/11 22:21:10 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <vector>
 
 #define MAX_EVENTS 128
 
@@ -37,13 +36,16 @@ public:
 
 	Server&	operator=(const Server &src); // ocf copy assignment operator
 
-	in_port_t	getPort() const;
-
 	void	setPort(const in_port_t &port);
 	void	setPw(const std::string &pw);
 
+	in_port_t	getPort() const;
+	std::string	getPw() const;
+
 	void	startServer();
 	void	startEpoll();
+	void	runEpoll();
+
 
 private:
 	in_port_t			_port;
@@ -56,6 +58,9 @@ private:
 	struct epoll_event	_event; // specifying the type of events to monitor
 	struct epoll_event	_events[MAX_EVENTS]; // array to hold events returned by epoll_wait()
 
-	std::vector<Client>				_clients;
-	std::map<std::string, Channel>	_channels;
+	std::map<int, Client>			_clients; // client's fd and object
+	std::map<std::string, Channel>	_channels; // channel's name and object
+	
+	void	joinChannel(const Client &client, const std::string &cmd);
 };
+

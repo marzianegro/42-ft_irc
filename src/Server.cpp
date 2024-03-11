@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/07 12:43:31 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/11 22:02:52 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ void	Server::setPw(const std::string &pw) {
 
 in_port_t	Server::getPort() const {
 	return (this->_port);
+}
+
+std::string	Server::getPw() const {
+	return (this->_pw);
 }
 
 void	Server::startServer() {
