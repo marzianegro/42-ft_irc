@@ -29,8 +29,10 @@ public:
 
 	Channel&	operator=(const Channel &src); // ocf copy assignment operator
 
-	std::string	getName() const;
-	std::string	getTopic() const;
+	std::string				getName() const;
+	std::string				getTopic() const;
+	std::vector<Client*>	getOps() const;
+	std::vector<Client*>	getRegs() const;
 
 	void	setName(const std::string &name);
 	void	setTopic(const std::string &topic);

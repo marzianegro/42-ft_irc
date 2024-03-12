@@ -50,6 +50,14 @@ std::string	Channel::getTopic() const {
 	return (this->_topic);
 }
 
+std::vector<Client*>	Channel::getOps() const {
+	return (this->_opUsers);
+}
+
+std::vector<Client*>	Channel::getRegs() const {
+	return (this->_regUsers);
+}
+
 void	Channel::setName(const std::string &name) {
 	this->_name = name;
 }
