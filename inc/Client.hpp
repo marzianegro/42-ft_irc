@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:58:07 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/11 22:02:51 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/12 23:19:15 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ private:
 	int							_socket; // client's socket file descriptor so we can read from and write to it
 	bool						_isAuthorized; // whether the pw was correct or not
 	std::vector<std::string>	_channels; // list of channels the client is currently in
-	bool						_isOperator; // if the client is an operator instead of a regular user
+	bool						_isOperator; // if the client is the server operator
 
 	std::string	_buffer; // buffer for the messages
 };
