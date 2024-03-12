@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/11 22:21:08 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/12 21:37:51 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ class Client;
 class	Channel {
 
 public:
-	Channel(const Client &operator, const std::string &name);
-	Channel(const Client &operator, const std::string &name, const std::string &key);
+	// for these constructors whoOperator cannot be const, as we need to be
+	// able to modify its data in Channel
+	Channel(Client *whoOperator, const std::string &name);
+	Channel(Client *whoOperator, const std::string &name, const std::string &key);
 	Channel(const Channel &src); // ocf copy constructor
 	~Channel(); // ocf destructor
 
@@ -33,19 +35,22 @@ public:
 	void	setName(const std::string &name);
 	void	setTopic(const std::string &topic);
 
+	// new entry
+	void	sendMsg(const std::string &msg);
+
 	void	addClient(Client *client);
-	void	removeClient(Client *client);
+	bool	removeClient(Client *client);
 
 	// commmands
-	void	kick(Client *client); // KICK
-	void	invite(Client *client); // INVITE
-	void	topic(std::string topic); // TOPIC
+	int	kick(Client *client); // KICK
+	int	topic(); // TOPIC without <topic>
+	int	topic(const std::string &topic); // TOPIC with <topic>
 	// MODES
-	void	iMode(); // -i
-	void	tMode(); // -t
-	void	kMode(); // -k
-	void	oMode(); // -o
-	void	lMode(); // -l
+	int	iMode(); // -i
+	int	tMode(); // -t
+	int	kMode(); // -k
+	int	oMode(); // -o
+	int	lMode(); // -l
 
 private:
 	Channel(); // ocf default constructor

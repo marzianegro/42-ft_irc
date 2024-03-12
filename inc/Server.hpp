@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/11 22:21:10 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/12 19:13:16 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,3 +64,4 @@ private:
 	void	joinChannel(const Client &client, const std::string &cmd);
 };
 
+int	invite(Client *client, const std::string &target); // INVITE
