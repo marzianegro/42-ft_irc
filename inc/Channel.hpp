@@ -29,8 +29,10 @@ public:
 
 	Channel&	operator=(const Channel &src); // ocf copy assignment operator
 
-	std::string	getName() const;
-	std::string	getTopic() const;
+	std::string				getName() const;
+	std::string				getTopic() const;
+	std::vector<Client*>	getOps() const;
+	std::vector<Client*>	getRegs() const;
 
 	void	setName(const std::string &name);
 	void	setTopic(const std::string &topic);
@@ -58,6 +60,6 @@ private:
 	std::string				_name;
 	std::string				_topic;
 	std::string				_key;
-	std::vector<Client*>	_operators;
-	std::vector<Client*>	_clients;
+	std::vector<Client*>	_opUsers;
+	std::vector<Client*>	_regUsers;
 };
