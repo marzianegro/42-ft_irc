@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 19:13:16 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/12 23:19:17 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ public:
 	void	startEpoll();
 	void	runEpoll();
 
-
 private:
 	in_port_t			_port;
 	std::string			_pw;
@@ -61,7 +60,9 @@ private:
 	std::map<int, Client>			_clients; // client's fd and object
 	std::map<std::string, Channel>	_channels; // channel's name and object
 	
-	void	joinChannel(const Client &client, const std::string &cmd);
+	std::string	join(const Client &user, const std::string &key);
+	std::string	invite(Client *user, const std::string &channel);
+	
+	std::string	quit(Client *client, const std::string &reason);
 };
 
-int	invite(Client *client, const std::string &target); // INVITE

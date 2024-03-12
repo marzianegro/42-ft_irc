@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 19:13:19 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/12 23:19:14 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,32 +129,34 @@ void	Server::runEpoll() {
 	}
 }
 
-/*
-	Command: JOIN
-	Parameters: <channel>{,<channel>} [<key>{,<key>}]
-	Alt Params: 0
-*/
-void	Server::joinChannel(const Client &client, const std::string &cmd) {
+void	Server::join(const Client &user, const std::string &key) {
 		
 }
 
-/*
-	Command: INVITE
-	Parameters: <nickname> <channel>
-*/
-int	Channel::invite(Client *client, const std::string &target) {
-	if (target channel does not exist) { // look for target channel in server list?
-		sendMsg("<client> <channel> :No such channel");
-		return (403); // ERR_NOSUCHCHANNEL
+std::string	Server::invite(Client *user, const std::string &channel) {
+	std::map<std::string, Channel>::iterator	it = this->_channels.find(channel);
+	
+	if (it == this->_channels.end()) {
+		return (errNoSuchChannel());
 	}
-	if (client inviting is not on channel) // client not found in this->_clients {
-		sendMsg("<client> <channel> :You're not on that channel");
-		return (442);
-	}
-	if (client invited is already on channel) {
-		sendMsg("<client> <nick> <channel> :is already on channel");
-		return (443);
+	if (it->second.findClient(user)) {
+		return (errNotOnChannel());
 	} else {
-		sendMsg(inviter INVITE invited #channel);
+		return (errUserOnChannel());
 	}
+}
+
+std::string	Server::quit(Client *client, const std::string &reason) {
+	std::map<int, Channel>::iterator	it = this->_clients.find(client);
+	std::string	msg = ":gerboa QUIT : " + reason + '\n' +
+    "                               ; " + client->getNickname() + " is exiting the network with
+                                   the message: " + '"' + reason + '"';
+
+	std::map<int, Channel>::iterator	it_msg = this->_clients.begin();
+	while (it != this->_channels.end()) {
+		send(it->first, msg, msg.length(), 0);
+	}
+	close(it->first);
+	delete it->second;
+	this->_clients.erase(it);
 }
