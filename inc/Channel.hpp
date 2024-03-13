@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 17:49:18 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:56:17 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ public:
 
 	std::string	kick(Client *user);
 	std::string	topic(Client *user);
-	std::string	topic(const std::string &topic);
+	void		topic(const std::string &topic);
 	// int	iMode(); // -i
 	// int	tMode(); // -t
 	// int	kMode(); // -k

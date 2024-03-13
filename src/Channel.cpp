@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 17:49:05 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:56:20 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ std::string	Channel::topic(Client *user) {
 	}
 }
 
-std::string	Channel::topic(const std::string &topic) {
+void	Channel::topic(const std::string &topic) {
 	if (topic.empty()) {
 		this->_topic = "";
 	} else if (!topic.compare(this->_topic)) {
