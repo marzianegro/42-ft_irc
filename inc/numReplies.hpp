@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Channel.hpp"
 #include "Server.hpp"
 
 std::string errNoSuchChannel(const std::string &channelName, const std::string &clientName);

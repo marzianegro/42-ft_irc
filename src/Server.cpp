@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 18:14:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 18:57:15 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ Server&	Server::operator=(const Server &src) {
 		this->_serverAddr = src._serverAddr;
 		this->_epollFd = src._epollFd;
 		this->_event = src._event;
-		this->_events = src._events; // need to fix this
+		for (int i = 0; i < MAX_EVENTS; i++) {
+			this->_events[i] = src._events[i];
+		}
 	}
 	return (*this);
 }
@@ -98,7 +100,7 @@ void	Server::startEpoll() {
 }
 
 void	Server::runEpoll() {
-	int	numEvents = epoll_wait(this->_epollFd, this->_event, MAX_EVENTS, 0); // 0 for a non-blocking check
+	int	numEvents = epoll_wait(this->_epollFd, &this->_event, MAX_EVENTS, 0); // 0 for a non-blocking check
 	if (numEvents == -1) {
 		std::cerr << "epoll_wait() failed\n";
 		exit(EXIT_FAILURE);
@@ -124,6 +126,7 @@ void	Server::runEpoll() {
 			std::cout << "File descriptor added to epoll instance\n";
 		} else {
 			int	clientSock = this->_events[i].data.fd;
+			(void)clientSock;
 			// handle client data
 			// Client	client(clientSock); but each client object needs a different name
 		}
@@ -134,31 +137,36 @@ void	Server::runEpoll() {
 		
 // }
 
-std::string	Server::invite(Client *user, const std::string &channel) {
+std::string	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
 	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(channel);
-	std::map<int, Client*>::iterator		it_cl = this->_clients.find(user); 
 	
 	if (it_chan == this->_channels.end()) {
-		return (errNoSuchChannel(it_chan->second->getName(), this->_clients->getNickname()));
+		return (errNoSuchChannel(it_chan->second->getName(), inviter->getNickname()));
 	}
-	if (it_chan->second->findClient(user)) {
-		return (errNotOnChannel());
-	} else {
-		return (errUserOnChannel());
+	if (!(it_chan->second->findUser(inviter))) {
+		return (errNotOnChannel(it_chan->first, inviter->getNickname()));
 	}
+	if (it_chan->second->findUser(invited)) {
+		return (errUserOnChannel(it_chan->first, inviter->getNickname(), invited->getNickname()));
+	}
+
+	// std::map<int, Client*>::iterator		it_cl = this->_clients.find(invited->getSocket()); 
+	// message to invited
+	return (NULL); // ???
 }
 
 std::string	Server::quit(Client *client, const std::string &reason) {
-	std::map<int, Client*>::iterator	it = this->_clients.find(client);
+	std::map<int, Client*>::iterator	it = this->_clients.find(client->getSocket());
 	std::string	msg = ":gerboa QUIT : " + reason + '\n' +
     "                               ; " + client->getNickname() + " is exiting the network with\
                                    the message: " + '"' + reason + '"';
 
 	std::map<int, Client*>::iterator	it_msg = this->_clients.begin();
-	while (it != this->_clients.end()) {
-		send(it->first, msg, msg.length(), 0);
+	while (it_msg != this->_clients.end()) {
+		send(it_msg->first, msg.c_str(), msg.length(), 0);
 	}
 	close(it->first);
 	delete it->second;
 	this->_clients.erase(it);
+	return (NULL); // ???
 }

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 18:14:04 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 18:42:48 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <iostream>
 #include <map>
+#include "numReplies.hpp"
 #include <stdlib.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
@@ -62,7 +63,7 @@ private:
 	std::map<std::string, Channel*>	_channels; // channel's name and object
 	
 	// std::string	join(const Client &user, const std::string &key);
-	std::string	invite(Client *user, const std::string &channel);
+	std::string	invite(Client *inviter, Client *invited, const std::string &channel);
 	
 	std::string	quit(Client *client, const std::string &reason);
 };
