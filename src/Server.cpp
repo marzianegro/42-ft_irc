@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 17:54:33 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 18:14:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,21 +125,23 @@ void	Server::runEpoll() {
 		} else {
 			int	clientSock = this->_events[i].data.fd;
 			// handle client data
+			// Client	client(clientSock); but each client object needs a different name
 		}
 	}
 }
 
-void	Server::join(const Client &user, const std::string &key) {
+// std::string	Server::join(const Client &user, const std::string &key) {
 		
-}
+// }
 
 std::string	Server::invite(Client *user, const std::string &channel) {
-	std::map<std::string, Channel>::iterator	it = this->_channels.find(channel);
+	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(channel);
+	std::map<int, Client*>::iterator		it_cl = this->_clients.find(user); 
 	
-	if (it == this->_channels.end()) {
-		return (errNoSuchChannel(it->second.getName(), ));
+	if (it_chan == this->_channels.end()) {
+		return (errNoSuchChannel(it_chan->second->getName(), this->_clients->getNickname()));
 	}
-	if (it->second.findClient(user)) {
+	if (it_chan->second->findClient(user)) {
 		return (errNotOnChannel());
 	} else {
 		return (errUserOnChannel());
@@ -147,13 +149,13 @@ std::string	Server::invite(Client *user, const std::string &channel) {
 }
 
 std::string	Server::quit(Client *client, const std::string &reason) {
-	std::map<int, Channel>::iterator	it = this->_clients.find(client);
+	std::map<int, Client*>::iterator	it = this->_clients.find(client);
 	std::string	msg = ":gerboa QUIT : " + reason + '\n' +
-    "                               ; " + client->getNickname() + " is exiting the network with
+    "                               ; " + client->getNickname() + " is exiting the network with\
                                    the message: " + '"' + reason + '"';
 
-	std::map<int, Channel>::iterator	it_msg = this->_clients.begin();
-	while (it != this->_channels.end()) {
+	std::map<int, Client*>::iterator	it_msg = this->_clients.begin();
+	while (it != this->_clients.end()) {
 		send(it->first, msg, msg.length(), 0);
 	}
 	close(it->first);
