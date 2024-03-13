@@ -82,10 +82,22 @@ bool		Client::getStatus() const {
 	return (this->_isOperator);
 }
 
-// void		Client::fillBuffer(const std::string &msg) {
+void		Client::fillBuffer(const std::string &msg) {
+	this->_buffer += msg;
+}
 
-// }
-
-// std::string	Client::readBuffer() {
+std::string	Client::readBuffer() {
+	std::size_t pos = this->_buffer.find("\r\n");
 	
-// }
+	if (pos == std::string::npos) {
+		return ("");
+	} else if (pos == 0) {
+		this->_buffer.erase(0, 2);
+		return ("");
+	}
+
+	std::string msg = this->_buffer.substr(0, pos);
+	this->_buffer.erase(0, pos + 2);
+
+	return (msg);
+}

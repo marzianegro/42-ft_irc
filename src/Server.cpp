@@ -99,38 +99,6 @@ void	Server::startEpoll() {
 	std::cout << "File descriptor added to epoll instance\n";
 }
 
-void	Server::runEpoll() {
-	int	numEvents = epoll_wait(this->_epollFd, &this->_event, MAX_EVENTS, 0); // 0 for a non-blocking check
-	if (numEvents == -1) {
-		std::cerr << "epoll_wait() failed\n";
-		exit(EXIT_FAILURE);
-	}
-	for (int i = 0; i < numEvents; i++) {
-		if (this->_events[i].data.fd == this->_serverSock) {
-			int	clientSock = accept(this->_serverSock, NULL, NULL);
-			if (clientSock == -1) {
-				std::cerr << std::strerror(errno) << '\n';
-				continue ;
-			}
-			if (fcntl(clientSock, F_SETFL, O_NONBLOCK) == -1) {
-				std::cerr << "fcntl() failed to set client socket to non-blocking\n";
-				close(clientSock);
-				continue ;
-			}
-			std::cout << "Client socket accepted\n";
-			this->_event.data.fd = clientSock;
-			if (epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, clientSock, &this->_event) == -1) {
-				std::cerr << "Failed to add file descriptor to epoll instance\n";
-				exit(EXIT_FAILURE);
-			}
-			std::cout << "File descriptor added to epoll instance\n";
-		} else {
-			int	clientSock = this->_events[i].data.fd;
-			// handle client data
-			this->_clients[clientSock] = new Client(clientSock);
-		}
-	}
-}
 
 // std::string	Server::join(const Client &user, const std::string &key) {
 		

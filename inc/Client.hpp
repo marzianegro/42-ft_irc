@@ -40,8 +40,8 @@ public:
 	bool		getAuth() const;
 	bool		getStatus() const;
 
-	// void		fillBuffer(const std::string &msg);
-	// std::string	readBuffer();
+	void		fillBuffer(const std::string &msg);
+	std::string	readBuffer();
 
 private:
 	Client(); // ocf default constructor

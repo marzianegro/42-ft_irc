@@ -24,7 +24,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define MAX_EVENTS 128
+#define MAX_BUFFER	512
+#define MAX_EVENTS	128
 
 class Channel;
 class Client;
@@ -66,5 +67,9 @@ private:
 	std::string	invite(Client *inviter, Client *invited, const std::string &channel);
 	
 	std::string	quit(Client *client, const std::string &reason);
+
+	void newClientConnection();
+	void clientEvent(epoll_event &event);
+	void execCmd(const std::string &msg, Client *client);
 };
 
