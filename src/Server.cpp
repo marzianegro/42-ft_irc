@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 19:26:25 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 21:10:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,31 +126,53 @@ void	Server::runEpoll() {
 			std::cout << "File descriptor added to epoll instance\n";
 		} else {
 			int	clientSock = this->_events[i].data.fd;
-			// handle client data
+			// handling client data
 			this->_clients[clientSock] = new Client(clientSock);
+			// TODO: @skyheis parse input
 		}
 	}
 }
 
-// std::string	Server::join(const Client &user, const std::string &key) {
-		
-// }
+std::string	Server::join(Client *user, std::map<std::string, std::string> &joinRequest) {
+
+	// joinRequest is the list of channels the user wants to join
+	std::map<std::string, std::string>::iterator mapIT = joinRequest.begin();
+	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(mapIT->first);
+	for (; mapIT != joinRequest.end(); mapIT++) {
+		if (chanIT == this->_channels.end()) {
+			return (errNoSuchChannel(joinRequest[mapIT->first], NULL)); // there's no inviter here
+		}
+		if (mapIT->second != chanIT->second->getKey()) {
+			return (errBadChannelKey(joinRequest[mapIT->first], user->getNickname()));
+		}
+		if (chanIT->second->getIModeStatus() && !user->getInvitation()) {
+			return (errInviteOnlyChan(joinRequest[mapIT->first], user->getNickname()));
+		}
+	}
+
+	// send msg: "; " + clientName + " is joining the channel " + channelName;
+	chanIT->second->topic(user); // channel’s topic (with RPL_TOPIC (332) and no message if channel does not have topic
+	// list of users currently joined to channel:
+	chanIT->second->getOps();
+	chanIT->second->getOps();
+	// 	- with one or more RPL_NAMREPLY (353) numerics
+	// 		- these messages sent by the server MUST include the requesting client that has just joined the channel
+	//	- followed by single RPL_ENDOFNAMES (366) numeric)
+}
 
 std::string	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
-	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(channel);
+	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(channel);
 	
-	if (it_chan == this->_channels.end()) {
-		return (errNoSuchChannel(it_chan->second->getName(), inviter->getNickname()));
+	if (chanIT == this->_channels.end()) {
+		return (errNoSuchChannel(chanIT->second->getName(), inviter->getNickname()));
 	}
-	if (!(it_chan->second->findUser(inviter))) {
-		return (errNotOnChannel(it_chan->first, inviter->getNickname()));
+	if (!(chanIT->second->findUser(inviter))) {
+		return (errNotOnChannel(chanIT->first, inviter->getNickname()));
 	}
-	if (it_chan->second->findUser(invited)) {
-		return (errUserOnChannel(it_chan->first, inviter->getNickname(), invited->getNickname()));
+	if (chanIT->second->findUser(invited)) {
+		return (errUserOnChannel(chanIT->first, inviter->getNickname(), invited->getNickname()));
 	}
-
-	// std::map<int, Client*>::iterator		it_cl = this->_clients.find(invited->getSocket()); 
-	// message to invited
+	invited->setInvitation(true);
 	return (NULL); // ???
 }
 

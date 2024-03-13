@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 18:57:19 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 21:00:16 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ public:
 
 	std::string				getName() const;
 	std::string				getTopic() const;
+	std::string				getKey() const;
+	bool					getIModeStatus() const;
 	std::vector<Client*>	getOps() const;
 	std::vector<Client*>	getRegs() const;
 
@@ -57,6 +59,7 @@ private:
 	std::string				_name;
 	std::string				_topic;
 	std::string				_key;
+	bool					_iModeOn; // invite-only
 	std::vector<Client*>	_opUsers; // operator (not regular)
 	std::vector<Client*>	_regUsers; // regular (not operator)
 };

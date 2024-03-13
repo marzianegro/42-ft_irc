@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:59:49 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 17:51:28 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 20:59:52 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ void	Client::setAuth(const bool &auth) {
 	this->_isAuthorized = auth;
 }
 
+void	Client::setInvitation(const bool &invite) {
+	this->_isInvited = invite;
+}
+
 void	Client::setStatus(const bool &status) {
 	this->_isOperator = status;
 }
@@ -76,6 +80,10 @@ int			Client::getSocket() const {
 
 bool		Client::getAuth() const {
 	return (this->_isAuthorized);
+}
+
+bool		Client::getInvitation() const {
+	return (this->_isInvited);
 }
 
 bool		Client::getStatus() const {

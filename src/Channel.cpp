@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 18:57:18 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 21:09:14 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,14 @@ std::string	Channel::getName() const {
 
 std::string	Channel::getTopic() const {
 	return (this->_topic);
+}
+
+std::string	Channel::getKey() const {
+	return (this->_key);
+}
+
+bool	Channel::getIModeStatus() const {
+	return (this->_iModeOn);
 }
 
 std::vector<Client*>	Channel::getOps() const {
