@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Numerics.cpp                                       :+:      :+:    :+:   */
+/*   numReplies.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:34:28 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 21:37:52 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:52:40 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ std::string rplTopic(const std::string &channelName, const std::string &clientNa
 }
 
 std::string rplInviting(const std::string &channelName, const std::string &clientName, const std::string &invitedClientName) {
-	retrun (":gerboa" + " 341 " + clientName + " " + invitedClientName + " " + channelName);
+	return (":gerboa" + " 341 " + clientName + " " + invitedClientName + " " + channelName);
 }
 
 std::string rplNamReply(const Channel &channel, const std::string &clientName) {
@@ -118,7 +118,7 @@ std::string rplNamReply(const Channel &channel, const std::string &clientName) {
 	names += " ";
 
 	std::vector<Client *>::const_iterator it = clients.begin();
-	while (it != cclients.end()) {
+	while (it != clients.end()) {
 		names += (*it)->getNickname() + " ";
 		++it;
 	}

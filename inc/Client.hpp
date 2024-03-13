@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:58:07 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 23:19:15 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:51:27 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ public:
 	bool		getAuth() const;
 	bool		getStatus() const;
 
-	void		fillBuffer(const std::string &msg);
-	std::string	readBuffer();
+	// void		fillBuffer(const std::string &msg);
+	// std::string	readBuffer();
 
 private:
 	Client(); // ocf default constructor

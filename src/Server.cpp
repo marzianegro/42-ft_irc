@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 23:19:14 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:54:33 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Server&	Server::operator=(const Server &src) {
 		this->_serverAddr = src._serverAddr;
 		this->_epollFd = src._epollFd;
 		this->_event = src._event;
-		this->_events = src._events;
+		this->_events = src._events; // need to fix this
 	}
 	return (*this);
 }
@@ -137,7 +137,7 @@ std::string	Server::invite(Client *user, const std::string &channel) {
 	std::map<std::string, Channel>::iterator	it = this->_channels.find(channel);
 	
 	if (it == this->_channels.end()) {
-		return (errNoSuchChannel());
+		return (errNoSuchChannel(it->second.getName(), ));
 	}
 	if (it->second.findClient(user)) {
 		return (errNotOnChannel());

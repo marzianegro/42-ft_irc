@@ -6,13 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 23:19:28 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:49:05 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Channel.hpp"
 #include "../inc/Client.hpp"
-#include "..inc/numReplies.hpp"
+#include "../inc/numReplies.hpp"
 
 Channel::Channel() {
 }
@@ -98,17 +98,17 @@ bool	Channel::findUser(Client *user) {
 }
 
 std::string	Channel::kick(Client *user) {
-	if (!removeClient(user)) {
-		return (errNotOnChannel());
+	if (!removeUser(user)) {
+		return (errNotOnChannel(this->_name, user->getNickname()));
 	}
 	return (NULL);
 }
 
-std::string	Channel::topic() {
+std::string	Channel::topic(Client *user) {
 	if (this->_topic.empty()) {
-		return (rplNoTopic());
+		return (rplNoTopic(this->_name, user->getNickname()));
 	} else {
-		return (rplTopic());
+		return (rplTopic(this->_name, user->getNickname(), this->_topic));
 	}
 }
 
@@ -120,22 +120,22 @@ std::string	Channel::topic(const std::string &topic) {
 	}
 }
 
-void	Channel::iMode() {
+// void	Channel::iMode() {
 
-}
+// }
 
-void	Channel::tMode() {
+// void	Channel::tMode() {
 
-}
+// }
 
-void	Channel::kMode() {
+// void	Channel::kMode() {
 
-}
+// }
 
-void	Channel::oMode() {
+// void	Channel::oMode() {
 
-}
+// }
 
-void	Channel::lMode() {
+// void	Channel::lMode() {
 
-}
+// }

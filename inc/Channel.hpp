@@ -6,12 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 22:55:34 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:49:18 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -42,14 +43,13 @@ public:
 	bool	findUser(Client *user);
 
 	std::string	kick(Client *user);
-	std::string	topic();
+	std::string	topic(Client *user);
 	std::string	topic(const std::string &topic);
-	// MODES
-	int	iMode(); // -i
-	int	tMode(); // -t
-	int	kMode(); // -k
-	int	oMode(); // -o
-	int	lMode(); // -l
+	// int	iMode(); // -i
+	// int	tMode(); // -t
+	// int	kMode(); // -k
+	// int	oMode(); // -o
+	// int	lMode(); // -l
 
 private:
 	Channel(); // ocf default constructor

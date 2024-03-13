@@ -6,13 +6,17 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:59:49 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/12 22:57:08 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:51:28 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Client.hpp"
 
 Client::Client() {
+}
+
+Client::Client(const int &socket) : _socket(socket) {
+
 }
 
 Client::Client(const Client &src) {
@@ -78,10 +82,10 @@ bool		Client::getStatus() const {
 	return (this->_isOperator);
 }
 
-void		Client::fillBuffer(const std::string &msg) {
+// void		Client::fillBuffer(const std::string &msg) {
 
-}
+// }
 
-std::string	Client::readBuffer() {
+// std::string	Client::readBuffer() {
 	
-}
+// }
