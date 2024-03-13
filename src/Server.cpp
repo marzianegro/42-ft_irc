@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 18:57:15 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/13 19:26:25 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,8 @@ void	Server::runEpoll() {
 			std::cout << "File descriptor added to epoll instance\n";
 		} else {
 			int	clientSock = this->_events[i].data.fd;
-			(void)clientSock;
 			// handle client data
-			// Client	client(clientSock); but each client object needs a different name
+			this->_clients[clientSock] = new Client(clientSock);
 		}
 	}
 }
