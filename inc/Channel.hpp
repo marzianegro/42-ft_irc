@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:35:30 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:41:25 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,3 @@ private:
 	std::vector<Client*>	_opUsers; // operator (not regular)
 	std::vector<Client*>	_regUsers; // regular (not operator)
 };
-
-// TODO:
-// - add client limit to invite/join + numReplies
-// - ask @skyheis if +mode both activates and deactivates modes

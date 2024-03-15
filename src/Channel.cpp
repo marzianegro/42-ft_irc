@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:35:27 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:41:10 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,24 +148,49 @@ void	Channel::topic(Client *user, const std::string &topic) {
 }
 
 void	Channel::iMode() {
-	this->_iModeOn = true;
+	if (this->_iModeOn) {
+		this->_iModeOn = false;
+	} else {
+		this->_iModeOn = true;
+	}
 }
 
 void	Channel::tMode() {
-	this->_tModeOn = true;
+	if (this->_tModeOn) {
+		this->_tModeOn = false;
+	} else {
+		this->_tModeOn = true;
+	}
 }
 
 void	Channel::kMode(const std::string &key) {
-	this->_kModeOn = true;
-	// servers may validate the value (e.g., to forbid spaces, as they make it harder to use the key in JOIN messages)
-	this->_key = key;
+	if (this->_kModeOn) {
+		this->_kModeOn = false;
+		this->_key = "";
+	} else {
+		this->_kModeOn = true;
+		// servers may validate the value (e.g., to forbid spaces, as they make it harder to use the key in JOIN messages)
+		this->_key = key;
+	}
 }
 
 void	Channel::oMode(Client *user) {
+	if (this->_oModeOn) {
+		this->_oModeOn = false;
+		user->setStatus(false);
+	} else  {
+		this->_oModeOn = true;
+		user->setStatus(true);
+	}
 	// if a user has this mode, this indicates that they are a NETWORK operator TODO: ???
-	user->setStatus(true);
 }
 
 void	Channel::lMode(const int &limit) {
-	this->_userLimit = limit;
+	if (this->_lModeOn) {
+		this->_lModeOn = false;
+		this->_userLimit = NULL;
+	} else {
+		this->_lModeOn = true;
+		this->_userLimit = limit;
+	}
 }
