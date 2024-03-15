@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:35:28 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:43:05 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ std::string	Server::join(Client *user, std::map<std::string, std::string> &joinR
 	// 	- with one or more RPL_NAMREPLY (353) numerics
 	// 		- these messages sent by the server MUST include the requesting client that has just joined the channel
 	//	- followed by single RPL_ENDOFNAMES (366) numeric)
+	return (NULL); // TODO: ???
 }
 
 std::string	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
@@ -183,7 +184,7 @@ std::string	Server::invite(Client *inviter, Client *invited, const std::string &
 		return (errChannelIsFull(channel,invited->getNickname()));
 	}
 	invited->setInvitation(true);
-	return (NULL); // ???
+	return (NULL); // TODO: ???
 }
 
 std::string	Server::quit(Client *client, const std::string &reason) {
@@ -199,5 +200,5 @@ std::string	Server::quit(Client *client, const std::string &reason) {
 	close(it->first);
 	delete it->second;
 	this->_clients.erase(it);
-	return (NULL); // ???
+	return (NULL); // TODO: ???
 }

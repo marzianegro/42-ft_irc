@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:41:10 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:42:27 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void	Channel::oMode(Client *user) {
 void	Channel::lMode(const int &limit) {
 	if (this->_lModeOn) {
 		this->_lModeOn = false;
-		this->_userLimit = NULL;
+		this->_userLimit = 0; // TODO: what do i put here? int max?
 	} else {
 		this->_lModeOn = true;
 		this->_userLimit = limit;
