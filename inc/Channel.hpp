@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 21:00:16 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:35:30 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ public:
 	std::string				getName() const;
 	std::string				getTopic() const;
 	std::string				getKey() const;
+	int						getLimit() const;
+	int						getCount() const;
 	bool					getIModeStatus() const;
+	bool					getKModeStatus() const;
 	std::vector<Client*>	getOps() const;
 	std::vector<Client*>	getRegs() const;
 
 	void	setName(const std::string &name);
 	void	setTopic(const std::string &topic);
+	void	setCount(); // TODO: better if _userCount + parameter?
 
 	void	addUser(Client *user);
 	bool	removeUser(Client *user);
@@ -46,12 +50,12 @@ public:
 
 	std::string	kick(Client *user);
 	std::string	topic(Client *user);
-	void		topic(const std::string &topic);
-	// int	iMode(); // -i
-	// int	tMode(); // -t
-	// int	kMode(); // -k
-	// int	oMode(); // -o
-	// int	lMode(); // -l
+	void		topic(Client *user, const std::string &topic);
+	void		iMode();
+	void		tMode();
+	void		kMode(const std::string &key);
+	void		oMode(Client *user);
+	void		lMode(const int &limit);
 
 private:
 	Channel(); // ocf default constructor
@@ -59,7 +63,17 @@ private:
 	std::string				_name;
 	std::string				_topic;
 	std::string				_key;
-	bool					_iModeOn; // invite-only
+	int						_userLimit;
+	int						_userCount;
+	bool					_iModeOn; // invite-only channel mode
+	bool					_tModeOn; // protected topic mode
+	bool					_kModeOn; // key channel mode
+	bool					_oModeOn; // oper user mode
+	bool					_lModeOn; // client limit channel mode
 	std::vector<Client*>	_opUsers; // operator (not regular)
 	std::vector<Client*>	_regUsers; // regular (not operator)
 };
+
+// TODO:
+// - add client limit to invite/join + numReplies
+// - ask @skyheis if +mode both activates and deactivates modes

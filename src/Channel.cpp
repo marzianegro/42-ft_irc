@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 21:09:14 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:35:27 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,20 @@ std::string	Channel::getKey() const {
 	return (this->_key);
 }
 
+int	Channel::getLimit() const {
+	return (this->_userLimit);
+}
+
+int	Channel::getCount() const {
+	return (this->_userCount);
+}
+
 bool	Channel::getIModeStatus() const {
 	return (this->_iModeOn);
+}
+
+bool	Channel::getKModeStatus() const {
+	return (this->_kModeOn);
 }
 
 std::vector<Client*>	Channel::getOps() const {
@@ -74,6 +86,9 @@ void	Channel::setTopic(const std::string &topic) {
 	this->_topic = topic;
 }
 
+void	Channel::setCount() {
+	this->_userCount++;
+}
 
 void	Channel::addUser(Client *user) {
 	this->_regUsers.push_back(user);
@@ -120,7 +135,11 @@ std::string	Channel::topic(Client *user) {
 	}
 }
 
-void	Channel::topic(const std::string &topic) {
+void	Channel::topic(Client *user, const std::string &topic) {
+	if (this->_tModeOn && !user->getStatus()) {
+		// TODO: user must have channel privilege operatore status in order to change the topic
+		return; // error?
+	}
 	if (topic.empty()) {
 		this->_topic = "";
 	} else if (!topic.compare(this->_topic)) {
@@ -128,22 +147,25 @@ void	Channel::topic(const std::string &topic) {
 	}
 }
 
-// void	Channel::iMode() {
+void	Channel::iMode() {
+	this->_iModeOn = true;
+}
 
-// }
+void	Channel::tMode() {
+	this->_tModeOn = true;
+}
 
-// void	Channel::tMode() {
+void	Channel::kMode(const std::string &key) {
+	this->_kModeOn = true;
+	// servers may validate the value (e.g., to forbid spaces, as they make it harder to use the key in JOIN messages)
+	this->_key = key;
+}
 
-// }
+void	Channel::oMode(Client *user) {
+	// if a user has this mode, this indicates that they are a NETWORK operator TODO: ???
+	user->setStatus(true);
+}
 
-// void	Channel::kMode() {
-
-// }
-
-// void	Channel::oMode() {
-
-// }
-
-// void	Channel::lMode() {
-
-// }
+void	Channel::lMode(const int &limit) {
+	this->_userLimit = limit;
+}

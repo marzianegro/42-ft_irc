@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 21:10:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:35:28 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,23 +136,30 @@ void	Server::runEpoll() {
 std::string	Server::join(Client *user, std::map<std::string, std::string> &joinRequest) {
 
 	// joinRequest is the list of channels the user wants to join
-	std::map<std::string, std::string>::iterator mapIT = joinRequest.begin();
-	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(mapIT->first);
-	for (; mapIT != joinRequest.end(); mapIT++) {
+	std::map<std::string, std::string>::iterator reqIT = joinRequest.begin();
+	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(reqIT->first);
+	for (; reqIT != joinRequest.end(); reqIT++) {
 		if (chanIT == this->_channels.end()) {
-			return (errNoSuchChannel(joinRequest[mapIT->first], NULL)); // there's no inviter here
-		}
-		if (mapIT->second != chanIT->second->getKey()) {
-			return (errBadChannelKey(joinRequest[mapIT->first], user->getNickname()));
+			return (errNoSuchChannel(joinRequest[reqIT->first], NULL)); // there's no inviter here
 		}
 		if (chanIT->second->getIModeStatus() && !user->getInvitation()) {
-			return (errInviteOnlyChan(joinRequest[mapIT->first], user->getNickname()));
+			return (errInviteOnlyChan(joinRequest[reqIT->first], user->getNickname()));
+		}
+		if (chanIT->second->getKModeStatus() && reqIT->second != chanIT->second->getKey()) {
+			return (errBadChannelKey(joinRequest[reqIT->first], user->getNickname()));
+		} else if (!chanIT->second->getKModeStatus() && !reqIT->second.empty()) {
+			// TODO: no key needed for channel
+		}
+		if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
+			return (errChannelIsFull(joinRequest[reqIT->first],user->getNickname()));
 		}
 	}
 
-	// send msg: "; " + clientName + " is joining the channel " + channelName;
-	chanIT->second->topic(user); // channel’s topic (with RPL_TOPIC (332) and no message if channel does not have topic
-	// list of users currently joined to channel:
+	chanIT->second->setCount();
+	// 1. send msg: "; " + clientName + " is joining the channel " + channelName;
+	// 2. channel’s topic (with RPL_TOPIC (332) and no message if channel does not have topic
+	chanIT->second->topic(user);
+	// 3. list of users currently joined to channel:
 	chanIT->second->getOps();
 	chanIT->second->getOps();
 	// 	- with one or more RPL_NAMREPLY (353) numerics
@@ -171,6 +178,9 @@ std::string	Server::invite(Client *inviter, Client *invited, const std::string &
 	}
 	if (chanIT->second->findUser(invited)) {
 		return (errUserOnChannel(chanIT->first, inviter->getNickname(), invited->getNickname()));
+	}
+	if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
+		return (errChannelIsFull(channel,invited->getNickname()));
 	}
 	invited->setInvitation(true);
 	return (NULL); // ???
