@@ -24,7 +24,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define MAX_EVENTS 128
+#define MAX_BUFFER	512
+#define MAX_EVENTS	128
 
 class Channel;
 class Client;
@@ -65,5 +66,9 @@ private:
 
 	std::map<int, Client*>			_clients; // client's fd and object
 	std::map<std::string, Channel*>	_channels; // channel's name and object
+  
+  void newClientConnection();
+	void clientEvent(epoll_event &event);
+	void execCmd(const std::string &msg, Client *client);
 };
 
