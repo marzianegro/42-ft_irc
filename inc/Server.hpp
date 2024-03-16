@@ -23,6 +23,7 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <sstream>
 
 #define MAX_BUFFER	512
 #define MAX_EVENTS	128
@@ -49,7 +50,7 @@ public:
 	void	startEpoll();
 	void	runEpoll();
 
-	std::string	join(Client *user, std::map<std::string, std::string> &joinRequest);
+	std::string	join(Client *user, const std::string &channel, const std::string &key);
 	std::string	invite(Client *inviter, Client *invited, const std::string &channel);
 	std::string	quit(Client *client, const std::string &reason);
 	
@@ -70,5 +71,9 @@ private:
 	void newClientConnection();
 	void clientEvent(epoll_event &event);
 	void execCmd(const std::string &msg, Client *client);
+	bool checkPw(const std::string &pw);
+	void clientDisconnect(Client *client);
+
+	void parseJoin(Client *client, std::string msg);
 };
 

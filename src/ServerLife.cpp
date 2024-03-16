@@ -14,6 +14,16 @@
 #include "../inc/Client.hpp"
 #include "../inc/Server.hpp"
 
+void Server::clientDisconnect(Client *client) {
+	epoll_event *event;
+
+	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), event);
+	this->_clients.erase(client->getSocket());
+	close(client->getSocket());
+	// TODO: quit from channels
+	delete client;
+}
+
 void Server::newClientConnection() {
 	int	clientSock = accept(this->_serverSock, NULL, NULL);
 	if (clientSock == -1) {
@@ -44,7 +54,7 @@ void Server::clientEvent(epoll_event &event) {
 	ssize_t byteRecv = recv(event.data.fd, buffer, sizeof(buffer), 0);
 	if (byteRecv == 0) {
 		std::cout << "Connection closed by the client\n";
-		epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, event.data.fd, &event);
+		this->clientDisconnect(this->_clients[event.data.fd]);
 	} else if (byteRecv == -1) {
 		std::cerr << "Error while receiving the message\n";
 	} else {
@@ -77,27 +87,69 @@ void	Server::runEpoll() {
 }
 
 void Server::execCmd(const std::string &msg, Client *client) {
-	std::string possibleCmd[] = {"JOIN", "INVITE"};
+	(void)client;
+
+	std::string possibleCmd[] = {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "OPER"};
 	int			lenght = sizeof(possibleCmd);
 	std::string cmd;
 	std::size_t	pos = msg.find(' ');
 
 	cmd = msg.substr(0, pos);
 
+	if (cmd == "CAP") {
+		return ;
+	} else if (!client->getAuth()) {
+		if (cmd == "PASS") {
+			if (this->checkPw(msg.substr(pos + 1))) {
+				client->setAuth(true);
+			} else {
+				this->clientDisconnect(client);
+			}
+		} else {
+			// not auth
+		}
+		return ;
+	}
+
 	int cmdPos = 0;
 	while (cmdPos < lenght) {
 		if (cmd == possibleCmd[cmdPos]) {
-			// call function
-			return ;
+			break;
 		}
 		cmdPos++;
 	}
 
 	switch (cmdPos) {
 		case 0:
+			// this->parsePrivmsg(client, msg.substr(pos+1));
 			break;
 
 		case 1:
+			this->parseJoin(client, msg.substr(pos+1));
+			break;
+
+		case 2:
+			break;
+		
+		case 3:
+			break;
+
+		case 4:
+			break;
+
+		case 5:
+			break;
+
+		case 6:
+			break;
+
+		case 7:
+			break;
+		
+		case 8:
+			break;
+
+		case 9:
 			break;
 
 		default:

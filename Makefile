@@ -24,7 +24,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 RM = rm -f
 
 #### TARGETS ####
-FL_SRCS = Channel.cpp Client.cpp main.cpp numReplies.cpp Server.cpp
+FL_SRCS = Channel.cpp Client.cpp main.cpp numReplies.cpp Server.cpp ServerLife.cpp
 DIRSRCS = src/
 SRCS = ${addprefix ${DIRSRCS},${FL_SRCS}}
 
