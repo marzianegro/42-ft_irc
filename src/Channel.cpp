@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:42:27 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/16 18:46:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ std::string	Channel::topic(Client *user) {
 
 void	Channel::topic(Client *user, const std::string &topic) {
 	if (this->_tModeOn && !user->getStatus()) {
-		// TODO: user must have channel privilege operatore status in order to change the topic
+		// TODO: user must have channel privilege operator status in order to change the topic
 		return; // error?
 	}
 	if (topic.empty()) {
@@ -147,50 +147,52 @@ void	Channel::topic(Client *user, const std::string &topic) {
 	}
 }
 
-void	Channel::iMode() {
-	if (this->_iModeOn) {
-		this->_iModeOn = false;
-	} else {
-		this->_iModeOn = true;
-	}
+void	Channel::iModeSet() {
+	this->_iModeOn = true;
 }
 
-void	Channel::tMode() {
-	if (this->_tModeOn) {
-		this->_tModeOn = false;
-	} else {
-		this->_tModeOn = true;
-	}
+void	Channel::tModeSet() {
+	this->_tModeOn = true;
 }
 
-void	Channel::kMode(const std::string &key) {
-	if (this->_kModeOn) {
-		this->_kModeOn = false;
-		this->_key = "";
-	} else {
-		this->_kModeOn = true;
-		// servers may validate the value (e.g., to forbid spaces, as they make it harder to use the key in JOIN messages)
-		this->_key = key;
-	}
+void	Channel::kModeSet(const std::string &key) {
+	this->_kModeOn = true;
+	this->_key = key;
 }
 
-void	Channel::oMode(Client *user) {
-	if (this->_oModeOn) {
-		this->_oModeOn = false;
-		user->setStatus(false);
-	} else  {
-		this->_oModeOn = true;
-		user->setStatus(true);
-	}
-	// if a user has this mode, this indicates that they are a NETWORK operator TODO: ???
+void	Channel::oModeSet(Client *user) {
+	this->_oModeOn = true;
+	std::vector<Client*>::iterator	regIT = std::find(this->_regUsers.begin(), this->_regUsers.end(), user);
+	this->_regUsers.erase(regIT);
+	this->_opUsers.push_back(user);
 }
 
-void	Channel::lMode(const int &limit) {
-	if (this->_lModeOn) {
-		this->_lModeOn = false;
-		this->_userLimit = 0; // TODO: what do i put here? int max?
-	} else {
-		this->_lModeOn = true;
-		this->_userLimit = limit;
-	}
+void	Channel::lModeSet(const int &limit) {
+	this->_lModeOn = true;
+	this->_userLimit = limit;
+}
+
+void	Channel::iModeUnset() {
+	this->_iModeOn = false;
+}
+
+void	Channel::tModeUnset() {
+	this->_tModeOn = false;
+}
+
+void	Channel::kModeUnset(const std::string &key) {
+	this->_kModeOn = false;
+	this->_key = "";
+}
+
+void	Channel::oModeUnset(Client *user) {
+	this->_oModeOn = false;
+	std::vector<Client*>::iterator	opIT = std::find(this->_opUsers.begin(), this->_opUsers.end(), user);
+	this->_opUsers.erase(opIT);
+	this->_regUsers.push_back(user);
+}
+
+void	Channel::lModeUnset(const int &limit) {
+	this->_lModeOn = false;
+	this->_userLimit = 42; // TODO: not sure
 }

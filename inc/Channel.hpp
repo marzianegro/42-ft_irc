@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:41:25 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/16 18:52:25 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ class Client;
 class	Channel {
 
 public:
-	// for these constructors whoOperator cannot be const, as we need to be
-	// able to modify its data in Channel
+	// for these constructors whoOperator cannot be const, as we need to be able to modify its data in Channel
 	Channel(Client *creator, const std::string &name);
 	Channel(Client *creator, const std::string &name, const std::string &key);
 	Channel(const Channel &src); // ocf copy constructor
@@ -51,11 +50,17 @@ public:
 	std::string	kick(Client *user);
 	std::string	topic(Client *user);
 	void		topic(Client *user, const std::string &topic);
-	void		iMode();
-	void		tMode();
-	void		kMode(const std::string &key);
-	void		oMode(Client *user);
-	void		lMode(const int &limit);
+	
+	void		iModeSet();
+	void		tModeSet();
+	void		kModeSet(const std::string &key);
+	void		oModeSet(Client *user);
+	void		lModeSet(const int &limit);
+	void		iModeUnset();
+	void		tModeUnset();
+	void		kModeUnset(const std::string &key);
+	void		oModeUnset(Client *user);
+	void		lModeUnset(const int &limit);
 
 private:
 	Channel(); // ocf default constructor
@@ -65,11 +70,13 @@ private:
 	std::string				_key;
 	int						_userLimit;
 	int						_userCount;
+
 	bool					_iModeOn; // invite-only channel mode
 	bool					_tModeOn; // protected topic mode
 	bool					_kModeOn; // key channel mode
 	bool					_oModeOn; // oper user mode
 	bool					_lModeOn; // client limit channel mode
+
 	std::vector<Client*>	_opUsers; // operator (not regular)
 	std::vector<Client*>	_regUsers; // regular (not operator)
 };

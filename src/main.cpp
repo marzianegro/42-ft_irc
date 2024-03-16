@@ -6,13 +6,11 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 10:34:21 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:01:33 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/16 18:46:54 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Server.hpp"
-
-#define MAX_EVENTS 128
 
 void	checkArgs(int ac) {
 	if (ac != 3) {

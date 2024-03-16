@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/15 17:02:28 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/16 18:50:30 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ private:
 	std::map<int, Client*>			_clients; // client's fd and object
 	std::map<std::string, Channel*>	_channels; // channel's name and object
   
-  void newClientConnection();
+	void newClientConnection();
 	void clientEvent(epoll_event &event);
 	void execCmd(const std::string &msg, Client *client);
 };
