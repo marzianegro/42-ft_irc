@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:58:07 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 17:51:27 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:35:29 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ public:
 	void	setHostAddress(const int &hostaddress);
 	void	setUsername(const std::string &username);
 	void	setAuth(const bool &auth);
-	void	setStatus(const bool &status);
+	void	setInvitation(const bool &invite);
+	void	setStatus(const bool &status); // operator
 
 	std::string getNickname() const;
 	int			getHostAddress() const;
 	std::string	getUsername() const;
 	int			getSocket() const;
 	bool		getAuth() const;
+	bool		getInvitation() const;
 	bool		getStatus() const;
 
 	void		fillBuffer(const std::string &msg);
@@ -53,6 +55,7 @@ private:
 
 	int							_socket; // client's socket file descriptor so we can read from and write to it
 	bool						_isAuthorized; // whether the pw was correct or not
+	bool						_isInvited;
 	std::vector<std::string>	_channels; // list of channels the client is currently in
 	bool						_isOperator; // if the client is the server operator
 

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 10:34:21 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 18:29:28 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/15 17:01:33 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	checkArgs(int ac) {
 	}
 }
 
-void	checkPort(int port) {
+int	checkPort(int port) {
 	if (port < 0 || port > 65535) {
 		std::cerr << "\033[1;31mERROR\033[0m Invalid port\n";
 		std::cout << "Port should be between valid range of 0 to 65535\n";
@@ -31,6 +31,7 @@ void	checkPort(int port) {
 	if (port < 1024) {
 		std::cout << "\033[1;33mWARNING\033[0m Port " << port << " is ""well-known"" and requires special permissions to bind to\n";
 	}
+	return (port);
 }
 
 int	main(int ac, char **av) {
@@ -38,8 +39,7 @@ int	main(int ac, char **av) {
 
 	Server	server;
 
-	checkPort(atoi(av[1]));
-	server.setPort(atoi(av[1]));
+	server.setPort(checkPort(atoi(av[1])));
 	server.setPw(av[2]);
 
 	server.startServer();
