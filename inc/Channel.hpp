@@ -58,9 +58,9 @@ public:
 	void		lModeSet(const int &limit);
 	void		iModeUnset();
 	void		tModeUnset();
-	void		kModeUnset(const std::string &key);
+	void		kModeUnset();
 	void		oModeUnset(Client *user);
-	void		lModeUnset(const int &limit);
+	void		lModeUnset();
 
 private:
 	Channel(); // ocf default constructor

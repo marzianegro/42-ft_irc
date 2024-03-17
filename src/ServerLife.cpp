@@ -15,9 +15,7 @@
 #include "../inc/Server.hpp"
 
 void Server::clientDisconnect(Client *client) {
-	epoll_event *event;
-
-	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), event);
+	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), &this->_current_event);
 	this->_clients.erase(client->getSocket());
 	close(client->getSocket());
 	// TODO: quit from channels
@@ -78,7 +76,8 @@ void	Server::runEpoll() {
 		exit(EXIT_FAILURE);
 	}
 	for (int i = 0; i < numEvents; i++) {
-		if (this->_events[i].data.fd == this->_serverSock) { // new client connection
+		this->_current_event = this->_events[i];
+		if (this->_current_event.data.fd == this->_serverSock) { // new client connection
 			this->newClientConnection();
 		} else {
 			this->clientEvent(this->_events[i]);
@@ -121,7 +120,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 
 	switch (cmdPos) {
 		case 0:
-			// this->parsePrivmsg(client, msg.substr(pos+1));
+			this->parsePrivmsg(client, msg.substr(pos+1));
 			break;
 
 		case 1:
@@ -129,6 +128,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 
 		case 2:
+			this->parseInvite(client, msg.substr(pos+1));
 			break;
 		
 		case 3:

@@ -180,7 +180,7 @@ void	Channel::tModeUnset() {
 	this->_tModeOn = false;
 }
 
-void	Channel::kModeUnset(const std::string &key) {
+void	Channel::kModeUnset() {
 	this->_kModeOn = false;
 	this->_key = "";
 }
@@ -192,7 +192,7 @@ void	Channel::oModeUnset(Client *user) {
 	this->_regUsers.push_back(user);
 }
 
-void	Channel::lModeUnset(const int &limit) {
+void	Channel::lModeUnset() {
 	this->_lModeOn = false;
 	this->_userLimit = 42; // TODO: not sure
 }

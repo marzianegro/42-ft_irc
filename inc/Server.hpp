@@ -64,6 +64,7 @@ private:
 	int					_epollFd;
 	struct epoll_event	_event; // specifying the type of events to monitor
 	struct epoll_event	_events[MAX_EVENTS]; // array to hold events returned by epoll_wait()
+	struct epoll_event	_current_event;
 
 	std::map<int, Client*>			_clients; // client's fd and object
 	std::map<std::string, Channel*>	_channels; // channel's name and object
@@ -73,7 +74,13 @@ private:
 	void execCmd(const std::string &msg, Client *client);
 	bool checkPw(const std::string &pw);
 	void clientDisconnect(Client *client);
+	void sendToClient(Client *client, const std::string &target, const std::string &msg);
+	void sendToChannel(Client *client, const std::string &channel, const std::string &msg, bool onlyOps);
 
+	void parsePrivmsg(Client *client, std::string msg);
 	void parseJoin(Client *client, std::string msg);
-};
+	void parseInvite(Client *client, std::string msg);
+	// void parseInvite(Client *client, std::string msg);
 
+	Client *findClientByNick(const std::string &nick);
+};

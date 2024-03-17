@@ -134,6 +134,8 @@ std::string	Server::join(Client *user, const std::string &channel, const std::st
 std::string	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
 	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(channel);
 	
+	//TODO: check if invited != NULL, null mean that the invited client is not connected
+
 	if (chanIT == this->_channels.end()) {
 		return (errNoSuchChannel(chanIT->second->getName(), inviter->getNickname()));
 	}
