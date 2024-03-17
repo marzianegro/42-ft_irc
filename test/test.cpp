@@ -1,15 +1,17 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <map>
 
 int main() {
-	std::istringstream ssch("this,is,a,test");
-	std::istringstream ssky("less,keys");
-	std::string channel, ky;
-	while (std::getline(ssch, channel, ',')) {
-		if (!std::getline(ssky, ky, ','))
-			ky = "";
-		std::cout << "channel: " << channel << " key: " << ky << std::endl;
+	std::map<std::string, char *> test;
+	char *str = "test";
+
+	test["test"] = str;
+
+	if (test["testone"]) {
+		std::cout << "testone exists\n";
+	} else {
+		std::cout << "testone does not exist\n";
 	}
-	return 0;
 }

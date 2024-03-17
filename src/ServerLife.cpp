@@ -88,7 +88,7 @@ void	Server::runEpoll() {
 void Server::execCmd(const std::string &msg, Client *client) {
 	(void)client;
 
-	std::string possibleCmd[] = {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "OPER"};
+	std::string possibleCmd[] = {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG"};
 	int			lenght = sizeof(possibleCmd);
 	std::string cmd;
 	std::size_t	pos = msg.find(' ');
@@ -117,6 +117,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 		}
 		cmdPos++;
 	}
+	// {"MODE", "QUIT", "NICK", "USER", "OPER"};
 
 	switch (cmdPos) {
 		case 0:
@@ -132,24 +133,35 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 		
 		case 3:
+			this->parseKick(client, msg.substr(pos+1));
 			break;
 
 		case 4:
+			this->parseTopic(client, msg.substr(pos+1));
 			break;
 
 		case 5:
+			this->parseMode(client, msg.substr(pos+1));
 			break;
 
 		case 6:
+			this->parseQuit(client, msg.substr(pos+1));
 			break;
 
 		case 7:
+			this->nick(client, msg.substr(pos+1));
 			break;
 		
 		case 8:
+			this->parseUser(client, msg.substr(pos+1));
 			break;
 
 		case 9:
+			this->ping(client, msg.substr(pos+1));
+			break;
+
+		case 10:
+			this->pong(client);
 			break;
 
 		default:

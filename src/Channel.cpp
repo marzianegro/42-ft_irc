@@ -120,9 +120,10 @@ bool	Channel::findUser(Client *user) {
 	return (false);
 }
 
-std::string	Channel::kick(Client *user) {
-	if (!removeUser(user)) {
-		return (errNotOnChannel(this->_name, user->getNickname()));
+std::string	Channel::kick(Client *kicker, Client *kicked, const std::string &reason) {
+	// TODO: check if client is NULL
+	if (!removeUser(kicked)) {
+		return (errNotOnChannel(this->_name, kicked->getNickname()));
 	}
 	return (NULL);
 }

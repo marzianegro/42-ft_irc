@@ -47,7 +47,7 @@ public:
 	bool	removeUser(Client *user);
 	bool	findUser(Client *user);
 
-	std::string	kick(Client *user);
+	std::string	kick(Client *kicker, Client *kicked, const std::string &reason);
 	std::string	topic(Client *user);
 	void		topic(Client *user, const std::string &topic);
 	

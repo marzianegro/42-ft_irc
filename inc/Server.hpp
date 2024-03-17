@@ -74,13 +74,25 @@ private:
 	void execCmd(const std::string &msg, Client *client);
 	bool checkPw(const std::string &pw);
 	void clientDisconnect(Client *client);
-	void sendToClient(Client *client, const std::string &target, const std::string &msg);
-	void sendToChannel(Client *client, const std::string &channel, const std::string &msg, bool onlyOps);
+
+	void sendMsgToClient(Client *client, const std::string &target, const std::string &msg);
+	void sendMsgToChannel(Client *client, const std::string &channel, const std::string &msg, bool onlyOps);
+	void kick(Client *kicker, Client *kicked, const std::string &channel, const std::string &reason);
+	void topic(Client *user, const std::string &channel, const std::string &topic);
+	void nick(Client *client, const std::string &newNick);
+	void user(Client *client, const std::string &username, const std::string &realname);
+	void ping(Client *client, const std::string &token);
+	void pong(Client *client);
 
 	void parsePrivmsg(Client *client, std::string msg);
 	void parseJoin(Client *client, std::string msg);
 	void parseInvite(Client *client, std::string msg);
-	// void parseInvite(Client *client, std::string msg);
+	void parseKick(Client *client, std::string msg);
+	void parseTopic(Client *client, std::string msg);
+	void parseMode(Client *client, std::string msg);
+	void parseQuit(Client *client, std::string msg);
+	void parseUser(Client *client, std::string msg);
+	void parseOper(Client *client, std::string msg);
 
 	Client *findClientByNick(const std::string &nick);
 };
