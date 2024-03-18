@@ -168,6 +168,36 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			ftSend(client->getSocket(), this->_msg);
 			break;
 	}
-	
-	
 }
+
+
+/*
+**		channel.kick
+**		channel.invite
+
+
+	server ascolta -> riceve un messaggio -> controlla se è autenticato -> guardo se conosce il comando -> chiama il parsing
+	della stringa ricevuta -> check parametri -> esegue il comando
+
+	il comando prevede:
+		- check se i parametri sono corretti e sono TUTTI (altrimenti needmodeparams)
+		- check se l'utente è autorizzato a fare l'azione
+		- altri check puntuali
+		- esegue quel che deve fare
+	
+	ci sono dei comandi che agiscono sul channel, altri no:
+
+	sul channel:
+		- invite
+		- kick
+		- mode
+		- topic
+	
+	altri no:
+		- msg
+		- join
+		- quit
+		- nick
+		- user
+		etc.
+*/

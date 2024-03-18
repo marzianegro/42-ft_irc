@@ -26,6 +26,7 @@ Channel::Channel(Client *creator, const std::string &name, const std::string &ke
 	this->_opUsers.push_back(creator);
 	this->_name = name;
 	this->_key = key;
+	this->_kModeOn = true;
 }
 
 Channel::Channel(const Channel &src) {
@@ -46,8 +47,12 @@ std::string	Channel::getName() const {
 	return (this->_name);
 }
 
-std::string	Channel::getTopic() const {
-	return (this->_topic);
+std::string	Channel::getTopic(Client *user) const {
+	if (this->_topic.empty()) {
+		return (rplNoTopic(this->_name, user->getNickname()));
+	} else {
+		return (rplTopic(this->_name, user->getNickname(), this->_topic));
+	}
 }
 
 std::string	Channel::getKey() const {
@@ -70,6 +75,10 @@ bool	Channel::getKModeStatus() const {
 	return (this->_kModeOn);
 }
 
+bool	Channel::getTModeStatus() const {
+	return (this->_tModeOn);
+}
+
 std::vector<Client*>	Channel::getOps() const {
 	return (this->_opUsers);
 }
@@ -82,12 +91,20 @@ void	Channel::setName(const std::string &name) {
 	this->_name = name;
 }
 
-void	Channel::setTopic(const std::string &topic) {
-	this->_topic = topic;
+void	Channel::setTopic(Client *user, const std::string &topic) {
+	if (topic.length() == 1 && topic[0] == ':') {
+		this->_topic = "";
+	} else if (!topic.compare(this->_topic)) {
+		this->_topic = topic;
+	}
 }
 
-void	Channel::setCount() {
+void	Channel::upCount() {
 	this->_userCount++;
+}
+
+void	Channel::downCount() {
+	this->_userCount--;
 }
 
 void	Channel::addUser(Client *user) {
@@ -120,31 +137,23 @@ bool	Channel::findUser(Client *user) {
 	return (false);
 }
 
-std::string	Channel::kick(Client *kicker, Client *kicked, const std::string &reason) {
-	// TODO: check if client is NULL
-	if (!removeUser(kicked)) {
-		return (errNotOnChannel(this->_name, kicked->getNickname()));
-	}
-	return (NULL);
+bool	Channel::isOperator(Client *user) {
+	std::vector<Client*>::iterator	it_op = std::find(this->_opUsers.begin(), this->_opUsers.end(), user);
+
+	return (it_op != this->_opUsers.end());
 }
 
-std::string	Channel::topic(Client *user) {
-	if (this->_topic.empty()) {
-		return (rplNoTopic(this->_name, user->getNickname()));
-	} else {
-		return (rplTopic(this->_name, user->getNickname(), this->_topic));
-	}
+bool	Channel::isInvited(Client *user) {
+	std::vector<Client*>::iterator	it_inv = std::find(this->_invUsers.begin(), this->_invUsers.end(), user);
+
+	return (it_inv != this->_opUsers.end());
 }
 
-void	Channel::topic(Client *user, const std::string &topic) {
-	if (this->_tModeOn && !user->getStatus()) {
-		// TODO: user must have channel privilege operator status in order to change the topic
-		return; // error?
-	}
-	if (topic.empty()) {
-		this->_topic = "";
-	} else if (!topic.compare(this->_topic)) {
-		this->_topic = topic;
+void Channel::invitedJoining(Client *user) {
+	std::vector<Client*>::iterator	it_inv = std::find(this->_invUsers.begin(), this->_invUsers.end(), user);
+
+	if (it_inv != this->_invUsers.end()) {
+		this->_invUsers.erase(it_inv);
 	}
 }
 

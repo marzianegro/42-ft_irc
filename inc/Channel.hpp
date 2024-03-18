@@ -30,27 +30,32 @@ public:
 	Channel&	operator=(const Channel &src); // ocf copy assignment operator
 
 	std::string				getName() const;
-	std::string				getTopic() const;
+	std::string				getTopic(Client *user) const;
 	std::string				getKey() const;
 	int						getLimit() const;
 	int						getCount() const;
 	bool					getIModeStatus() const;
 	bool					getKModeStatus() const;
+	bool					getTModeStatus() const;
 	std::vector<Client*>	getOps() const;
 	std::vector<Client*>	getRegs() const;
 
 	void	setName(const std::string &name);
-	void	setTopic(const std::string &topic);
-	void	setCount(); // TODO: better if _userCount + parameter?
+	void	setTopic(Client *user, const std::string &topic);
+	
+	void	upCount();
+	void	downCount();
 
 	void	addUser(Client *user);
 	bool	removeUser(Client *user);
 	bool	findUser(Client *user);
+	bool	isOperator(Client *user);
+	bool	isInvited(Client *user);
+	void	invitedJoining(Client *user);
 
-	std::string	kick(Client *kicker, Client *kicked, const std::string &reason);
-	std::string	topic(Client *user);
-	void		topic(Client *user, const std::string &topic);
-	
+	// void		genaralMsg(Client *user, const std::string &msg); TODO:
+	// void		operatorMsg(Client *user, const std::string &msg); TODO:
+
 	void		iModeSet();
 	void		tModeSet();
 	void		kModeSet(const std::string &key);
@@ -79,4 +84,5 @@ private:
 
 	std::vector<Client*>	_opUsers; // operator (not regular)
 	std::vector<Client*>	_regUsers; // regular (not operator)
+	std::vector<Client*>	_invUsers; // invited
 };

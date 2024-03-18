@@ -99,38 +99,6 @@ void	Server::startEpoll() {
 	std::cout << "File descriptor added to epoll instance\n";
 }
 
-std::string	Server::join(Client *user, const std::string &channel, const std::string &key) {
-
-	// joinRequest is the list of channels the user wants to join
-	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(channel);
-	if (chanIT == this->_channels.end()) {
-		return (errNoSuchChannel(channel, NULL)); // there's no inviter here
-	}
-	if (chanIT->second->getIModeStatus() && !user->getInvitation()) {
-		return (errInviteOnlyChan(channel, user->getNickname()));
-	}
-	if (chanIT->second->getKModeStatus() && key != chanIT->second->getKey()) {
-		return (errBadChannelKey(channel, user->getNickname()));
-	} else if (!chanIT->second->getKModeStatus() && !key.empty()) {
-		// TODO: no key needed for channel
-	}
-	if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
-		return (errChannelIsFull(channel,user->getNickname()));
-	}
-
-	chanIT->second->setCount();
-	// 1. send msg: "; " + clientName + " is joining the channel " + channelName;
-	// 2. channel’s topic (with RPL_TOPIC (332) and no message if channel does not have topic
-	chanIT->second->topic(user);
-	// 3. list of users currently joined to channel:
-	chanIT->second->getOps();
-	chanIT->second->getOps();
-	// 	- with one or more RPL_NAMREPLY (353) numerics
-	// 		- these messages sent by the server MUST include the requesting client that has just joined the channel
-	//	- followed by single RPL_ENDOFNAMES (366) numeric)
-	return (NULL); // TODO: ???
-}
-
 std::string	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
 	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(channel);
 	
