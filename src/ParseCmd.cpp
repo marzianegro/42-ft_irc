@@ -46,8 +46,14 @@ void Server::parseInvite(Client *client, std::string msg) {
 	std::getline(ssmsg, channel);
 
 	invited = this->findClientByNick(nickname);
-	// TODO: error formatting chan
-	this->invite(client, invited, channel);
+	
+	if (!isChannelValid(channel)) {
+		this->_msg = errNoSuchChannel(channel, client->getNickname());
+		ftSend(client->getSocket(), this->_msg);
+	} else {
+		channel = trimChannelName(channel);
+		this->invite(client, invited, channel);
+	}
 }
 
 void Server::parseKick(Client *client, std::string msg) {
@@ -57,12 +63,13 @@ void Server::parseKick(Client *client, std::string msg) {
 	std::getline(ssmsg, nickname, ' ');
 	std::getline(ssmsg, reason);
 
-	// TODO: error formatting chan
-	// if (chName[0] == '#' || chName[0] == '&') {
-	// 	chName = chName.substr(1);
-	// } else {
-	// 	chName = chName.substr(0);
-	// }
+	if (!isChannelValid(chName)) {
+		this->_msg = errNoSuchChannel(chName, client->getNickname());
+		ftSend(client->getSocket(), this->_msg);
+		return ;
+	}
+
+	chName = trimChannelName(chName);
 
 	Client *kicked = this->findClientByNick(nickname);
 
@@ -75,12 +82,8 @@ void Server::parseTopic(Client *client, std::string msg) {
 	std::getline(ssmsg, channel, ' ');
 	std::getline(ssmsg, topic);
 
-	// TODO: error formatting chan
-	// if (chName[0] == '#' || chName[0] == '&') {
-	// 	chName = chName.substr(1);
-	// } else {
-	// 	chName = chName.substr(0);
-	// }
+	channel = trimChannelName(channel);
+
 	this->topic(client, channel, topic);
 }
 

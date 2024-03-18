@@ -14,33 +14,17 @@
 #include "../inc/Client.hpp"
 #include "../inc/Server.hpp"
 
-// TODO:
-// CAP message
-// AUTHENTICATE message
-// PASS message
-// NICK message
-// USER message
-// PING message
-// PONG message
-// OPER message
-// QUIT message
-// ERROR message
-
-// DONE
-// JOIN message
-// PART message
-// TOPIC message
-// NAMES message
-// LIST message
-// INVITE message
-// Invite list
-// KICK message
-
 // ERR_NOSUCHCHANNEL (403)
+// ERR_NOORIGIN (409)
+// ERR_NONICKNAMEGIVEN (431)
+// ERR_ERRONEUSNICKNAME (432)
+// ERR_NICKNAMEINUSE (433)
 // ERR_USERNOTINCHANNEL (441)
 // ERR_NOTONCHANNEL (442)
 // ERR_USERONCHANNEL (443)
 // ERR_NEEDMOREPARAMS (461)
+// ERR_ALREADYREGISTERED (462)
+// ERR_PASSWDMISMATCH (464)
 // ERR_CHANNELISFULL (471)
 // ERR_INVITEONLYCHAN (473)
 // ERR_BADCHANNELKEY (475)
@@ -54,8 +38,30 @@
 
 // ERR
 
+
 std::string errNoSuchChannel(const std::string &channelName, const std::string &clientName) {
+	std::string chNameFixed = fixChannelName(channelName);
 	return (":gerboa 403 " + clientName + " " + channelName + " :No such channel");
+}
+
+std::string errNoOrigin(const std::string &clientName) {
+	return (":gerboa 409 " + clientName + " :No origin specified");
+}
+
+std::string errUnknownCommand(const std::string &clientName, const std::string &command) {
+	return (":gerboa 421 " + clientName + " " + command + " :Unknown command");
+}
+
+std::string errNoNickNameGiven(const std::string &clientName) {
+	return (":gerboa 431 " + clientName + " :No nickname given");
+}
+
+std::string errErroneusNickname(const std::string &clientName, const std::string &nickname) {
+	return (":gerboa 432 " + clientName + " " + nickname + " :Erroneus nickname");
+}
+
+std::string errNickNameInUse(const std::string &clientName, const std::string &nickname) {
+	return (":gerboa 433 " + clientName + " " + nickname + " :Nickname is already in use");
 }
 
 std::string errUserNotInChannel(const std::string &channelName, const std::string &clientName, const std::string &invitedClientName) {
@@ -68,6 +74,14 @@ std::string errNotOnChannel(const std::string &channelName, const std::string &c
 
 std::string errUserOnChannel(const std::string &channelName, const std::string &clientName, const std::string &invitedClientName) {
 	return (":gerboa 443 " + clientName + " " + invitedClientName + " " + channelName + " :is already on channel");
+}
+
+std::string errAlreadyRegistered(const std::string &clientName) {
+	return (":gerboa 462 " + clientName + " :You may not reregister");
+}
+
+std::string errPasswdMismatch(const std::string &clientName) {
+	return (":gerboa 464 " + clientName + " :Password incorrect");
 }
 
 std::string errNeedMoreParams(const std::string &clientName, const std::string &command) {
@@ -89,7 +103,6 @@ std::string errBadChannelKey(const std::string &channelName, const std::string &
 std::string errChanOPrivsNeeded(const std::string &channelName, const std::string &clientName) {
 	return (":gerboa 482 " + clientName + " " + channelName + " :You're not channel operator");
 }
-
 
 // RPL
 

@@ -117,7 +117,6 @@ void Server::execCmd(const std::string &msg, Client *client) {
 		}
 		cmdPos++;
 	}
-	// {"MODE", "QUIT", "NICK", "USER", "OPER"};
 
 	switch (cmdPos) {
 		case 0:
@@ -165,8 +164,8 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 
 		default:
-			// error
-			// CMD not found
+			this->_msg = errUnknownCommand(client->getNickname(), cmd);
+			ftSend(client->getSocket(), this->_msg);
 			break;
 	}
 	

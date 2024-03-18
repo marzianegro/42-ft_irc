@@ -55,6 +55,8 @@ public:
 	std::string	quit(Client *client, const std::string &reason);
 	
 private:
+	std::string			_msg;
+
 	in_port_t			_port;
 	std::string			_pw;
 
@@ -96,3 +98,10 @@ private:
 
 	Client *findClientByNick(const std::string &nick);
 };
+
+// Utils
+std::string	trimChannelName(const std::string &channel);
+bool 		isChannelValid(const std::string &channel);
+bool 		isNicknameValid(const std::string &nickname);
+void		ftSend(int fd, std::string &msg);
+std::string fixChannelName(const std::string &channelName);

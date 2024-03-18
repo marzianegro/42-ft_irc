@@ -14,3 +14,40 @@ Client *Server::findClientByNick(const std::string &nick) {
 	}
 	return (NULL);
 }
+
+std::string trimChannelName(const std::string &channel) {
+	std::string	trimmed = channel;
+
+	if (channel[0] == '#' || channel[0] == '&')
+		trimmed = channel.substr(1);
+
+	return (trimmed);
+}
+
+bool isChannelValid(const std::string &channel) {
+	if (channel.size() < 1 || channel.size() > 50)
+		return (false);
+	
+	return (channel[0] != '#' && channel[0] != '&');
+}
+
+bool isNicknameValid(const std::string &nickname) {
+	if (nickname.size() < 1 || nickname.size() > 9)
+		return (false);
+	if (nickname[0] == '#' || nickname[0] == '&' || nickname[0] == '@' || nickname[0] == ':')
+		return (false);
+
+	return (nickname.find(' ') == std::string::npos);
+}
+
+void ftSend(int fd, std::string &msg) {
+	msg += "\r\n";
+	send(fd, msg.c_str(), msg.size(), 0);
+}
+
+std::string fixChannelName(const std::string &channelName) {
+	std::string fixed = channelName;
+	if (channelName[0] != '#' && channelName[0] != '&')
+		fixed = "#" + fixed;
+	return (fixed);
+}
