@@ -42,6 +42,7 @@ bool isNicknameValid(const std::string &nickname) {
 
 void ftSend(int fd, std::string &msg) {
 	msg += "\r\n";
+	std::cout << "SENDING: " << msg << std::endl;
 	send(fd, msg.c_str(), msg.size(), 0);
 }
 

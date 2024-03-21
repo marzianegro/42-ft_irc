@@ -50,6 +50,7 @@ void Server::clientEvent(epoll_event &event) {
 	bzero(buffer, sizeof(buffer));
 
 	ssize_t byteRecv = recv(event.data.fd, buffer, sizeof(buffer), 0);
+	std::cout << "1 buffer: " << buffer << std::endl;
 	if (byteRecv == 0) {
 		std::cout << "Connection closed by the client\n";
 		this->clientDisconnect(this->_clients[event.data.fd]);
@@ -60,11 +61,14 @@ void Server::clientEvent(epoll_event &event) {
 		std::string msg;
 		std::map<int, Client*>::iterator	it = this->_clients.find(event.data.fd);
 		
+		
 		it->second->fillBuffer(buffer);
 		msg = it->second->readBuffer();
+		std::cout << "3 msg   : " << msg << std::endl;
 		while (!msg.empty()) {
 			this->execCmd(msg, it->second);
 			msg = it->second->readBuffer();
+			std::cout << "4 msg   : " << msg << std::endl;
 		}
 	}
 }
@@ -87,6 +91,9 @@ void	Server::runEpoll() {
 
 void Server::execCmd(const std::string &msg, Client *client) {
 	(void)client;
+
+	std::cout << "in execution: " << msg << std::endl;
+	std::cout << "server msg  : " << this->_msg << std::endl;
 
 	std::string possibleCmd[] = {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG"};
 	int			lenght = sizeof(possibleCmd);
@@ -118,6 +125,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 		cmdPos++;
 	}
 
+// {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG"};
 	switch (cmdPos) {
 		case 0:
 			this->parsePrivmsg(client, msg.substr(pos+1));

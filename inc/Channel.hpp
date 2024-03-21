@@ -41,7 +41,7 @@ public:
 	std::vector<Client*>	getRegs() const;
 
 	void	setName(const std::string &name);
-	void	setTopic(Client *user, const std::string &topic);
+	void	setTopic(const std::string &topic);
 	
 	void	upCount();
 	void	downCount();

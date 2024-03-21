@@ -18,32 +18,50 @@ void Server::sendMsgToChannel(Client *client, const std::string &channel, const 
 	(void)onlyOps; // if true send only to operators
 }
 
-void	Server::join(Client *user, const std::string &chName, const std::string &key) {
+void	Server::join(Client *user, std::string &chName, const std::string &key) {
+	if (chName[0] == '#') {
+		chName = chName.substr(1);
+	}
+
 	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(chName);
 	this->_msg = "";
+	bool chanExist = true;
 
 	if (chName.empty()) {
+		std::cout << "1" << std::endl;
 		this->_msg = errNeedMoreParams(user->getNickname(), "JOIN");
 	} else if (chanIT == this->_channels.end() && key.empty()) {
+		std::cout << "2" << std::endl;
 		this->_channels[chName] = new Channel(user, chName);
+		chanExist = false;
 	} else if (chanIT == this->_channels.end()) {
+		std::cout << "3" << std::endl;
 		this->_channels[chName] = new Channel(user, chName, key);
 	} else if (chanIT->second->getKModeStatus() && key != chanIT->second->getKey()) {
+		std::cout << "4" << std::endl;
 		this->_msg = errBadChannelKey(chName, user->getNickname());
 	} else if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
+		std::cout << "5" << std::endl;
 		this->_msg = errChannelIsFull(chName, user->getNickname());
-	} else if (chanIT->second->getIModeStatus() && !user->getInvitation()) {
-		this->_msg = errInviteOnlyChan(chName, user->getNickname());
-	}
+	} // else if (chanIT->second->getIModeStatus() && !user->getInvitation()) {
+		// FIXME: invitation
+	// 	this->_msg = errInviteOnlyChan(chName, user->getNickname());
+	// }
+
+	std::cout << "server _msg is " << this->_msg << std::endl;
 
 	if (this->_msg.empty()) {
 		chanIT = this->_channels.find(chName);
-		chanIT->second->upCount();
-		chanIT->second->invitedJoining(user);
-		chanIT->second->addUser(user);
+		if (chanExist) {
+			chanIT->second->upCount();
+			chanIT->second->invitedJoining(user);
+			chanIT->second->addUser(user);
+		}
 		
+		// TODO:/FIXME: send to every user on the channel?
 		this->_msg = ":" + user->getNickname() + " JOIN #" + chName;
 		ftSend(user->getSocket(), this->_msg);
+		
 		
 		this->_msg = chanIT->second->getTopic(user);
 		ftSend(user->getSocket(), this->_msg);
@@ -97,7 +115,7 @@ void Server::topic(Client *user, const std::string &chName, const std::string &t
 	} else if (topic.empty()) {
 		this->_msg = channel->getTopic(user);
 	} else {
-		channel->setTopic(user, topic);
+		channel->setTopic(topic);
 	}
 	
 	if (!this->_msg.empty()) {
@@ -105,29 +123,58 @@ void Server::topic(Client *user, const std::string &chName, const std::string &t
 	}
 }
 
+bool checkNick(const std::string &nick) {
+	for (size_t i = 0; i < nick.size(); i++) {
+		if (!isalnum(nick[i]) && nick[i] != '_' && nick[i] != '-') {
+			return (false);
+		}
+	}
+	return (true);
+}
+
 void Server::nick(Client *client, const std::string &newNick) {
-	(void)client;
-	(void)newNick; // check if empty
-	// ERR_NONICKNAMEGIVEN (431)
-	// ERR_ERRONEUSNICKNAME (432)
-	// ERR_NICKNAMEINUSE (433)
-	// ERR_NICKCOLLISION (436)
+	this->_msg = "";
+
+	std::cout << "newNick is " << newNick << std::endl;
+
+	if (newNick.empty()) {
+		this->_msg = errNoNicknameGiven("no-name");
+	} else if (!checkNick(newNick)) {
+		this->_msg = errErroneusNickname("no-name", newNick);
+	} else if (!checkNicknames(newNick)) {
+		this->_msg = errNicknameInUse("no-name", newNick);
+	}
+	
+	if (this->_msg.empty()) {
+		client->setNickname(newNick);
+	}
+	ftSend(client->getSocket(), this->_msg);
 }
 
 void Server::user(Client *client, const std::string &username, const std::string &realname) {
-	
-	(void)client;
-	(void)username;
-	(void)realname;
-	// ERR_NEEDMOREPARAMS (461)
-	// ERR_ALREADYREGISTRED (462)
+	this->_msg = "";
+
+	if (username.empty() || realname.empty()) {
+		this->_msg = errNeedMoreParams(client->getNickname(), "USER");
+	} else if (!client->getUsername().empty()) {
+		this->_msg = errAlreadyRegistered(client->getNickname());
+	}
+
+	if (this->_msg.empty()) {
+		client->setUsername(username);
+		client->setRealname(realname);
+	}
 }
 
 void Server::ping(Client *client, const std::string &token) {
-	(void)client;
-	(void)token; // this must not be empty
-	// PONG: send a pong msg to the client
-	// example: PONG gerboa <token>
+	
+	if (token.empty()) {
+		this->_msg = errNoOrigin(client->getNickname());
+	} else {
+		this->_msg = "PONG gerboa " + token;
+	}
+	
+	ftSend(client->getSocket(), this->_msg);
 }
 
 void Server::pong(Client *client) {

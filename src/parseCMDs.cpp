@@ -3,6 +3,7 @@
 #include "../inc/Server.hpp"
 
 void Server::parseJoin(Client *client, std::string msg) {
+	std::cout << "CALLING JOIN: " << msg << std::endl;
 	std::istringstream ssmsg(msg);
 	std::string channels, keys, channel, key;
 	std::getline(ssmsg, channels, ' ');
@@ -12,6 +13,7 @@ void Server::parseJoin(Client *client, std::string msg) {
 	while (std::getline(ssch, channel, ',')) {
 		if (!std::getline(ssky, key, ','))
 			key = "";
+		std::cout << "JOINING: " << channel << " WITH KEY: " << key << std::endl;
 		this->join(client, channel, key);
 	}
 }

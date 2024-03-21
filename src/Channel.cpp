@@ -91,7 +91,7 @@ void	Channel::setName(const std::string &name) {
 	this->_name = name;
 }
 
-void	Channel::setTopic(Client *user, const std::string &topic) {
+void	Channel::setTopic(const std::string &topic) {
 	if (topic.length() == 1 && topic[0] == ':') {
 		this->_topic = "";
 	} else if (!topic.compare(this->_topic)) {

@@ -116,7 +116,7 @@ std::string	Server::invite(Client *inviter, Client *invited, const std::string &
 	if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
 		return (errChannelIsFull(channel,invited->getNickname()));
 	}
-	invited->setInvitation(true);
+	// invited->setInvitation(true);
 	return (NULL); // TODO: ???
 }
 
@@ -136,6 +136,26 @@ std::string	Server::quit(Client *client, const std::string &reason) {
 	return (NULL); // TODO: ???
 }
 
-bool Server::checkPw(const std::string &pw) {
+bool	Server::checkPw(const std::string &pw) {
 	return (this->_pw == pw);
+}
+
+bool	Server::checkNicknames(const std::string &nickname) {
+	std::map<int, Client*>::iterator	it = this->_clients.begin();
+	for (; it != this->_clients.end(); it++) {
+		if (nickname.compare(it->second->getNickname()) == 0) {
+			return (false);
+		}
+	}
+	return (true);
+}
+
+bool	Server::checkUsernames(const std::string &username) {
+	std::map<int, Client*>::iterator	it = this->_clients.begin();
+	for (; it != this->_clients.end(); it++) {
+		if (username.compare(it->second->getUsername()) == 0) {
+			return (false);
+		}
+	}
+	return (true);
 }

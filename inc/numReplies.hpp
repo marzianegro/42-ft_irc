@@ -6,9 +6,9 @@
 std::string errNoSuchChannel(const std::string &channelName, const std::string &clientName);
 std::string errNoOrigin(const std::string &clientName);
 std::string errUnknownCommand(const std::string &clientName, const std::string &command);
-std::string errNoNickNameGiven(const std::string &clientName);
+std::string errNoNicknameGiven(const std::string &clientName);
 std::string errErroneusNickname(const std::string &clientName, const std::string &nickname);
-std::string errNickNameInUse(const std::string &clientName, const std::string &nickname);
+std::string errNicknameInUse(const std::string &clientName, const std::string &nickname);
 std::string errNotOnChannel(const std::string &channelName, const std::string &clientName);
 std::string errUserNotInChannel(const std::string &channelName, const std::string &clientName, const std::string &invitedClientName);
 std::string errUserOnChannel(const std::string &channelName, const std::string &clientName, const std::string &invitedClientName);

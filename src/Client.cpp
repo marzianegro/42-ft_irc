@@ -16,7 +16,9 @@ Client::Client() {
 }
 
 Client::Client(const int &socket) : _socket(socket) {
-
+	this->_isAuthorized = false;
+	this->_isOperator = false;
+	this->_buffer = "";
 }
 
 Client::Client(const Client &src) {
@@ -29,8 +31,8 @@ Client::~Client() {
 Client&	Client::operator=(const Client &src) {
 	if (this != &src) {
 		this->_nickname = src._nickname;
-		this->_hostAddress = src._hostAddress;
 		this->_username = src._username;
+		this->_realname = src._realname;
 		this->_socket = src._socket;
 		this->_isAuthorized = src._isAuthorized;
 		this->_channels = src._channels;
@@ -43,20 +45,17 @@ Client&	Client::operator=(const Client &src) {
 void	Client::setNickname(const std::string &nickname) {
 	this->_nickname = nickname;
 }
-void	Client::setHostAddress(const int &hostaddress) {
-	this->_hostAddress = hostaddress;
-}
 
 void	Client::setUsername(const std::string &username) {
 	this->_username = username;
 }
 
-void	Client::setAuth(const bool &auth) {
-	this->_isAuthorized = auth;
+void	Client::setRealname(const std::string &realname) {
+	this->_realname = realname;
 }
 
-void	Client::setInvitation(const bool &invite) {
-	this->_isInvited = invite;
+void	Client::setAuth(const bool &auth) {
+	this->_isAuthorized = auth;
 }
 
 void	Client::setStatus(const bool &status) {
@@ -67,9 +66,10 @@ std::string Client::getNickname() const {
 	return (this->_nickname);
 }
 
-int			Client::getHostAddress() const {
-	return (this->_hostAddress);
+std::string Client::getRealname() const {
+	return (this->_realname);
 }
+
 std::string	Client::getUsername() const {
 	return (this->_username);
 }
@@ -82,20 +82,19 @@ bool		Client::getAuth() const {
 	return (this->_isAuthorized);
 }
 
-bool		Client::getInvitation() const {
-	return (this->_isInvited);
-}
-
 bool		Client::getStatus() const {
 	return (this->_isOperator);
 }
 
 void		Client::fillBuffer(const std::string &msg) {
 	this->_buffer += msg;
+	std::cout << "2 allbuffer: " << this->_buffer << std::endl;
 }
 
 std::string	Client::readBuffer() {
 	std::size_t pos = this->_buffer.find("\r\n");
+
+	std::cout << "pos: " << pos  << "/" << std::string::npos << std::endl;
 	
 	if (pos == std::string::npos) {
 		return ("");
@@ -103,6 +102,8 @@ std::string	Client::readBuffer() {
 		this->_buffer.erase(0, 2);
 		return ("");
 	}
+
+	std::cout << "subtringing" << std::endl;
 
 	std::string msg = this->_buffer.substr(0, pos);
 	this->_buffer.erase(0, pos + 2);

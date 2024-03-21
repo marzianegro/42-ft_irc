@@ -52,15 +52,15 @@ std::string errUnknownCommand(const std::string &clientName, const std::string &
 	return (":gerboa 421 " + clientName + " " + command + " :Unknown command");
 }
 
-std::string errNoNickNameGiven(const std::string &clientName) {
+std::string errNoNicknameGiven(const std::string &clientName) {
 	return (":gerboa 431 " + clientName + " :No nickname given");
 }
 
 std::string errErroneusNickname(const std::string &clientName, const std::string &nickname) {
-	return (":gerboa 432 " + clientName + " " + nickname + " :Erroneus nickname");
+	return (":gerboa 432 " + nickname + " " + clientName + " :Erroneus nickname");
 }
 
-std::string errNickNameInUse(const std::string &clientName, const std::string &nickname) {
+std::string errNicknameInUse(const std::string &clientName, const std::string &nickname) {
 	return (":gerboa 433 " + clientName + " " + nickname + " :Nickname is already in use");
 }
 
