@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:59:49 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/16 18:50:34 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/23 15:44:56 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ bool		Client::getStatus() const {
 
 void		Client::fillBuffer(const std::string &msg) {
 	this->_buffer += msg;
-	std::cout << "2 allbuffer: " << this->_buffer << std::endl;
+	// std::cout << "2 allbuffer: " << this->_buffer << std::endl;
 }
 
 std::string	Client::readBuffer() {
 	std::size_t pos = this->_buffer.find("\r\n");
 
-	std::cout << "pos: " << pos  << "/" << std::string::npos << std::endl;
+	// std::cout << "pos: " << pos  << "/" << std::string::npos << std::endl;
 	
 	if (pos == std::string::npos) {
 		return ("");
@@ -103,7 +103,7 @@ std::string	Client::readBuffer() {
 		return ("");
 	}
 
-	std::cout << "subtringing" << std::endl;
+	// std::cout << "subtringing" << std::endl;
 
 	std::string msg = this->_buffer.substr(0, pos);
 	this->_buffer.erase(0, pos + 2);

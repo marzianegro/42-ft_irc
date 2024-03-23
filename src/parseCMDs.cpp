@@ -18,7 +18,7 @@ void Server::parseJoin(Client *client, std::string msg) {
 	}
 }
 
-bool privmsgToChannel(const std::string &channel) {
+bool isPrivmsgToChannel(const std::string &channel) {
 	return channel[0] == '#' || channel[0] == '&' || channel[0] == '@';
 }
 
@@ -33,7 +33,7 @@ void Server::parsePrivmsg(Client *client, std::string msg) {
 	std::getline(ssmsg, target, ' ');
 	std::getline(ssmsg, message);
 
-	if (privmsgToChannel(target)) {
+	if (isPrivmsgToChannel(target)) {
 		this->sendMsgToChannel(client, target, message, onlyOps(target));
 	} else {
 		this->sendMsgToClient(client, target, message);

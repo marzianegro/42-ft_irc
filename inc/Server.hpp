@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/16 18:50:30 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/23 16:16:02 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ private:
 	bool	checkNicknames(const std::string &nickname);
 	bool	checkUsernames(const std::string &username);
 	void	clientDisconnect(Client *client);
+	void	sendToChannel(const std::string &chName, Client *exclude, bool onlyOps);
 
 	void	sendMsgToClient(Client *client, const std::string &target, std::string &msg);
-	void	sendMsgToChannel(Client *client, const std::string &channel, std::string &msg, bool onlyOps);
+	void	sendMsgToChannel(Client *client, std::string &channel, std::string &msg, bool onlyOps);
 	void	join(Client *user, std::string &chName, const std::string &key);
-	void	kick(Client *kicker, Client *kicked, const std::string &chName, const std::string &reason);
+	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);
 	void	nick(Client *client, const std::string &newNick);
 	void	user(Client *client, const std::string &username, const std::string &realname);

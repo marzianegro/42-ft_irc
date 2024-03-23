@@ -17,3 +17,26 @@ ev_nums: 1
 msg: USER ggiannit 8 * :ggiannit
 ev_nums: 1
 msg: JOIN #ciao
+
+
+
+/////////////////////////
+in execution: JOIN #123
+server msg  : 
+CALLING JOIN: #123
+SENDING: :debgigi2 JOIN #123
+SENDING: :gerboa 331 debgigi2 123 :No topic is set
+SENDING: :gerboa 353 debgigi2 = 123 :@debgigi2  
+SENDING: :gerboa 366 debgigi2 123 :End of /NAMES list
+
+3 msg   : MODE #123
+in execution: MODE #123
+
+pos: 18446744073709551615/18446744073709551615
+4 msg   : 
+1 buffer: WHO #123
+
+2 allbuffer: WHO #123
+
+in execution: WHO #123
+SENDING: :gerboa 421 debgigi2 WHO :Unknown command

@@ -5,50 +5,48 @@
 // TO REMEMBER:
 // all msg, topic reason etc have ':' at the beginning
 
-// PRIVMSG command is used to send private messages between users, as well as to send messages to channels.
 void Server::sendMsgToClient(Client *client, const std::string &target, std::string &msg) {
 	std::map<int, Client*>::iterator	clientIT = this->_clients.begin();
+	this->_msg = "";
 
-	// TODO: need to check if client is on server/channel?
-	for (; clientIT != this->_clients.end(); clientIT++) {
-		if (clientIT->second->getNickname() == target) {
-			if (!msg.empty()) {
-				ftSend(clientIT->second->getSocket(), msg);
-			} else {
-				errNoTextToSend(client->getNickname());
+	if (msg.empty()) {
+		this->_msg = errNoTextToSend(client->getNickname());
+	} else {
+		this->_msg = ":" + client->getNickname() + " PRIVMSG " + target + " " + msg;
+
+		for (; clientIT != this->_clients.end(); clientIT++) {
+			if (clientIT->second->getNickname() == target) {
+				ftSend(clientIT->second->getSocket(), this->_msg);
+				return ;
 			}
 		}
+
+		this->_msg = errNoSuchNick(client->getNickname(), target);
 	}
-	if (clientIT == this->_clients.end()) {
-		errNoSuchNick(client->getNickname(), target);
-		return ;
-	}
+	ftSend(client->getSocket(), this->_msg);
 }
 
-void Server::sendMsgToChannel(Client *client, const std::string &chName, std::string &msg, bool onlyOps) {
-	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(chName);
-	
-	std::vector<Client*>			regUsers = chanIT->second->getRegs();
-	std::vector<Client*>::iterator	regIT = regUsers.begin();
+void Server::sendMsgToChannel(Client *client, std::string &chName, std::string &msg, bool onlyOps) {
+	if (chName[0] == '@') {
+		chName = chName.substr(1);
+	}
+	if (chName[0] == '#') {
+		chName = chName.substr(1);
+	}
+	Channel *channel = this->_channels[chName];
 
-	std::vector<Client*>			opUsers = chanIT->second->getOps();
-	std::vector<Client*>::iterator	opIT = opUsers.begin();
-
-	if (chanIT == this->_channels.end()) {
-		errNoSuchChannel(chName, client->getNickname());
-	} else if (!chanIT->second->findUser(client)) {
-		errNotOnChannel(chName, client->getNickname()); // FIXME: is this the right one?
-	} else if (!msg.empty() && !onlyOps) {
-		for (; regIT != regUsers.end(); regIT++) {
-			ftSend((*regIT)->getSocket(), msg);
-		}
-		for (; opIT != opUsers.end(); opIT++) {
-			ftSend((*opIT)->getSocket(), msg);
-		}
-	} else if (!msg.empty() && onlyOps) {
-		for (; opIT != opUsers.end(); opIT++) {
-			ftSend((*opIT)->getSocket(), msg);
-		}
+	if (msg.empty()) {
+		this->_msg = errNoTextToSend(client->getNickname());
+		ftSend(client->getSocket(), this->_msg);
+	} else if (!channel) {
+		this->_msg = errNoSuchChannel(chName, client->getNickname());
+		ftSend(client->getSocket(), this->_msg);
+	} else if (!channel->findUser(client)) {
+		this->_msg = errNotOnChannel(chName, client->getNickname());
+		ftSend(client->getSocket(), this->_msg);
+	} else {
+		this->_msg = ":" + client->getNickname() + " PRIVMSG #" + chName + " " + msg;
+		sendToChannel(chName, client, onlyOps);
 	}
 }
 
@@ -87,7 +85,7 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 		}
 		
 		this->_msg = ":" + user->getNickname() + " JOIN #" + chName;
-		sendMsgToChannel(user, chName, this->_msg, false); // FIXME: does this have to be sent to every user on the channel?
+		sendToChannel(chName, NULL, false);
 		
 		this->_msg = chanIT->second->getTopic(user);
 		ftSend(user->getSocket(), this->_msg);
@@ -101,7 +99,9 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 	}
 }
 
-void Server::kick(Client *kicker, Client *kicked, const std::string &chName, const std::string &reason) {
+void Server::kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason) {
+	bool hasBeenKicked = false;
+
 	Channel *channel = this->_channels[chName];
 	
 	if (chName.empty()) {
@@ -115,12 +115,13 @@ void Server::kick(Client *kicker, Client *kicked, const std::string &chName, con
 	} else if (!kicked || !channel->removeUser(kicked)) {
 		this->_msg = errUserNotInChannel(chName, kicker->getNickname(), kicked->getNickname());
 	} else {
+		hasBeenKicked = true;
 		channel->downCount();
 		this->_msg = ":" + kicker->getNickname() + " KICK #" + chName + kicked->getNickname() + " " + reason;
 	}
 
-	if (this->_msg[0] == ':') {
-		sendMsgToChannel(kicker, chName, this->_msg, false); // FIXME: is it kicker or kicked?
+	if (hasBeenKicked) {
+		sendToChannel(chName, NULL, false); // TODO: kicker escluso?
 	} else {
 		ftSend(kicker->getSocket(), this->_msg);
 	}
@@ -142,6 +143,9 @@ void Server::topic(Client *user, const std::string &chName, const std::string &t
 		this->_msg = channel->getTopic(user);
 	} else {
 		channel->setTopic(topic);
+		this->_msg = rplTopic(channel->getName(), user->getNickname(), topic);
+		sendToChannel(chName, NULL, false);
+		return ;
 	}
 	
 	if (!this->_msg.empty()) {

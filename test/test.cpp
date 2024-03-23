@@ -1,17 +1,14 @@
 #include <iostream>
-#include <sstream>
 #include <string>
-#include <map>
 
 int main() {
-	std::map<std::string, char *> test;
-	char *str = "test";
+    std::string array[] = {"Hellaaaaaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahahhahao", "World", "from", "C++"};
+	int sizeofstr = sizeof(std::string);
+    int num_elements = sizeof(array) / sizeofstr;
 
-	test["test"] = str;
+	std::cout << "Size of string: " << sizeofstr << std::endl;
+	std::cout << "Size of array: " << sizeof(array) << std::endl;
+    std::cout << "Number of elements: " << num_elements << std::endl;
 
-	if (test["testone"]) {
-		std::cout << "testone exists\n";
-	} else {
-		std::cout << "testone does not exist\n";
-	}
+    return 0;
 }

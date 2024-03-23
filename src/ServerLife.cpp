@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   ServerLife.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/13 19:26:25 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/03/23 17:45:53 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void Server::clientEvent(epoll_event &event) {
 	bzero(buffer, sizeof(buffer));
 
 	ssize_t byteRecv = recv(event.data.fd, buffer, sizeof(buffer), 0);
-	std::cout << "1 buffer: " << buffer << std::endl;
+	// std::cout << "1 buffer: " << buffer << std::endl;
 	if (byteRecv == 0) {
 		std::cout << "Connection closed by the client\n";
 		this->clientDisconnect(this->_clients[event.data.fd]);
@@ -64,11 +64,11 @@ void Server::clientEvent(epoll_event &event) {
 		
 		it->second->fillBuffer(buffer);
 		msg = it->second->readBuffer();
-		std::cout << "3 msg   : " << msg << std::endl;
+		// std::cout << "3 msg   : " << msg << std::endl;
 		while (!msg.empty()) {
 			this->execCmd(msg, it->second);
 			msg = it->second->readBuffer();
-			std::cout << "4 msg   : " << msg << std::endl;
+			// std::cout << "4 msg   : " << msg << std::endl;
 		}
 	}
 }
@@ -90,13 +90,12 @@ void	Server::runEpoll() {
 }
 
 void Server::execCmd(const std::string &msg, Client *client) {
-	(void)client;
+	this->_msg = "";
 
 	std::cout << "in execution: " << msg << std::endl;
-	std::cout << "server msg  : " << this->_msg << std::endl;
 
 	std::string possibleCmd[] = {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG"};
-	int			lenght = sizeof(possibleCmd);
+	int			lenght = sizeof(possibleCmd) / sizeof(std::string);
 	std::string cmd;
 	std::size_t	pos = msg.find(' ');
 
@@ -112,7 +111,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 				this->clientDisconnect(client);
 			}
 		} else {
-			// not auth
+			// TODO: not auth
 		}
 		return ;
 	}
@@ -124,7 +123,8 @@ void Server::execCmd(const std::string &msg, Client *client) {
 		}
 		cmdPos++;
 	}
-
+	
+	// std::cout << "command here is: " << possibleCmd[cmdPos] << '\n';
 // {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG"};
 	switch (cmdPos) {
 		case 0:
@@ -172,6 +172,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 
 		default:
+			std::cout << "INTO UNKNWOWN COMMAND" << '\n';
 			this->_msg = errUnknownCommand(client->getNickname(), cmd);
 			ftSend(client->getSocket(), this->_msg);
 			break;
