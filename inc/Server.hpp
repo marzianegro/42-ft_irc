@@ -62,8 +62,8 @@ private:
 	bool	checkUsernames(const std::string &username);
 	void	clientDisconnect(Client *client);
 
-	void	sendMsgToClient(Client *client, const std::string &target, const std::string &msg);
-	void	sendMsgToChannel(Client *client, const std::string &channel, const std::string &msg, bool onlyOps);
+	void	sendMsgToClient(Client *client, const std::string &target, std::string &msg);
+	void	sendMsgToChannel(Client *client, const std::string &channel, std::string &msg, bool onlyOps);
 	void	join(Client *user, std::string &chName, const std::string &key);
 	void	kick(Client *kicker, Client *kicked, const std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);

@@ -3,8 +3,10 @@
 #include "Channel.hpp"
 #include "Server.hpp"
 
+std::string errNoSuchNick(const std::string &sender, const std::string &receiver);
 std::string errNoSuchChannel(const std::string &channelName, const std::string &clientName);
 std::string errNoOrigin(const std::string &clientName);
+std::string errNoTextToSend(const std::string &sender);
 std::string errUnknownCommand(const std::string &clientName, const std::string &command);
 std::string errNoNicknameGiven(const std::string &clientName);
 std::string errErroneusNickname(const std::string &clientName, const std::string &nickname);

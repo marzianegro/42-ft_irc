@@ -5,17 +5,51 @@
 // TO REMEMBER:
 // all msg, topic reason etc have ':' at the beginning
 
-void Server::sendMsgToClient(Client *client, const std::string &target, const std::string &msg) {
-	(void)client;
-	(void)target; // check if exists
-	(void)msg; // send to the client, but only if not empty
+// PRIVMSG command is used to send private messages between users, as well as to send messages to channels.
+void Server::sendMsgToClient(Client *client, const std::string &target, std::string &msg) {
+	std::map<int, Client*>::iterator	clientIT = this->_clients.begin();
+
+	// TODO: need to check if client is on server/channel?
+	for (; clientIT != this->_clients.end(); clientIT++) {
+		if (clientIT->second->getNickname() == target) {
+			if (!msg.empty()) {
+				ftSend(clientIT->second->getSocket(), msg);
+			} else {
+				errNoTextToSend(client->getNickname());
+			}
+		}
+	}
+	if (clientIT == this->_clients.end()) {
+		errNoSuchNick(client->getNickname(), target);
+		return ;
+	}
 }
 
-void Server::sendMsgToChannel(Client *client, const std::string &channel, const std::string &msg, bool onlyOps) {
-	(void)client; // check if on the channel
-	(void)channel; // check if exists
-	(void)msg; // send to all clients on the channel if not empty
-	(void)onlyOps; // if true send only to operators
+void Server::sendMsgToChannel(Client *client, const std::string &chName, std::string &msg, bool onlyOps) {
+	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(chName);
+	
+	std::vector<Client*>			regUsers = chanIT->second->getRegs();
+	std::vector<Client*>::iterator	regIT = regUsers.begin();
+
+	std::vector<Client*>			opUsers = chanIT->second->getOps();
+	std::vector<Client*>::iterator	opIT = opUsers.begin();
+
+	if (chanIT == this->_channels.end()) {
+		errNoSuchChannel(chName, client->getNickname());
+	} else if (!chanIT->second->findUser(client)) {
+		errNotOnChannel(chName, client->getNickname()); // FIXME: is this the right one?
+	} else if (!msg.empty() && !onlyOps) {
+		for (; regIT != regUsers.end(); regIT++) {
+			ftSend((*regIT)->getSocket(), msg);
+		}
+		for (; opIT != opUsers.end(); opIT++) {
+			ftSend((*opIT)->getSocket(), msg);
+		}
+	} else if (!msg.empty() && onlyOps) {
+		for (; opIT != opUsers.end(); opIT++) {
+			ftSend((*opIT)->getSocket(), msg);
+		}
+	}
 }
 
 void	Server::join(Client *user, std::string &chName, const std::string &key) {
@@ -28,25 +62,19 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 	bool chanExist = true;
 
 	if (chName.empty()) {
-		std::cout << "1" << std::endl;
 		this->_msg = errNeedMoreParams(user->getNickname(), "JOIN");
 	} else if (chanIT == this->_channels.end() && key.empty()) {
-		std::cout << "2" << std::endl;
 		this->_channels[chName] = new Channel(user, chName);
 		chanExist = false;
 	} else if (chanIT == this->_channels.end()) {
-		std::cout << "3" << std::endl;
 		this->_channels[chName] = new Channel(user, chName, key);
 	} else if (chanIT->second->getKModeStatus() && key != chanIT->second->getKey()) {
-		std::cout << "4" << std::endl;
 		this->_msg = errBadChannelKey(chName, user->getNickname());
 	} else if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
-		std::cout << "5" << std::endl;
 		this->_msg = errChannelIsFull(chName, user->getNickname());
-	} // else if (chanIT->second->getIModeStatus() && !user->getInvitation()) {
-		// FIXME: invitation
-	// 	this->_msg = errInviteOnlyChan(chName, user->getNickname());
-	// }
+	} else if (chanIT->second->getIModeStatus() && !chanIT->second->isInvited(user)) {
+		this->_msg = errInviteOnlyChan(chName, user->getNickname());
+	}
 
 	std::cout << "server _msg is " << this->_msg << std::endl;
 
@@ -58,10 +86,8 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 			chanIT->second->addUser(user);
 		}
 		
-		// TODO:/FIXME: send to every user on the channel?
 		this->_msg = ":" + user->getNickname() + " JOIN #" + chName;
-		ftSend(user->getSocket(), this->_msg);
-		
+		sendMsgToChannel(user, chName, this->_msg, false); // FIXME: does this have to be sent to every user on the channel?
 		
 		this->_msg = chanIT->second->getTopic(user);
 		ftSend(user->getSocket(), this->_msg);
@@ -94,7 +120,7 @@ void Server::kick(Client *kicker, Client *kicked, const std::string &chName, con
 	}
 
 	if (this->_msg[0] == ':') {
-		// TODO: send to channel
+		sendMsgToChannel(kicker, chName, this->_msg, false); // FIXME: is it kicker or kicked?
 	} else {
 		ftSend(kicker->getSocket(), this->_msg);
 	}
@@ -167,7 +193,6 @@ void Server::user(Client *client, const std::string &username, const std::string
 }
 
 void Server::ping(Client *client, const std::string &token) {
-	
 	if (token.empty()) {
 		this->_msg = errNoOrigin(client->getNickname());
 	} else {

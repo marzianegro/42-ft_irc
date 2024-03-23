@@ -20,12 +20,14 @@ Channel::Channel() {
 Channel::Channel(Client *creator, const std::string &name) {
 	this->_opUsers.push_back(creator);
 	this->_name = name;
+	this->_userLimit = 42; // TODO: not sure about this
 }
 
 Channel::Channel(Client *creator, const std::string &name, const std::string &key) {
 	this->_opUsers.push_back(creator);
 	this->_name = name;
 	this->_key = key;
+	this->_userLimit = 42; // TODO: not sure about this
 	this->_kModeOn = true;
 }
 

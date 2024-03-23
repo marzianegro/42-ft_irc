@@ -102,19 +102,23 @@ void	Server::startEpoll() {
 std::string	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
 	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(channel);
 	
-	//TODO: check if invited != NULL, null mean that the invited client is not connected
+	std::map<int, Client*>::iterator	clientIT = this->_clients.find(invited->getSocket());
+	if (clientIT != this->_clients.end()) {
+		//FIXME: check if invited != NULL, null mean that the invited client is not connected
+		this->_msg = "Invited client is not connected";
+	}
 
 	if (chanIT == this->_channels.end()) {
-		return (errNoSuchChannel(chanIT->second->getName(), inviter->getNickname()));
+		this->_msg = errNoSuchChannel(chanIT->second->getName(), inviter->getNickname());
 	}
 	if (!(chanIT->second->findUser(inviter))) {
-		return (errNotOnChannel(chanIT->first, inviter->getNickname()));
+		this->_msg = errNotOnChannel(chanIT->first, inviter->getNickname());
 	}
 	if (chanIT->second->findUser(invited)) {
-		return (errUserOnChannel(chanIT->first, inviter->getNickname(), invited->getNickname()));
+		this->_msg = errUserOnChannel(chanIT->first, inviter->getNickname(), invited->getNickname());
 	}
 	if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
-		return (errChannelIsFull(channel,invited->getNickname()));
+		this->_msg = errChannelIsFull(channel,invited->getNickname());
 	}
 	// invited->setInvitation(true);
 	return (NULL); // TODO: ???

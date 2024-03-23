@@ -14,8 +14,10 @@
 #include "../inc/Client.hpp"
 #include "../inc/Server.hpp"
 
+// ERR_NOSUCHNICK (401) // FIXME:
 // ERR_NOSUCHCHANNEL (403)
 // ERR_NOORIGIN (409)
+// ERR_NOTEXTTOSEND (412) // FIXME:
 // ERR_NONICKNAMEGIVEN (431)
 // ERR_ERRONEUSNICKNAME (432)
 // ERR_NICKNAMEINUSE (433)
@@ -38,6 +40,10 @@
 
 // ERR
 
+// FIXME: Topetta tried her best
+std::string errNoSuchNick(const std::string &sender, const std::string &receiver) {
+	return (":gerboa 401 " + sender + " " + receiver + " :No such nick");
+}
 
 std::string errNoSuchChannel(const std::string &channelName, const std::string &clientName) {
 	std::string chNameFixed = fixChannelName(channelName);
@@ -46,6 +52,11 @@ std::string errNoSuchChannel(const std::string &channelName, const std::string &
 
 std::string errNoOrigin(const std::string &clientName) {
 	return (":gerboa 409 " + clientName + " :No origin specified");
+}
+
+// FIXME: Topetta tried her best
+std::string errNoTextToSend(const std::string &sender) {
+	return (":gerboa 412 " + sender + " :No text to send");
 }
 
 std::string errUnknownCommand(const std::string &clientName, const std::string &command) {
