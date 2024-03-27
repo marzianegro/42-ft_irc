@@ -20,14 +20,14 @@ Channel::Channel() {
 Channel::Channel(Client *creator, const std::string &name) {
 	this->_opUsers.push_back(creator);
 	this->_name = name;
-	this->_userLimit = 42; // TODO: not sure about this
+	this->_userLimit = 2142;
 }
 
 Channel::Channel(Client *creator, const std::string &name, const std::string &key) {
 	this->_opUsers.push_back(creator);
 	this->_name = name;
 	this->_key = key;
-	this->_userLimit = 42; // TODO: not sure about this
+	this->_userLimit = 2142;
 	this->_kModeOn = true;
 }
 
@@ -89,6 +89,10 @@ std::vector<Client*>	Channel::getRegs() const {
 	return (this->_regUsers);
 }
 
+std::vector<Client*>	Channel::getInvs() const {
+	return (this->_invUsers);
+}
+
 void	Channel::setName(const std::string &name) {
 	this->_name = name;
 }
@@ -111,6 +115,10 @@ void	Channel::downCount() {
 
 void	Channel::addUser(Client *user) {
 	this->_regUsers.push_back(user);
+}
+
+void	Channel::addInvited(Client *user) {
+	this->_invUsers.push_back(user);
 }
 
 bool	Channel::removeUser(Client *user) {
@@ -148,10 +156,10 @@ bool	Channel::isOperator(Client *user) {
 bool	Channel::isInvited(Client *user) {
 	std::vector<Client*>::iterator	it_inv = std::find(this->_invUsers.begin(), this->_invUsers.end(), user);
 
-	return (it_inv != this->_opUsers.end());
+	return (it_inv != this->_invUsers.end());
 }
 
-void Channel::invitedJoining(Client *user) {
+void	Channel::invitedJoining(Client *user) {
 	std::vector<Client*>::iterator	it_inv = std::find(this->_invUsers.begin(), this->_invUsers.end(), user);
 
 	if (it_inv != this->_invUsers.end()) {
@@ -206,5 +214,5 @@ void	Channel::oModeUnset(Client *user) {
 
 void	Channel::lModeUnset() {
 	this->_lModeOn = false;
-	this->_userLimit = 42; // TODO: not sure
+	this->_userLimit = 2142;
 }

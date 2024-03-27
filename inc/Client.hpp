@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -33,12 +34,16 @@ public:
 	void	setAuth(const bool &auth);
 	void	setStatus(const bool &status); // operator
 
-	std::string getNickname() const;
-	std::string	getUsername() const;
-	std::string	getRealname() const;
-	int			getSocket() const;
-	bool		getAuth() const;
-	bool		getStatus() const;
+	void	addChannel(const std::string &chName);
+	void	removeChannel(const std::string &chName);
+
+	std::string					getNickname() const;
+	std::string					getUsername() const;
+	std::string					getRealname() const;
+	int							getSocket() const;
+	bool						getAuth() const;
+	bool						getStatus() const;
+	std::vector<std::string>	getChannels() const;
 
 	void		fillBuffer(const std::string &msg);
 	std::string	readBuffer();

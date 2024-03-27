@@ -24,6 +24,7 @@
 // ERR_USERNOTINCHANNEL (441)
 // ERR_NOTONCHANNEL (442)
 // ERR_USERONCHANNEL (443)
+// ERR_NOTREGISTERED (451)
 // ERR_NEEDMOREPARAMS (461)
 // ERR_ALREADYREGISTERED (462)
 // ERR_PASSWDMISMATCH (464)
@@ -32,6 +33,7 @@
 // ERR_BADCHANNELKEY (475)
 // ERR_CHANOPRIVSNEEDED (482)
 
+// RPL_CHANNELMODEIS (324)
 // RPL_NOTOPIC (331)
 // RPL_TOPIC (332)
 // RPL_INVITING (341)
@@ -85,6 +87,10 @@ std::string errUserOnChannel(const std::string &channelName, const std::string &
 	return (":gerboa 443 " + clientName + " " + invitedClientName + " #" + channelName + " :is already on channel");
 }
 
+std::string errNotRegistered() {
+	return (":gerboa 451 unnamed :You have not registered");
+}
+
 std::string errAlreadyRegistered(const std::string &clientName) {
 	return (":gerboa 462 " + clientName + " :You may not reregister");
 }
@@ -114,6 +120,25 @@ std::string errChanOPrivsNeeded(const std::string &channelName, const std::strin
 }
 
 // RPL
+
+std::string rplChannelModeIs(const std::string &channelName, const std::string &clientName, Channel *channel) {
+	std::string msg = ":gerboa 324 " + clientName + " #" + channelName;
+
+	if (channel->getIModeStatus()) {
+		msg += " i";
+		msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
+	}
+	if (channel->getKModeStatus()) {
+		msg += " k " + channel->getKey();
+		msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
+	}
+	if (channel->getLimit() != 2142) {
+		msg += " l " + channel->getLimit();
+		msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
+	}
+
+	return (msg); //REVIEW: check if this is correct
+}
 
 std::string rplNoTopic(const std::string &channelName, const std::string &clientName) {
 	return (":gerboa 331 " + clientName + " #" + channelName + " :No topic is set");

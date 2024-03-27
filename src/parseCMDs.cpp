@@ -90,9 +90,16 @@ void Server::parseTopic(Client *client, std::string msg) {
 }
 
 void Server::parseMode(Client *client, std::string msg) {
-	(void)client;
-	(void)msg;
-	// TODO:
+	std::istringstream ssmsg(msg);
+	std::string target, arg;
+	std::vector<std::string> args;
+
+	std::getline(ssmsg, target, ' ');
+	while (std::getline(ssmsg, arg, ' ')) {
+		args.push_back(arg);
+	}
+
+	this->mode(client, target, args);
 }
 
 void Server::parseQuit(Client *client, std::string msg) {

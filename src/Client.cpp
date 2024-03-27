@@ -62,6 +62,18 @@ void	Client::setStatus(const bool &status) {
 	this->_isOperator = status;
 }
 
+void	Client::addChannel(const std::string &chName) {
+	this->_channels.push_back(chName);
+}
+
+void	Client::removeChannel(const std::string &chName) {
+	std::vector<std::string>::iterator	it_chan = std::find(this->_channels.begin(), this->_channels.end(), chName);
+	
+	if (it_chan != this->_channels.end()) {
+		this->_channels.erase(it_chan);
+	}
+}
+
 std::string Client::getNickname() const {
 	return (this->_nickname);
 }
@@ -86,9 +98,12 @@ bool		Client::getStatus() const {
 	return (this->_isOperator);
 }
 
+std::vector<std::string>	Client::getChannels() const {
+	return (this->_channels);
+}
+
 void		Client::fillBuffer(const std::string &msg) {
 	this->_buffer += msg;
-	// std::cout << "2 allbuffer: " << this->_buffer << std::endl;
 }
 
 std::string	Client::readBuffer() {
@@ -103,7 +118,7 @@ std::string	Client::readBuffer() {
 		return ("");
 	}
 
-	// std::cout << "subtringing" << std::endl;
+	// std::cout << "substringing" << std::endl;
 
 	std::string msg = this->_buffer.substr(0, pos);
 	this->_buffer.erase(0, pos + 2);

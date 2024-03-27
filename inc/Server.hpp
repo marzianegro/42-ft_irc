@@ -50,12 +50,13 @@ public:
 	void	startEpoll();
 	void	runEpoll();
 
-	std::string	invite(Client *inviter, Client *invited, const std::string &channel);
-	std::string	quit(Client *client, const std::string &reason);
+	void	invite(Client *inviter, Client *invited, const std::string &channel);
+	void	quit(Client *client, const std::string &reason);
 	
 private:  
 	void	newClientConnection();
 	void	clientEvent(epoll_event &event);
+	void	consoleEvent();
 	void	execCmd(const std::string &msg, Client *client);
 	bool	checkPw(const std::string &pw);
 	bool	checkNicknames(const std::string &nickname);
@@ -68,6 +69,7 @@ private:
 	void	join(Client *user, std::string &chName, const std::string &key);
 	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);
+	void	mode(Client *user, const std::string &channel, const std::vector<std::string> &mode);
 	void	nick(Client *client, const std::string &newNick);
 	void	user(Client *client, const std::string &username, const std::string &realname);
 	void	ping(Client *client, const std::string &token);

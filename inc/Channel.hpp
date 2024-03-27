@@ -39,6 +39,7 @@ public:
 	bool					getTModeStatus() const;
 	std::vector<Client*>	getOps() const;
 	std::vector<Client*>	getRegs() const;
+	std::vector<Client*>	getInvs() const;
 
 	void	setName(const std::string &name);
 	void	setTopic(const std::string &topic);
@@ -47,14 +48,15 @@ public:
 	void	downCount();
 
 	void	addUser(Client *user);
+	void	addInvited(Client *user);
 	bool	removeUser(Client *user);
 	bool	findUser(Client *user);
 	bool	isOperator(Client *user);
 	bool	isInvited(Client *user);
 	void	invitedJoining(Client *user);
 
-	// void		genaralMsg(Client *user, const std::string &msg); TODO:
-	// void		operatorMsg(Client *user, const std::string &msg); TODO:
+	// void		genaralMsg(Client *user, const std::string &msg); TODO: maybe
+	// void		operatorMsg(Client *user, const std::string &msg); TODO: maybe
 
 	void		iModeSet();
 	void		tModeSet();

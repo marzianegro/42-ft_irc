@@ -99,45 +99,52 @@ void	Server::startEpoll() {
 	std::cout << "File descriptor added to epoll instance\n";
 }
 
-std::string	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
-	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(channel);
+void	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
+	// REVIEW: is this done in parser? if not, is it correct?
+	if (!invited || channel.empty()) {
+		this->_msg = errNeedMoreParams(inviter->getNickname(), "INVITE");
+	}
 	
-	std::map<int, Client*>::iterator	clientIT = this->_clients.find(invited->getSocket());
-	if (clientIT != this->_clients.end()) {
-		//FIXME: check if invited != NULL, null mean that the invited client is not connected
-		this->_msg = "Invited client is not connected";
+	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(channel);
+	std::map<int, Client*>::iterator			it_client = this->_clients.find(invited->getSocket());
+
+	if (it_client == this->_clients.end()) {
+		// REVIEW: if invited is null, it means they're not connected (to the server?)
+		this->findClientByNick(invited->getNickname());
+		this->_msg = "Invited client is not on server";
 	}
 
-	if (chanIT == this->_channels.end()) {
-		this->_msg = errNoSuchChannel(chanIT->second->getName(), inviter->getNickname());
-	}
-	if (!(chanIT->second->findUser(inviter))) {
-		this->_msg = errNotOnChannel(chanIT->first, inviter->getNickname());
-	}
-	if (chanIT->second->findUser(invited)) {
-		this->_msg = errUserOnChannel(chanIT->first, inviter->getNickname(), invited->getNickname());
-	}
-	if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
+	if (it_chan == this->_channels.end()) {
+		this->_msg = errNoSuchChannel(it_chan->second->getName(), inviter->getNickname());
+	} else if (!(it_chan->second->findUser(inviter))) {
+		this->_msg = errNotOnChannel(it_chan->first, inviter->getNickname());
+	} else if (!it_chan->second->isOperator(inviter)) {
+		this->_msg = errChanOPrivsNeeded(channel, inviter->getNickname());
+	} else if (it_chan->second->findUser(invited)) {
+		this->_msg = errUserOnChannel(it_chan->first, inviter->getNickname(), invited->getNickname());
+	} else if (it_chan->second->getCount() >= it_chan->second->getLimit()) {
 		this->_msg = errChannelIsFull(channel,invited->getNickname());
 	}
-	// invited->setInvitation(true);
-	return (NULL); // TODO: ???
+
+	it_chan->second->addInvited(invited);
+	this->_msg = rplInviting(channel, inviter->getNickname(), invited->getNickname());
 }
 
-std::string	Server::quit(Client *client, const std::string &reason) {
-	std::map<int, Client*>::iterator	it = this->_clients.find(client->getSocket());
-	std::string	msg = ":gerboa QUIT : " + reason + '\n' +
-    "                               ; " + client->getNickname() + " is exiting the network with\
-                                   the message: " + '"' + reason + '"';
+void	Server::quit(Client *client, const std::string &reason) {
+	std::map<int, Client*>::iterator	it_client = this->_clients.find(client->getSocket());
+	
+	this->_msg = ":" + client->getNickname() + " QUIT :Quit";
+	if (!reason.empty()) {
+		this->_msg += ": " + reason;
+	}
 
 	std::map<int, Client*>::iterator	it_msg = this->_clients.begin();
-	while (it_msg != this->_clients.end()) {
-		send(it_msg->first, msg.c_str(), msg.length(), 0);
+	for (; it_msg != this->_clients.end(); it_msg++) {
+		send(it_msg->first, this->_msg.c_str(), this->_msg.length(), 0);
 	}
-	close(it->first);
-	delete it->second;
-	this->_clients.erase(it);
-	return (NULL); // TODO: ???
+	close(it_client->first);
+	delete it_client->second;
+	this->_clients.erase(it_client);
 }
 
 bool	Server::checkPw(const std::string &pw) {

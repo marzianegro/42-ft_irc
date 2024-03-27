@@ -18,7 +18,14 @@ void Server::clientDisconnect(Client *client) {
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), &this->_current_event);
 	this->_clients.erase(client->getSocket());
 	close(client->getSocket());
-	// TODO: quit from channels
+	
+	// REVIEW: quit from channels
+	std::vector<std::string>::iterator	it = client->getChannels().begin();
+	while (it != client->getChannels().end()) {
+		this->_channels[*it]->removeUser(client);
+		it++;
+	}
+
 	delete client;
 }
 
@@ -45,6 +52,16 @@ void Server::newClientConnection() {
 	this->_clients[clientSock] = new Client(clientSock);
 }
 
+void Server::consoleEvent() {
+	char buffer[MAX_BUFFER];
+	bzero(buffer, sizeof(buffer));
+
+	std::cin >> buffer;
+	std::string console = buffer;
+
+	std::cout << "msg from console: " + console << std::endl;
+}
+
 void Server::clientEvent(epoll_event &event) {
 	char buffer[MAX_BUFFER];
 	bzero(buffer, sizeof(buffer));
@@ -64,11 +81,9 @@ void Server::clientEvent(epoll_event &event) {
 		
 		it->second->fillBuffer(buffer);
 		msg = it->second->readBuffer();
-		// std::cout << "3 msg   : " << msg << std::endl;
 		while (!msg.empty()) {
 			this->execCmd(msg, it->second);
 			msg = it->second->readBuffer();
-			// std::cout << "4 msg   : " << msg << std::endl;
 		}
 	}
 }
@@ -81,8 +96,11 @@ void	Server::runEpoll() {
 	}
 	for (int i = 0; i < numEvents; i++) {
 		this->_current_event = this->_events[i];
+		std::cout << "event fd " << this->_current_event.data.fd << std::endl;
 		if (this->_current_event.data.fd == this->_serverSock) { // new client connection
 			this->newClientConnection();
+		} else if (this->_current_event.data.fd == STDIN_FILENO) {
+			this->consoleEvent(); //FIXME:
 		} else {
 			this->clientEvent(this->_events[i]);
 		}
@@ -111,7 +129,9 @@ void Server::execCmd(const std::string &msg, Client *client) {
 				this->clientDisconnect(client);
 			}
 		} else {
-			// TODO: not auth
+			this->_msg = errNotRegistered();
+			ftSend(client->getSocket(), this->_msg);
+			this->clientDisconnect(client);
 		}
 		return ;
 	}
@@ -124,53 +144,40 @@ void Server::execCmd(const std::string &msg, Client *client) {
 		cmdPos++;
 	}
 	
-	// std::cout << "command here is: " << possibleCmd[cmdPos] << '\n';
-// {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG"};
 	switch (cmdPos) {
 		case 0:
 			this->parsePrivmsg(client, msg.substr(pos+1));
 			break;
-
 		case 1:
 			this->parseJoin(client, msg.substr(pos+1));
 			break;
-
 		case 2:
 			this->parseInvite(client, msg.substr(pos+1));
 			break;
-		
 		case 3:
 			this->parseKick(client, msg.substr(pos+1));
 			break;
-
 		case 4:
 			this->parseTopic(client, msg.substr(pos+1));
 			break;
-
 		case 5:
 			this->parseMode(client, msg.substr(pos+1));
 			break;
-
 		case 6:
 			this->parseQuit(client, msg.substr(pos+1));
 			break;
-
 		case 7:
 			this->nick(client, msg.substr(pos+1));
 			break;
-		
 		case 8:
 			this->parseUser(client, msg.substr(pos+1));
 			break;
-
 		case 9:
 			this->ping(client, msg.substr(pos+1));
 			break;
-
 		case 10:
 			this->pong(client);
 			break;
-
 		default:
 			std::cout << "INTO UNKNWOWN COMMAND" << '\n';
 			this->_msg = errUnknownCommand(client->getNickname(), cmd);
@@ -178,7 +185,6 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 	}
 }
-
 
 /*
 **		channel.kick

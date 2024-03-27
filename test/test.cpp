@@ -1,14 +1,19 @@
 #include <iostream>
+#include <sstream>
+#include <vector>
 #include <string>
 
 int main() {
-    std::string array[] = {"Hellaaaaaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahaahahahahhahahaahhahaahahhaahahahhahao", "World", "from", "C++"};
-	int sizeofstr = sizeof(std::string);
-    int num_elements = sizeof(array) / sizeofstr;
+	std::istringstream ssmsg("#target +k test +i");
+	std::string target, arg;
+	std::vector<std::string> args;
 
-	std::cout << "Size of string: " << sizeofstr << std::endl;
-	std::cout << "Size of array: " << sizeof(array) << std::endl;
-    std::cout << "Number of elements: " << num_elements << std::endl;
+	std::getline(ssmsg, target, ' ');
+	while (std::getline(ssmsg, arg, ' ')) {
+		args.push_back(arg);
+	}
 
+    std::cout << "Target:  " << target << std::endl;
+    std::cout << "ArgSize: " << args.size() << std::endl;
     return 0;
 }

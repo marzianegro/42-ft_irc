@@ -79,6 +79,7 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 	if (this->_msg.empty()) {
 		chanIT = this->_channels.find(chName);
 		if (chanExist) {
+			user->addChannel(chName);
 			chanIT->second->upCount();
 			chanIT->second->invitedJoining(user);
 			chanIT->second->addUser(user);
@@ -102,9 +103,10 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 void Server::kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason) {
 	bool hasBeenKicked = false;
 
+	std::cout << "channel name is " << chName << std::endl;
 	Channel *channel = this->_channels[chName];
 	
-	if (chName.empty()) {
+	if (chName.empty() || !kicked) {
 		this->_msg = errNeedMoreParams(kicker->getNickname(), "KICK");
 	} else if (!channel) {
 		this->_msg = errNoSuchChannel(chName, kicker->getNickname());
@@ -117,11 +119,12 @@ void Server::kick(Client *kicker, Client *kicked, std::string &chName, const std
 	} else {
 		hasBeenKicked = true;
 		channel->downCount();
+		kicked->removeChannel(chName);
 		this->_msg = ":" + kicker->getNickname() + " KICK #" + chName + kicked->getNickname() + " " + reason;
 	}
 
 	if (hasBeenKicked) {
-		sendToChannel(chName, NULL, false); // TODO: kicker escluso?
+		sendToChannel(chName, NULL, false); // REVIEW: kicker escluso?
 	} else {
 		ftSend(kicker->getSocket(), this->_msg);
 	}
@@ -151,6 +154,15 @@ void Server::topic(Client *user, const std::string &chName, const std::string &t
 	if (!this->_msg.empty()) {
 		ftSend(user->getSocket(), this->_msg);
 	}
+}
+void Server::mode(Client *user, const std::string &channel, const std::vector<std::string> &mode) {
+	(void)user;
+	(void)channel;
+	(void)mode;
+	// TODO: implement this, topetta
+	// ERR_NOSUCHCHANNEL (403)
+	// ERR_CHANOPRIVSNEEDED (482)
+	// RPL_CHANNELMODEIS (324) 
 }
 
 bool checkNick(const std::string &nick) {
