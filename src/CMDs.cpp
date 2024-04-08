@@ -155,14 +155,119 @@ void Server::topic(Client *user, const std::string &chName, const std::string &t
 		ftSend(user->getSocket(), this->_msg);
 	}
 }
-void Server::mode(Client *user, const std::string &channel, const std::vector<std::string> &mode) {
-	(void)user;
-	(void)channel;
-	(void)mode;
-	// TODO: implement this, topetta
-	// ERR_NOSUCHCHANNEL (403)
-	// ERR_CHANOPRIVSNEEDED (482)
-	// RPL_CHANNELMODEIS (324) 
+void Server::mode(Client *user, const std::string &chName, const std::vector<std::string> &mode) {
+	Channel *channel = this->_channels[chName];
+	
+	if (!channel) {
+		this->_msg = errNoSuchChannel(chName, user->getNickname());
+	} else if (!channel->findUser(user)) {
+		this->_msg = errNotOnChannel(chName, user->getNickname());
+	} else if (!channel->isOperator(user)) {
+		this->_msg = errChanOPrivsNeeded(chName, user->getNickname());
+	}
+	
+	std::vector<std::string>::const_iterator it_mode = mode.begin();
+	while (it_mode != mode.end()) {
+		if (it_mode->length() == 2 && (*it_mode)[0] == '+') {
+			modeSet(mode, channel, user);
+		} else if (it_mode->length() == 2 && (*it_mode)[0] == '-') {
+			modeUnset(mode, channel, user);
+		}
+	}
+
+	this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
+}
+
+void Server::modeSet(const std::vector<std::string> &mode, Channel *channel, Client *user) {
+	std::vector<std::string>::const_iterator it_mode = mode.begin();
+
+	if (((*it_mode)[1] == 'i')) {
+		channel->iModeSet();
+	} else if (((*it_mode)[1] == 't')) {
+		channel->tModeSet();
+	} else if (((*it_mode)[1] == 'k')) {
+		++it_mode;
+		if (it_mode != mode.end() && it_mode->length() > 0 && ((*it_mode)[0] != '+' && (*it_mode)[0] != '-')) {
+			channel->kModeSet(*it_mode);
+		} else {
+			--it_mode;
+		}
+	} else if (((*it_mode)[1] == 'o')) {
+		++it_mode;
+		if (it_mode != mode.end() && it_mode->length() > 0 && ((*it_mode)[0] != '+' && (*it_mode)[0] != '-')) {
+			std::map<int, Client*>::iterator	it_user = this->_clients.begin();
+
+			while (it_user++ != this->_clients.end()) {
+				if (it_user->second->getNickname().compare(*it_mode) == 0) {
+					if (channel->findUser(it_user->second) && !channel->isOperator(it_user->second)) { // REVIEW: is there an error for already being operator?
+						channel->oModeSet(it_user->second);
+					} else {
+						this->_msg = errUserNotInChannel(channel->getName(), user->getNickname(), it_user->second->getNickname());
+					}
+					break;
+				}
+			}
+			if (it_user == this->_clients.end()) {
+				this->_msg = errNoSuchNick(user->getNickname(), it_user->second->getNickname());
+			}
+			if (!this->_msg.empty()) {
+				ftSend(user->getSocket(), this->_msg);
+				this->_msg = "";
+			}
+		} else {
+			--it_mode;
+		}
+	} else if (((*it_mode)[1] == 'l')) {
+		++it_mode;
+		if (it_mode != mode.end()) {
+			std::istringstream	iss(*it_mode);
+			unsigned int	tryUInt = 0;
+			if (iss >> tryUInt) {
+				channel->lModeSet(tryUInt);
+			}
+		} else {
+			--it_mode;
+		}
+	}
+}
+
+void Server::modeUnset(const std::vector<std::string> &mode, Channel *channel, Client *user) {
+	std::vector<std::string>::const_iterator it_mode = mode.begin();
+
+	if (((*it_mode)[1] == 'i')) {
+		channel->iModeUnset();
+	} else if (((*it_mode)[1] == 't')) {
+		channel->tModeUnset();
+	} else if (((*it_mode)[1] == 'k')) {
+		channel->kModeUnset();
+	} else if (((*it_mode)[1] == 'o')) {
+		++it_mode;
+		if (it_mode != mode.end() && it_mode->length() > 0 && ((*it_mode)[0] != '+' && (*it_mode)[0] != '-')) {
+			std::map<int, Client*>::iterator	it_user = this->_clients.begin();
+
+			while (it_user++ != this->_clients.end()) {
+				if (it_user->second->getNickname().compare(*it_mode) == 0) {
+					if (channel->findUser(it_user->second)) {
+						channel->oModeUnset(it_user->second);
+					} else {
+						this->_msg = errUserNotInChannel(channel->getName(), user->getNickname(), it_user->second->getNickname());
+					}
+					break;
+				}
+			}
+			if (it_user == this->_clients.end()) {
+				this->_msg = errNoSuchNick(user->getNickname(), it_user->second->getNickname());
+			}
+			if (!this->_msg.empty()) {
+				ftSend(user->getSocket(), this->_msg);
+				this->_msg = "";
+			}
+		} else {
+			--it_mode;
+		}
+	} else if (((*it_mode)[1] == 'l')) {
+		channel->lModeUnset();
+	}
 }
 
 bool checkNick(const std::string &nick) {

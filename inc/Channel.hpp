@@ -72,17 +72,17 @@ public:
 private:
 	Channel(); // ocf default constructor
 
-	std::string				_name;
-	std::string				_topic;
-	std::string				_key;
-	int						_userLimit;
-	int						_userCount;
+	std::string	_name;
+	std::string	_topic;
+	std::string	_key;
+	int			_userLimit;
+	int			_userCount;
 
-	bool					_iModeOn; // invite-only channel mode
-	bool					_tModeOn; // protected topic mode
-	bool					_kModeOn; // key channel mode
-	bool					_oModeOn; // oper user mode
-	bool					_lModeOn; // client limit channel mode
+	bool	_iModeOn; // invite-only channel mode
+	bool	_tModeOn; // protected topic mode
+	bool	_kModeOn; // key channel mode
+	bool	_oModeOn; // oper user mode
+	bool	_lModeOn; // client limit channel mode
 
 	std::vector<Client*>	_opUsers; // operator (not regular)
 	std::vector<Client*>	_regUsers; // regular (not operator)

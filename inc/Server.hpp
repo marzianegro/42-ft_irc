@@ -70,6 +70,8 @@ private:
 	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);
 	void	mode(Client *user, const std::string &channel, const std::vector<std::string> &mode);
+	void 	modeSet(const std::vector<std::string> &mode, Channel *channel, Client *user);
+	void 	modeUnset(const std::vector<std::string> &mode, Channel *channel, Client *user);
 	void	nick(Client *client, const std::string &newNick);
 	void	user(Client *client, const std::string &username, const std::string &realname);
 	void	ping(Client *client, const std::string &token);
@@ -105,8 +107,8 @@ private:
 };
 
 // Utils
-std::string	trimChannelName(const std::string &channel);
+std::string fixChannelName(const std::string &channelName);
+void		ftSend(int fd, std::string &msg);
 bool 		isChannelValid(const std::string &channel);
 bool 		isNicknameValid(const std::string &nickname);
-void		ftSend(int fd, std::string &msg);
-std::string fixChannelName(const std::string &channelName);
+std::string	trimChannelName(const std::string &channel);
