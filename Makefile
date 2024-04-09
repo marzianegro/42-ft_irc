@@ -6,7 +6,7 @@
 #    By: mnegro <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/24 18:25:00 by mnegro            #+#    #+#              #
-#    Updated: 2024/03/16 17:53:15 by mnegro           ###   ########.fr        #
+#    Updated: 2024/04/09 09:02:45 by mnegro           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 RM = rm -f
 
 #### TARGETS ####
-FL_SRCS = Channel.cpp Client.cpp CMDs.cpp main.cpp numReplies.cpp parseCMDs.cpp Server.cpp ServerLife.cpp Utils.cpp
+FL_SRCS = Channel.cpp Client.cpp cmds.cpp cmdUtils.cpp main.cpp numReplies.cpp parseCmds.cpp Server.cpp serverLife.cpp utils.cpp
 DIRSRCS = src/
 SRCS = ${addprefix ${DIRSRCS},${FL_SRCS}}
 

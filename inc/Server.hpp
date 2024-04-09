@@ -107,6 +107,7 @@ private:
 };
 
 // Utils
+bool		checkNick(const std::string &nick);
 std::string fixChannelName(const std::string &channelName);
 void		ftSend(int fd, std::string &msg);
 bool 		isChannelValid(const std::string &channel);
