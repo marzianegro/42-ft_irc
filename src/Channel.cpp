@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/16 18:46:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/16 23:25:20 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ Channel::Channel(Client *creator, const std::string &name) {
 	this->_opUsers.push_back(creator);
 	this->_name = name;
 	this->_userLimit = 2142;
+	this->_userCount = 1;
+	this->_iModeOn = false;
+	this->_tModeOn = false;
+	this->_kModeOn = false;
+	this->_oModeOn = false;
+	this->_lModeOn = false;
 }
 
 Channel::Channel(Client *creator, const std::string &name, const std::string &key) {
@@ -28,7 +34,12 @@ Channel::Channel(Client *creator, const std::string &name, const std::string &ke
 	this->_name = name;
 	this->_key = key;
 	this->_userLimit = 2142;
+	this->_userCount = 1;
+	this->_iModeOn = false;
+	this->_tModeOn = false;
 	this->_kModeOn = true;
+	this->_oModeOn = false;
+	this->_lModeOn = false;
 }
 
 Channel::Channel(const Channel &src) {
@@ -98,9 +109,10 @@ void	Channel::setName(const std::string &name) {
 }
 
 void	Channel::setTopic(const std::string &topic) {
+	std::cout << "topic gets here as: " << topic << '\n';
 	if (topic.length() == 1 && topic[0] == ':') {
 		this->_topic = "";
-	} else if (!topic.compare(this->_topic)) {
+	} else if (topic.compare(this->_topic) != 0) {
 		this->_topic = topic;
 	}
 }
@@ -182,8 +194,8 @@ void	Channel::kModeSet(const std::string &key) {
 
 void	Channel::oModeSet(Client *user) {
 	this->_oModeOn = true;
-	std::vector<Client*>::iterator	regIT = std::find(this->_regUsers.begin(), this->_regUsers.end(), user);
-	this->_regUsers.erase(regIT);
+	std::vector<Client*>::iterator	it_reg = std::find(this->_regUsers.begin(), this->_regUsers.end(), user);
+	this->_regUsers.erase(it_reg);
 	this->_opUsers.push_back(user);
 }
 
@@ -207,8 +219,8 @@ void	Channel::kModeUnset() {
 
 void	Channel::oModeUnset(Client *user) {
 	this->_oModeOn = false;
-	std::vector<Client*>::iterator	opIT = std::find(this->_opUsers.begin(), this->_opUsers.end(), user);
-	this->_opUsers.erase(opIT);
+	std::vector<Client*>::iterator	it_op = std::find(this->_opUsers.begin(), this->_opUsers.end(), user);
+	this->_opUsers.erase(it_op);
 	this->_regUsers.push_back(user);
 }
 

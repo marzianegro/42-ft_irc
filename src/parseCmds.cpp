@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:59 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/09 09:00:59 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/16 22:48:17 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void Server::parseMode(Client *client, std::string msg) {
 	while (std::getline(ssmsg, arg, ' ')) {
 		args.push_back(arg);
 	}
+
+	target = trimChannelName(target);
 
 	this->mode(client, target, args);
 }

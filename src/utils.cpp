@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils.cpp                                          :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:01:06 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/09 09:01:16 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/16 23:25:21 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@ void	Server::sendToChannel(const std::string &chName, Client *exclude, bool only
 	std::vector<Client*>::iterator	it_op = opUsers.begin();
 
 	for (; it_op != opUsers.end(); it_op++) {
-		if (*it_op == exclude)
+		if (*it_op == exclude) {
 			continue;
+		}
 		ftSend((*it_op)->getSocket(), this->_msg);
 	}
 	for (; !onlyOps && it_reg != regUsers.end(); it_reg++) {
-		if (*it_reg == exclude)
+		if (*it_reg == exclude) {
 			continue;
+		}
 		ftSend((*it_reg)->getSocket(), this->_msg);
 	}
 }
@@ -65,7 +67,7 @@ bool isChannelValid(const std::string &channel) {
 	if (channel.size() < 1 || channel.size() > 50)
 		return (false);
 	
-	return (channel[0] != '#' && channel[0] != '&');
+	return (channel[0] == '#' || channel[0] == '&');
 }
 
 bool isNicknameValid(const std::string &nickname) {

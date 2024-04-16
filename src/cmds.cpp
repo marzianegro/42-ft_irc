@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/09 09:00:41 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/16 23:25:21 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void Server::sendMsgToChannel(Client *client, std::string &chName, std::string &
 }
 
 void	Server::join(Client *user, std::string &chName, const std::string &key) {
+	// FIXME: user can join multiple times
 	if (chName[0] == '#') {
 		chName = chName.substr(1);
 	}
@@ -78,6 +79,7 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 		chanExist = false;
 	} else if (chanIT == this->_channels.end()) {
 		this->_channels[chName] = new Channel(user, chName, key);
+		chanExist = false;
 	} else if (chanIT->second->getKModeStatus() && key != chanIT->second->getKey()) {
 		this->_msg = errBadChannelKey(chName, user->getNickname());
 	} else if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
@@ -169,25 +171,30 @@ void Server::topic(Client *user, const std::string &chName, const std::string &t
 }
 void Server::mode(Client *user, const std::string &chName, const std::vector<std::string> &mode) {
 	Channel *channel = this->_channels[chName];
-	
+
 	if (!channel) {
 		this->_msg = errNoSuchChannel(chName, user->getNickname());
 	} else if (!channel->findUser(user)) {
 		this->_msg = errNotOnChannel(chName, user->getNickname());
+	} else if (mode.empty()) {
+		std::cout << "MODE is empty"; // REVIEW: for now keep this comment pls
+		this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
 	} else if (!channel->isOperator(user)) {
 		this->_msg = errChanOPrivsNeeded(chName, user->getNickname());
-	}
-	
-	std::vector<std::string>::const_iterator it_mode = mode.begin();
-	while (it_mode != mode.end()) {
-		if (it_mode->length() == 2 && (*it_mode)[0] == '+') {
-			modeSet(mode, channel, user);
-		} else if (it_mode->length() == 2 && (*it_mode)[0] == '-') {
-			modeUnset(mode, channel, user);
+	} else {
+		std::vector<std::string>::const_iterator it_mode = mode.begin();
+		while (it_mode != mode.end()) {
+			if (it_mode->length() == 2 && (*it_mode)[0] == '+') {
+				modeSet(mode, channel, user);
+			} else if (it_mode->length() == 2 && (*it_mode)[0] == '-') {
+				modeUnset(mode, channel, user);
+			}
+			++it_mode;
 		}
+		this->_msg = rplChannelModeIs(chName, user->getNickname(), channel); //FIXME: is this sent to everyone in the channel?
 	}
 
-	this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
+	ftSend(user->getSocket(), this->_msg);
 }
 
 void Server::nick(Client *client, const std::string &newNick) {
