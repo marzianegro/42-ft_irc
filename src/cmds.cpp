@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/18 15:44:02 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/18 16:35:15 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void Server::sendMsgToChannel(Client *client, std::string &chName, std::string &
 }
 
 void	Server::join(Client *user, std::string &chName, const std::string &key) {
-	if (chName[0] == '#') {
+	if (chName[0] == '#' || chName[0] == '&') {
 		chName = chName.substr(1);
 	}
 
