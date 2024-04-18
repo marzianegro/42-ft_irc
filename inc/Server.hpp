@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/23 16:16:02 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/04/18 15:33:13 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ private:
 	void	sendMsgToClient(Client *client, const std::string &target, std::string &msg);
 	void	sendMsgToChannel(Client *client, std::string &channel, std::string &msg, bool onlyOps);
 	void	join(Client *user, std::string &chName, const std::string &key);
+	void	part(Client *user, std::string &chName);
 	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);
 	void	mode(Client *user, const std::string &channel, const std::vector<std::string> &mode);

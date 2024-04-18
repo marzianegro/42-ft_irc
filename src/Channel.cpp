@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/16 23:25:20 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/18 15:44:04 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ void	Channel::setName(const std::string &name) {
 	this->_name = name;
 }
 
+// FIXME: add this->_msg
 void	Channel::setTopic(const std::string &topic) {
 	std::cout << "topic gets here as: " << topic << '\n';
 	if (topic.length() == 1 && topic[0] == ':') {
@@ -201,7 +202,11 @@ void	Channel::oModeSet(Client *user) {
 
 void	Channel::lModeSet(const int &limit) {
 	this->_lModeOn = true;
-	this->_userLimit = limit;
+	if (limit < this->_userCount) {
+		std::cerr << "Cannot set user limit to lower than the number of users currently in channel\n";
+	} else {
+		this->_userLimit = limit;
+	}
 }
 
 void	Channel::iModeUnset() {

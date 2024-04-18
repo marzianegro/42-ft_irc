@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/16 18:04:07 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/18 15:44:10 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,9 +142,9 @@ void	Server::quit(Client *client, const std::string &reason) {
 	for (; it_msg != this->_clients.end(); it_msg++) {
 		send(it_msg->first, this->_msg.c_str(), this->_msg.length(), 0);
 	}
+	this->_clients.erase(it_client);
 	close(it_client->first);
 	delete it_client->second;
-	this->_clients.erase(it_client);
 }
 
 bool	Server::checkPw(const std::string &pw) {

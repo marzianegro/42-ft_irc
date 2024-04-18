@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/16 23:25:21 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/18 15:44:02 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,54 +63,75 @@ void Server::sendMsgToChannel(Client *client, std::string &chName, std::string &
 }
 
 void	Server::join(Client *user, std::string &chName, const std::string &key) {
-	// FIXME: user can join multiple times
 	if (chName[0] == '#') {
 		chName = chName.substr(1);
 	}
 
-	std::map<std::string, Channel*>::iterator	chanIT = this->_channels.find(chName);
+	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(chName);
 	this->_msg = "";
 	bool chanExist = true;
 
 	if (chName.empty()) {
 		this->_msg = errNeedMoreParams(user->getNickname(), "JOIN");
-	} else if (chanIT == this->_channels.end() && key.empty()) {
+	} else if (it_chan == this->_channels.end() && key.empty()) {
 		this->_channels[chName] = new Channel(user, chName);
 		chanExist = false;
-	} else if (chanIT == this->_channels.end()) {
+	} else if (it_chan == this->_channels.end()) {
 		this->_channels[chName] = new Channel(user, chName, key);
 		chanExist = false;
-	} else if (chanIT->second->getKModeStatus() && key != chanIT->second->getKey()) {
+	} else if (it_chan->second->findUser(user)) {
+		this->_msg = errUserOnChannel(chName, user->getNickname(), NULL); // REVIEW: here? correct numReply?
+	} else if (it_chan->second->getKModeStatus() && key != it_chan->second->getKey()) {
 		this->_msg = errBadChannelKey(chName, user->getNickname());
-	} else if (chanIT->second->getCount() >= chanIT->second->getLimit()) {
+	} else if (it_chan->second->getCount() >= it_chan->second->getLimit()) {
 		this->_msg = errChannelIsFull(chName, user->getNickname());
-	} else if (chanIT->second->getIModeStatus() && !chanIT->second->isInvited(user)) {
+	} else if (it_chan->second->getIModeStatus() && !it_chan->second->isInvited(user)) {
 		this->_msg = errInviteOnlyChan(chName, user->getNickname());
 	}
 
 	std::cout << "server _msg is " << this->_msg << std::endl;
 
 	if (this->_msg.empty()) {
-		chanIT = this->_channels.find(chName);
+		it_chan = this->_channels.find(chName);
 		if (chanExist) {
 			user->addChannel(chName);
-			chanIT->second->upCount();
-			chanIT->second->invitedJoining(user);
-			chanIT->second->addUser(user);
+			it_chan->second->upCount();
+			it_chan->second->invitedJoining(user);
+			it_chan->second->addUser(user);
 		}
 		
 		this->_msg = ":" + user->getNickname() + " JOIN #" + chName;
 		sendToChannel(chName, NULL, false);
 		
-		this->_msg = chanIT->second->getTopic(user);
+		this->_msg = it_chan->second->getTopic(user);
 		ftSend(user->getSocket(), this->_msg);
 
-		this->_msg = rplNamReply(*chanIT->second, user->getNickname());
+		this->_msg = rplNamReply(*it_chan->second, user->getNickname());
 		ftSend(user->getSocket(), this->_msg);
-		this->_msg = rplEndOfNames(chanIT->first, user->getNickname());
+		this->_msg = rplEndOfNames(it_chan->first, user->getNickname());
 		ftSend(user->getSocket(), this->_msg);
 	} else {
 		ftSend(user->getSocket(), this->_msg);
+	}
+}
+
+void	Server::part(Client *user, std::string &chName) {
+	Channel *channel = this->_channels[chName];
+
+	if (chName.empty()) {
+		this->_msg = errNeedMoreParams(user->getNickname(), "PART");
+	}	else if (!channel) {
+		this->_msg = errNoSuchChannel(chName, user->getNickname());
+	} else if (!channel->findUser(user)) {
+		this->_msg = errNotOnChannel(chName, user->getNickname());
+	}
+
+	if (this->_msg.empty()) {
+		channel->removeUser(user);
+		channel->downCount();
+		user->removeChannel(chName);
+		this->_msg = ":" + user->getNickname() + " is leaving the channel #" + chName;
+		sendToChannel(chName, NULL, false);
 	}
 }
 
@@ -132,6 +153,7 @@ void Server::kick(Client *kicker, Client *kicked, std::string &chName, const std
 		this->_msg = errUserNotInChannel(chName, kicker->getNickname(), kicked->getNickname());
 	} else {
 		hasBeenKicked = true;
+		channel->removeUser(kicked);
 		channel->downCount();
 		kicked->removeChannel(chName);
 		this->_msg = ":" + kicker->getNickname() + " KICK #" + chName + kicked->getNickname() + " " + reason;
