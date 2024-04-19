@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/19 10:31:24 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/19 19:59:39 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ std::string	Channel::getKey() const {
 	return (this->_key);
 }
 
-int	Channel::getLimit() const {
+unsigned int	Channel::getLimit() const {
 	return (this->_userLimit);
 }
 
-int	Channel::getCount() const {
+unsigned int	Channel::getCount() const {
 	return (this->_userCount);
 }
 
@@ -165,13 +165,13 @@ bool	Channel::findUser(Client *user) {
 bool	Channel::isOperator(Client *user) {
 	std::vector<Client*>::iterator	it_op = std::find(this->_opUsers.begin(), this->_opUsers.end(), user);
 
-	if (it_op != this->_opUsers.end()) {
-		std::cout << "Confirming that user " << user->getNickname() << " IS operator\n";
-		return (true);
-	}
-	std::cout << "Confirming that user " << user->getNickname() << " IS NOT operator\n";
-	return (false);
-	// return (it_op != this->_opUsers.end());
+	// if (it_op != this->_opUsers.end()) {
+	// 	std::cout << "Confirming that user " << user->getNickname() << " IS operator\n";
+	// 	return (true);
+	// }
+	// std::cout << "Confirming that user " << user->getNickname() << " IS NOT operator\n";
+	// return (false);
+	return (it_op != this->_opUsers.end());
 }
 
 bool	Channel::isInvited(Client *user) {
@@ -210,11 +210,7 @@ void	Channel::oModeSet(Client *user) {
 
 void	Channel::lModeSet(const int &limit) {
 	this->_lModeOn = true;
-	if (limit < this->_userCount) {
-		std::cerr << "Cannot set user limit to lower than the number of users currently in channel\n";
-	} else {
-		this->_userLimit = limit;
-	}
+	this->_userLimit = limit;
 }
 
 void	Channel::iModeUnset() {

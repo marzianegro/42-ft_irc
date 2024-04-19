@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/18 15:33:13 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/19 20:20:13 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ private:
 	void	sendToChannel(const std::string &chName, Client *exclude, bool onlyOps);
 
 	void	sendMsgToClient(Client *client, const std::string &target, std::string &msg);
-	void	sendMsgToChannel(Client *client, std::string &channel, std::string &msg, bool onlyOps);
+	void	sendMsgToChannel(Client *client, std::string channel, std::string &msg, bool onlyOps);
 	void	join(Client *user, std::string &chName, const std::string &key);
 	void	part(Client *user, std::string &chName);
 	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);

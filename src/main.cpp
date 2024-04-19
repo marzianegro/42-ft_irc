@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 10:34:21 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/18 15:54:58 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/19 19:30:11 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	checkPort(std::string portStr) {
 	for (size_t i = 0; i < portStr.length(); i++) {
 		if (!isdigit(portStr[i])) {
 			std::cerr << "\033[1;31mERROR\033[0m Invalid port\n";
-			std::cout << "Port should be a numeric value\n";
+			std::cout << "Port should be a positive numeric value\n";
 			exit(EXIT_FAILURE);
 		}
 	}

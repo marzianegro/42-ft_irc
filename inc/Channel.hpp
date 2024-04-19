@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/18 15:44:04 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/19 19:59:36 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ public:
 	std::string				getName() const;
 	std::string				getTopic(Client *user) const;
 	std::string				getKey() const;
-	int						getLimit() const;
-	int						getCount() const;
+	unsigned int			getLimit() const;
+	unsigned int			getCount() const;
 	bool					getIModeStatus() const;
 	bool					getKModeStatus() const;
 	bool					getTModeStatus() const;
@@ -72,11 +72,11 @@ public:
 private:
 	Channel(); // ocf default constructor
 
-	std::string	_name;
-	std::string	_topic;
-	std::string	_key;
-	int			_userLimit;
-	int			_userCount;
+	std::string		_name;
+	std::string		_topic;
+	std::string		_key;
+	unsigned int	_userLimit;
+	unsigned int	_userCount;
 
 	bool	_iModeOn; // invite-only channel mode
 	bool	_tModeOn; // protected topic mode

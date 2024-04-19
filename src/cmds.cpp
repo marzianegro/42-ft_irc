@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/19 10:30:14 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/19 19:59:36 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Server::sendMsgToClient(Client *client, const std::string &target, std::str
 	ftSend(client->getSocket(), this->_msg);
 }
 
-void Server::sendMsgToChannel(Client *client, std::string &chName, std::string &msg, bool onlyOps) {
+void Server::sendMsgToChannel(Client *client, std::string chName, std::string &msg, bool onlyOps) {
 	if (chName[0] == '@') {
 		chName = chName.substr(1);
 	}
@@ -63,7 +63,7 @@ void Server::sendMsgToChannel(Client *client, std::string &chName, std::string &
 }
 
 void	Server::join(Client *user, std::string &chName, const std::string &key) {
-	if (chName[0] == '#' || chName[0] == '&') {
+	if (chName[0] == '#' || chName[0] == '&') { // FIXME: @Gigi ricordati di cambiare TUTTOOO
 		chName = chName.substr(1);
 	}
 
@@ -80,7 +80,7 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 		this->_channels[chName] = new Channel(user, chName, key);
 		chanExist = false;
 	} else if (it_chan->second->findUser(user)) {
-		this->_msg = errUserOnChannel(chName, user->getNickname(), NULL); // REVIEW: here? correct numReply?
+		this->_msg = errUserOnChannel(chName, user->getNickname(), NULL); // REVIEW: numReply
 	} else if (it_chan->second->getKModeStatus() && key != it_chan->second->getKey()) {
 		this->_msg = errBadChannelKey(chName, user->getNickname());
 	} else if (it_chan->second->getCount() >= it_chan->second->getLimit()) {
@@ -199,7 +199,6 @@ void Server::mode(Client *user, const std::string &chName, const std::vector<std
 	} else if (!channel->findUser(user)) {
 		this->_msg = errNotOnChannel(chName, user->getNickname());
 	} else if (mode.empty()) {
-		std::cout << "MODE is empty"; // REVIEW: for now keep this comment pls
 		this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
 	} else if (!channel->isOperator(user)) {
 		this->_msg = errChanOPrivsNeeded(chName, user->getNickname());
@@ -213,7 +212,9 @@ void Server::mode(Client *user, const std::string &chName, const std::vector<std
 			}
 			++it_mode;
 		}
-		this->_msg = rplChannelModeIs(chName, user->getNickname(), channel); //FIXME: is this sent to everyone in the channel?
+		this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
+		// FIXME: is this sent to everyone in the channel?
+		// REVIEW: this doesn't print correctly with +/-o; should be something like :NickName!~UserName@host MODE #channel +o TargetUserName
 	}
 
 	ftSend(user->getSocket(), this->_msg);
