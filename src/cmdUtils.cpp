@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/18 16:27:14 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/19 10:30:10 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,13 @@ void Server::modeSet(const std::vector<std::string> &mode, Channel *channel, Cli
 		}
 	} else if (((*it_mode)[1] == 'o')) {
 		++it_mode;
+		std::cout << "1. The user we're trying to make operator is " << *(it_mode) << '\n';
 		if (it_mode != mode.end() && it_mode->length() > 0 && ((*it_mode)[0] != '+' && (*it_mode)[0] != '-')) {
 			std::map<int, Client*>::iterator	it_user = this->_clients.begin();
 
-			while (it_user++ != this->_clients.end()) {
+			while (it_user != this->_clients.end()) {
+				std::cout << "We're looking in this->_clients to find " << *(it_mode) << '\n';
+				std::cout << "Right now we're at user " << it_user->second->getNickname() << '\n';
 				if (it_user->second->getNickname().compare(*it_mode) == 0) {
 					if (channel->findUser(it_user->second) && !channel->isOperator(it_user->second)) { // REVIEW: no error msg for already being operator
 						channel->oModeSet(it_user->second);
@@ -45,6 +48,7 @@ void Server::modeSet(const std::vector<std::string> &mode, Channel *channel, Cli
 					}
 					break;
 				}
+				++it_user;
 			}
 			if (it_user == this->_clients.end()) {
 				this->_msg = errNoSuchNick(user->getNickname(), it_user->second->getNickname());
@@ -81,6 +85,7 @@ void Server::modeUnset(const std::vector<std::string> &mode, Channel *channel, C
 		channel->kModeUnset();
 	} else if (((*it_mode)[1] == 'o')) {
 		++it_mode;
+		std::cout << "++it_mode results in " << (*it_mode) << '\n';
 		if (it_mode != mode.end() && it_mode->length() > 0 && ((*it_mode)[0] != '+' && (*it_mode)[0] != '-')) {
 			std::map<int, Client*>::iterator	it_user = this->_clients.begin();
 
