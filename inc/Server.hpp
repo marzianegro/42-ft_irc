@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/19 20:20:13 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/22 12:26:59 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ private:
 	void	sendMsgToClient(Client *client, const std::string &target, std::string &msg);
 	void	sendMsgToChannel(Client *client, std::string channel, std::string &msg, bool onlyOps);
 	void	join(Client *user, std::string &chName, const std::string &key);
-	void	part(Client *user, std::string &chName);
+	void	part(Client *user, std::string &chName, const std::string &reason);
 	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);
 	void	mode(Client *user, const std::string &channel, const std::vector<std::string> &mode);
@@ -77,6 +77,7 @@ private:
 	void	user(Client *client, const std::string &username, const std::string &realname);
 	void	ping(Client *client, const std::string &token);
 	void	pong(Client *client);
+	void	who(Client *client, const std::string &chName);
 
 	void	parsePrivmsg(Client *client, std::string msg);
 	void	parseJoin(Client *client, std::string msg);
@@ -87,6 +88,8 @@ private:
 	void	parseQuit(Client *client, std::string msg);
 	void	parseUser(Client *client, std::string msg);
 	void	parseOper(Client *client, std::string msg);
+	void	parsePart(Client *client, std::string msg);
+	void	parseWho(Client *client, std::string mask);
 
 	Client*	findClientByNick(const std::string &nick);
 

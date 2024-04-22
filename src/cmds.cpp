@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/19 19:59:36 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/22 12:34:37 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ void Server::sendMsgToChannel(Client *client, std::string chName, std::string &m
 	if (chName[0] == '@') {
 		chName = chName.substr(1);
 	}
-	if (chName[0] == '#') {
-		chName = chName.substr(1);
-	}
+	chName = trimChannelName(chName);
+
 	Channel *channel = this->_channels[chName];
 
 	if (msg.empty()) {
@@ -63,9 +62,9 @@ void Server::sendMsgToChannel(Client *client, std::string chName, std::string &m
 }
 
 void	Server::join(Client *user, std::string &chName, const std::string &key) {
-	if (chName[0] == '#' || chName[0] == '&') { // FIXME: @Gigi ricordati di cambiare TUTTOOO
-		chName = chName.substr(1);
-	}
+	// if (chName[0] == '#' || chName[0] == '&') { // REVIEW: aggiunto ovunque /  @Gigi ricordati di cambiare TUTTOOO 
+	// 	chName = chName.substr(1);
+	// }
 
 	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(chName);
 	this->_msg = "";
@@ -115,8 +114,11 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 	}
 }
 
-void	Server::part(Client *user, std::string &chName) {
+void	Server::part(Client *user, std::string &chName, const std::string &reason) {
 	Channel *channel = this->_channels[chName];
+
+	(void)reason;
+	//TODO: implementare reason
 
 	if (chName.empty()) {
 		this->_msg = errNeedMoreParams(user->getNickname(), "PART");
@@ -266,4 +268,23 @@ void Server::ping(Client *client, const std::string &token) {
 
 void Server::pong(Client *client) {
 	std::cout << "PONG received by" << client->getNickname() << '\n';
+}
+
+void	Server::who(Client *user, const std::string &chName) {
+	Channel *channel = this->_channels[chName];
+
+ 	if (!channel) {
+		this->_msg = errNoSuchChannel(chName, user->getNickname());
+	} else if (!channel->findUser(user)) {
+		this->_msg = errNotOnChannel(chName, user->getNickname());
+	}
+
+	if (this->_msg.empty()) {
+		this->_msg = rplNamReply(*channel, user->getNickname());
+		ftSend(user->getSocket(), this->_msg);
+		this->_msg = rplEndOfNames(chName, user->getNickname());
+		ftSend(user->getSocket(), this->_msg);
+	} else {
+		ftSend(user->getSocket(), this->_msg);
+	}
 }

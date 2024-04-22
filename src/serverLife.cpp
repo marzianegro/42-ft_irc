@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverLife.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/18 15:31:43 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/22 12:23:43 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 
 	std::cout << "in execution: " << msg << std::endl;
 
-	std::string possibleCmd[] = {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG"};
+	std::string possibleCmd[] = {"PRIVMSG", "JOIN", "INVITE", "KICK", "TOPIC", "MODE", "QUIT", "NICK", "USER", "PING", "PONG", "PART", "WHO"};
 	int			lenght = sizeof(possibleCmd) / sizeof(std::string);
 	std::string cmd;
 	std::size_t	pos = msg.find(' ');
@@ -177,6 +177,12 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 		case 10:
 			this->pong(client);
+			break;
+		case 11:
+			this->parsePart(client, msg.substr(pos+1));
+			break;
+		case 12:
+			this->parseWho(client, msg.substr(pos+1));
 			break;
 		default:
 			std::cout << "INTO UNKNWOWN COMMAND" << '\n';

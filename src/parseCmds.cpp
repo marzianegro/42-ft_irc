@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseCmds.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:59 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/19 18:06:27 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/04/22 12:32:29 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ void Server::parseJoin(Client *client, std::string msg) {
 	std::istringstream ssch(channels), ssky(keys);
 
 	while (std::getline(ssch, channel, ',')) {
+		channel = trimChannelName(channel);
 		if (!std::getline(ssky, key, ','))
 			key = "";
-		std::cout << "JOINING: " << channel << " WITH KEY: " << key << std::endl;
+		std::cout << "JOINING: #" << channel << " WITH KEY: " << key << std::endl;
 		this->join(client, channel, key);
 	}
 }
@@ -135,6 +136,32 @@ void Server::parseUser(Client *client, std::string msg) {
 }
 
 void Server::parseOper(Client *client, std::string msg) {
+	// TODO: lo implentiamo?
 	(void)client;
 	(void)msg;
+}
+
+void Server::parsePart(Client *client, std::string msg) {
+	std::istringstream ssmsg(msg);
+	std::string channel, reason;
+	std::getline(ssmsg, channel, ' ');
+	std::getline(ssmsg, reason);
+
+	channel = trimChannelName(channel);
+
+	this->part(client, channel, reason);
+}
+
+void Server::parseWho(Client *client, std::string mask) {
+	std::istringstream ssmask(mask);
+	std::string channel;
+	std::getline(ssmask, channel, ' ');
+
+	if (channel.empty()) {
+		this->_msg = errNeedMoreParams(client->getNickname(), "WHO");
+		ftSend(client->getSocket(), this->_msg);
+	} else if (isChannelValid(channel)) {
+		channel = trimChannelName(channel);
+		this->who(client, channel);
+	}
 }
