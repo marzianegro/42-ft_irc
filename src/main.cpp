@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 10:34:21 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/19 19:30:11 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/08 23:54:59 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	checkPort(std::string portStr) {
 	return (port);
 }
 
+
+// NOTES: when running `nc`, use -C to automatically end with \r\n
 int	main(int ac, char **av) {
 	checkArgs(ac);
 

@@ -18,7 +18,7 @@ static int	get_socket() {
 	int fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (fd < 0)
 		ft_init_error("Socker error");
-	fcntl(fd, F_SETFL, O_NONBLOCK); // ???
+	fcntl(fd, F_SETFL, O_NONBLOCK); // REVIEW: ???
 	sock_fd = fd;
 	return (fd);
 }

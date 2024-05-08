@@ -13,7 +13,7 @@ int	server_exit(t_server &srv, int exit_code) {
 void	wait_events(t_server &srv, int &ev_nums) {
 	ev_nums = epoll_wait(srv.poll_fd, srv.ev_lst, MAX_EVENTS, -1);
 	if (ev_nums == -1) {
-		perror("Error in epoll()");
+		perror("Error in epoll_wait()");
 		server_exit(srv, 1);
 	}
 	// std::cout << "num events: " << ev_nums << std::endl;
