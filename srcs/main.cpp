@@ -6,11 +6,11 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 10:34:21 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/08 23:54:59 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Server.hpp"
+#include "../incs/Server.hpp"
 
 void	checkArgs(int ac) {
 	if (ac != 3) {

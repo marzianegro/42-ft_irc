@@ -6,13 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:34:28 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/18 15:17:55 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
-#include "../inc/Client.hpp"
-#include "../inc/Server.hpp"
+#include "../incs/Channel.hpp"
+#include "../incs/Client.hpp"
+#include "../incs/Server.hpp"
 
 // ERR_NOSUCHNICK (401)
 // ERR_NOSUCHCHANNEL (403)

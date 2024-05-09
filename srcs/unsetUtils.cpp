@@ -6,13 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:58:43 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:10:38 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
-#include "../inc/Client.hpp"
-#include "../inc/Server.hpp"
+#include "../incs/Channel.hpp"
+#include "../incs/Client.hpp"
+#include "../incs/Server.hpp"
 
 void Server::modeUnset(const std::vector<std::string> &mode, Channel *channel, Client *user) {
 	std::vector<std::string>::const_iterator it_mode = mode.begin();

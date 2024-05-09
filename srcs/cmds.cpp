@@ -6,13 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:03:27 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 12:24:04 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
-#include "../inc/Client.hpp"
-#include "../inc/Server.hpp"
+#include "../incs/Channel.hpp"
+#include "../incs/Client.hpp"
+#include "../incs/Server.hpp"
 
 // FIXME: remember that all msg, topic reason etc have ':' at the beginning
 

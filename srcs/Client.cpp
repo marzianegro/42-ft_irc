@@ -6,11 +6,11 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:59:49 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 10:45:35 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Client.hpp"
+#include "../incs/Client.hpp"
 
 Client::Client() {
 }

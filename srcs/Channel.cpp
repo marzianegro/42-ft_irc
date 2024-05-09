@@ -6,13 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:41:22 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 12:24:05 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
-#include "../inc/Client.hpp"
-#include "../inc/numReplies.hpp"
+#include "../incs/Channel.hpp"
+#include "../incs/Client.hpp"
+#include "../incs/numReplies.hpp"
 
 Channel::Channel() {
 }

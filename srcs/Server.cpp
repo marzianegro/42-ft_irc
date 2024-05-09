@@ -6,13 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/19 10:31:23 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
-#include "../inc/Client.hpp"
-#include "../inc/Server.hpp"
+#include "../incs/Channel.hpp"
+#include "../incs/Client.hpp"
+#include "../incs/Server.hpp"
 
 Server::Server() {
 }

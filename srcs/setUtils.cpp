@@ -6,13 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:09:37 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 12:23:14 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
-#include "../inc/Client.hpp"
-#include "../inc/Server.hpp"
+#include "../incs/Channel.hpp"
+#include "../incs/Client.hpp"
+#include "../incs/Server.hpp"
 
 void Server::modeSet(const std::vector<std::string> &mode, Channel *channel, Client *user) {
 	std::vector<std::string>::const_iterator it_mode = mode.begin();
