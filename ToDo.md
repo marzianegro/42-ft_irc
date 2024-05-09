@@ -26,6 +26,12 @@
 	```
 - [ ] `kick` kicks but not in client
 - [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
+- [ ] implement ctrl-C, ctrl-D, ctrl-Z to avoid memory leaks
+- [ ] if `RPL_TOPIC` is returned to the client sending this command, `RPL_TOPICWHOTIME` SHOULD also be sent to that client.
+- [ ] implement notice for `part` -> found out it's implemented but doesn't work
+- [x] implement notice for `nick`
+- [ ] implement notice for `user` -> If a client tries to send the USER command after they have already completed registration with the server, the ERR_ALREADYREGISTERED reply should be sent and the attempt should fail // FIXME: implemented but doesn't work???
+- [ ] /join @ciao doesn't create channel in side in client, parsed as 'JOINING: #@ciao WITH KEY: ' + /join #ciao right after does the same though it parses correctly
 
 ## Things to check
 - [x] mode +i

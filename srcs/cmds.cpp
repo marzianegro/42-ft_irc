@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 12:36:37 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 17:44:29 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	Server::part(Client *user, std::string &chName, const std::string &reason) 
 		channel->removeUser(user);
 		channel->downCount();
 		user->removeChannel(chName);
-		this->_msg = ":" + user->getNickname() + " is leaving the channel #" + chName;
+		this->_msg = ":" + user->getNickname() + " is leaving the channel #" + chName; // FIXME: why is this not sent???
 		sendToChannel(chName, NULL, false);
 	}
 }
@@ -219,8 +219,6 @@ void Server::mode(Client *user, const std::string &chName, const std::vector<std
 void Server::nick(Client *client, const std::string &newNick) {
 	this->_msg = "";
 
-	std::cout << "newNick is " << newNick << std::endl;
-
 	if (newNick.empty()) {
 		this->_msg = errNoNicknameGiven("no-name");
 	} else if (!checkNick(newNick)) {
@@ -230,6 +228,9 @@ void Server::nick(Client *client, const std::string &newNick) {
 	}
 	
 	if (this->_msg.empty()) {
+		// this->_msg = client->getNickname() + " changed their nickname to " + newNick;
+		// FIXME: ONLY if the client is already registered
+		// FIXME: must be sent to everyone i suppose
 		client->setNickname(newNick);
 	}
 	ftSend(client->getSocket(), this->_msg);
@@ -241,7 +242,7 @@ void Server::user(Client *client, const std::string &username, const std::string
 	if (username.empty() || realname.empty()) {
 		this->_msg = errNeedMoreParams(client->getNickname(), "USER");
 	} else if (!client->getUsername().empty()) {
-		this->_msg = errAlreadyRegistered(client->getNickname());
+		this->_msg = errAlreadyRegistered(client->getNickname()); // FIXME: this doesn't work
 	}
 
 	if (this->_msg.empty()) {
