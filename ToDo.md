@@ -24,6 +24,8 @@
 	what():  basic_string: construction from null is not valid  
 	[1]    4921 IOT instruction (core dumped)  ./ircserv 8080 topolo  
 	```
+- [ ] `kick` kicks but not in client
+- [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
 
 ## Things to check
 - [x] mode +i

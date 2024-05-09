@@ -6,7 +6,7 @@
 #    By: mnegro <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/24 18:25:00 by mnegro            #+#    #+#              #
-#    Updated: 2024/05/09 11:42:09 by mnegro           ###   ########.fr        #
+#    Updated: 2024/05/09 12:37:01 by mnegro           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,11 +25,11 @@ RM = rm -f
 
 #### TARGETS ####
 FL_SRCS = Channel.cpp Client.cpp cmds.cpp main.cpp numReplies.cpp parseCmds.cpp Server.cpp serverLife.cpp setUtils.cpp unsetUtils.cpp utils.cpp
-DIRSRCS = src/
+DIRSRCS = srcs/
 SRCS = ${addprefix ${DIRSRCS},${FL_SRCS}}
 
 FL_OBJS = ${FL_SRCS:.cpp=.o}
-DIROBJS = obj/
+DIROBJS = objs/
 OBJS = ${addprefix ${DIROBJS},${FL_OBJS}}
 
 ### (EXPLICIT) RULES ###
