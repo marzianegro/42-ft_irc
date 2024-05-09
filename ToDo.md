@@ -9,7 +9,7 @@
 - [x] check if you can set limit lower than user count			-> added check through if/else
 - [ ] rifare tutti gli errori fanno cacare su questo client		-> // FIXME: @Gigi
 - [x] port check doesn't work with letters						-> added check in checkPort, now passing it av[i] instead of atoi(av[1])
-- [x] fix & when joining a channel								-> straight up guessed lol (added check for '&' in check for '#')
+- [x] fix & when joining a channel								 -> straight up guessed lol (added check for '&' in check for '#')
 - [ ] check conflicts between I mode and K mode
 - [x] add WHO command
 - [x] make & possible in channel name							-> to be tested, but was already setup for it
