@@ -15,13 +15,15 @@
 - [x] make & possible in channel name							-> to be tested, but was already setup for it
 - [ ] check how clients are cancelled (`nc` still receives message from channel after killing it)
 - [ ] when user exits, make sure everythig is clean
-		in execution: JOIN #culo
-		CALLING JOIN: #culo
-		JOINING: #culo WITH KEY: 
-		User gigetto found in _opUsers
-		terminate called after throwing an instance of 'std::logic_error'
-		what():  basic_string: construction from null is not valid
-		[1]    4921 IOT instruction (core dumped)  ./ircserv 8080 topolo
+	```
+	in execution: JOIN #culo  
+	CALLING JOIN: #culo  
+	JOINING: #culo WITH KEY:   
+	User gigetto found in _opUsers  
+	terminate called after throwing an instance of 'std::logic_error'  
+	what():  basic_string: construction from null is not valid  
+	[1]    4921 IOT instruction (core dumped)  ./ircserv 8080 topolo  
+	```
 
 ## Things to check
 - [x] mode +i
