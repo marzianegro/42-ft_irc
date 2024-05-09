@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:01:06 by mnegro            #+#    #+#             */
-/*   Updated: 2024/04/16 23:25:21 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:08:20 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,55 @@
 #include "../inc/Client.hpp"
 #include "../inc/Server.hpp"
 
+bool checkNick(const std::string &nick) {
+	for (size_t i = 0; i < nick.size(); i++) {
+		if (!isalnum(nick[i]) && nick[i] != '_' && nick[i] != '-') {
+			return (false);
+		}
+	}
+	return (true);
+}
+
+std::string fixChannelName(const std::string &channelName) {
+	std::string fixed = channelName;
+	if (channelName[0] != '#' && channelName[0] != '&')
+		fixed = "#" + fixed;
+	return (fixed);
+}
+
+void ftSend(int fd, std::string &msg) {
+	msg += "\r\n";
+	std::cout << "SENDING: " << msg << std::endl;
+	send(fd, msg.c_str(), msg.size(), 0);
+}
+
+bool isChannelValid(const std::string &channel) {
+	if (channel.size() < 1 || channel.size() > 50)
+		return (false);
+	
+	return (channel[0] == '#' || channel[0] == '&');
+}
+
+bool isNicknameValid(const std::string &nickname) {
+	if (nickname.size() < 1 || nickname.size() > 9)
+		return (false);
+	if (nickname[0] == '#' || nickname[0] == '&' || nickname[0] == '@' || nickname[0] == ':')
+		return (false);
+
+	return (nickname.find(' ') == std::string::npos);
+}
+
+std::string trimChannelName(const std::string &channel) {
+	std::string	trimmed = channel;
+
+	if (channel[0] == '#' || channel[0] == '&') {
+		trimmed = channel.substr(1);
+	}
+
+	return (trimmed);
+}
+
+// Server utils
 void	Server::sendToChannel(const std::string &chName, Client *exclude, bool onlyOps) {
 	Channel *channel = this->_channels[chName];
 	if (!channel) {
@@ -40,7 +89,7 @@ void	Server::sendToChannel(const std::string &chName, Client *exclude, bool only
 	}
 }
 
-// returns null if there is no client with this nick
+// Channel utils
 Client*	Server::findClientByNick(const std::string &nick) {
 	std::map<int, Client*>::iterator	it = this->_clients.begin();
 
@@ -50,44 +99,5 @@ Client*	Server::findClientByNick(const std::string &nick) {
 		}
 		it++;
 	}
-	return (NULL);
-}
-
-std::string trimChannelName(const std::string &channel) {
-	std::string	trimmed = channel;
-
-	if (channel[0] == '#' || channel[0] == '&') {
-		trimmed = channel.substr(1);
-	}
-
-	return (trimmed);
-}
-
-bool isChannelValid(const std::string &channel) {
-	if (channel.size() < 1 || channel.size() > 50)
-		return (false);
-	
-	return (channel[0] == '#' || channel[0] == '&');
-}
-
-bool isNicknameValid(const std::string &nickname) {
-	if (nickname.size() < 1 || nickname.size() > 9)
-		return (false);
-	if (nickname[0] == '#' || nickname[0] == '&' || nickname[0] == '@' || nickname[0] == ':')
-		return (false);
-
-	return (nickname.find(' ') == std::string::npos);
-}
-
-void ftSend(int fd, std::string &msg) {
-	msg += "\r\n";
-	std::cout << "SENDING: " << msg << std::endl;
-	send(fd, msg.c_str(), msg.size(), 0);
-}
-
-std::string fixChannelName(const std::string &channelName) {
-	std::string fixed = channelName;
-	if (channelName[0] != '#' && channelName[0] != '&')
-		fixed = "#" + fixed;
-	return (fixed);
+	return (NULL); // there's no client with this nick
 }

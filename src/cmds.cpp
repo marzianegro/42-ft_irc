@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/08 23:54:43 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:03:27 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include "../inc/Client.hpp"
 #include "../inc/Server.hpp"
 
-// TO REMEMBER:
-// all msg, topic reason etc have ':' at the beginning
+// FIXME: remember that all msg, topic reason etc have ':' at the beginning
 
 void Server::sendMsgToClient(Client *client, const std::string &target, std::string &msg) {
 	std::map<int, Client*>::iterator	clientIT = this->_clients.begin();
@@ -32,7 +31,6 @@ void Server::sendMsgToClient(Client *client, const std::string &target, std::str
 				return ;
 			}
 		}
-
 		this->_msg = errNoSuchNick(client->getNickname(), target);
 	}
 	ftSend(client->getSocket(), this->_msg);
@@ -62,10 +60,6 @@ void Server::sendMsgToChannel(Client *client, std::string chName, std::string &m
 }
 
 void	Server::join(Client *user, std::string &chName, const std::string &key) {
-	// if (chName[0] == '#' || chName[0] == '&') { // REVIEW: aggiunto ovunque /  @Gigi ricordati di cambiare TUTTOOO 
-	// 	chName = chName.substr(1);
-	// }
-
 	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(chName);
 	this->_msg = "";
 	bool chanExist = true;
@@ -262,7 +256,7 @@ void Server::ping(Client *client, const std::string &token) {
 	} else {
 		this->_msg = "PONG gerboa " + token;
 	}
-	
+
 	ftSend(client->getSocket(), this->_msg);
 }
 

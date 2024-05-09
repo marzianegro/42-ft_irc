@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:59:49 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/23 15:44:56 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/09 10:45:35 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,15 @@ std::string	Client::getUsername() const {
 	return (this->_username);
 }
 
-int			Client::getSocket() const {
+int	Client::getSocket() const {
 	return (this->_socket);
 }
 
-bool		Client::getAuth() const {
+bool	Client::getAuth() const {
 	return (this->_isAuthorized);
 }
 
-bool		Client::getStatus() const {
+bool	Client::getStatus() const {
 	return (this->_isOperator);
 }
 
@@ -102,14 +102,12 @@ std::vector<std::string>	Client::getChannels() const {
 	return (this->_channels);
 }
 
-void		Client::fillBuffer(const std::string &msg) {
+void	Client::fillBuffer(const std::string &msg) {
 	this->_buffer += msg;
 }
 
 std::string	Client::readBuffer() {
 	std::size_t pos = this->_buffer.find("\r\n");
-
-	// std::cout << "pos: " << pos  << "/" << std::string::npos << std::endl;
 	
 	if (pos == std::string::npos) {
 		return ("");
@@ -117,8 +115,6 @@ std::string	Client::readBuffer() {
 		this->_buffer.erase(0, 2);
 		return ("");
 	}
-
-	// std::cout << "substringing" << std::endl;
 
 	std::string msg = this->_buffer.substr(0, pos);
 	this->_buffer.erase(0, pos + 2);

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/08 23:54:45 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/09 11:10:17 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,21 @@ private:
 	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);
 	void	mode(Client *user, const std::string &channel, const std::vector<std::string> &mode);
+
 	void 	modeSet(const std::vector<std::string> &mode, Channel *channel, Client *user);
+	void 	iModeSet(Channel *channel, Client *user);
+	void 	tModeSet(Channel *channel, Client *user);
+	void 	kModeSet(const std::vector<std::string> &mode, Channel *channel, Client *user, std::vector<std::string>::const_iterator it_mode);
+	void 	oModeSet(const std::vector<std::string> &mode, Channel *channel, Client *user, std::vector<std::string>::const_iterator it_mode);
+	void 	lModeSet(const std::vector<std::string> &mode, Channel *channel, Client *user, std::vector<std::string>::const_iterator it_mode);
+
 	void 	modeUnset(const std::vector<std::string> &mode, Channel *channel, Client *user);
+	void 	iModeUnset(Channel *channel, Client *user);
+	void 	tModeUnset(Channel *channel, Client *user);
+	void 	kModeUnset(Channel *channel, Client *user);
+	void 	oModeUnset(const std::vector<std::string> &mode, Channel *channel, Client *user, std::vector<std::string>::const_iterator it_mode);
+	void 	lModeUnset(Channel *channel, Client *user);
+
 	void	nick(Client *client, const std::string &newNick);
 	void	user(Client *client, const std::string &username, const std::string &realname);
 	void	ping(Client *client, const std::string &token);
