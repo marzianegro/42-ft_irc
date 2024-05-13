@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/13 16:17:41 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@ Server::Server(const Server &src) {
 }
 
 Server::~Server() {
+	std::cout << "Initiating Server destructor...\n";
+	std::map<int, Client*>::iterator client_it = this->_clients.begin();
+	while (client_it != this->_clients.end()) {
+		close(client_it->second->getSocket());
+		epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client_it->second->getSocket(), NULL);
+		delete client_it->second;
+		this->_clients.erase(client_it++);
+	}
+
+	std::map<std::string, Channel*>::iterator channel_it = this->_channels.begin();
+	while (channel_it != this->_channels.end()) {
+		delete channel_it->second;
+		this->_channels.erase(channel_it++);
+	}
+
+	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, this->_serverSock, NULL);
+	close(this->_serverSock);
+	std::cout << "Server destructor done\n";
 }
 
 Server&	Server::operator=(const Server &src) {
@@ -52,6 +70,22 @@ in_port_t	Server::getPort() const {
 
 std::string	Server::getPw() const {
 	return (this->_pw);
+}
+
+int	Server::getSocket() const {
+	return (this->_serverSock);
+}
+
+int Server::getEpollFd() const {
+	return (this->_epollFd);
+}
+
+std::map<int, Client*>	Server::getClients() const {
+	return (this->_clients);
+}
+
+std::map<std::string, Channel*>	Server::getChannels() const {
+	return (this->_channels);
 }
 
 void	Server::startServer() {

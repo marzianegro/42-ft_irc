@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:01:06 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 18:45:48 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/13 16:25:35 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,24 @@ bool isNicknameValid(const std::string &nickname) {
 		return (false);
 
 	return (nickname.find(' ') == std::string::npos);
+}
+
+void	serverStatus(bool *serverSwitch) {
+	static bool	*serverStatus = NULL;
+
+	if (!serverStatus) {
+		serverStatus = serverSwitch;	
+	}
+	if (!serverSwitch) {
+		*serverStatus = false;
+	}
+}
+
+void	signalHandler(int signal) {
+	if (signal == SIGINT) {
+		std::cout << "Interrupt signal (" << signal << ") received" << std::endl;
+		serverStatus(NULL);
+	}
 }
 
 std::string trimChannelName(const std::string &channel) {

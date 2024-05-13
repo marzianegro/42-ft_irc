@@ -49,3 +49,7 @@
 
 ## Done
 - [x] do not permit to set limit over 2142
+
+- chiudere ogni client socket
+- chiudere il server socket
+- gestire ctrl-c

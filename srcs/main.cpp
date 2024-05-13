@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 10:34:21 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/13 16:25:36 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,24 @@ int	checkPort(std::string portStr) {
 	return (port);
 }
 
+bool serverOn;
 
 // NOTES: when running `nc`, use -C to automatically end with \r\n
 int	main(int ac, char **av) {
 	checkArgs(ac);
+	signal(SIGINT, signalHandler);
 
 	Server	server;
+	bool	serverLife = true;
+	
+	serverStatus(&serverLife);
 
 	server.setPort(checkPort(av[1]));
 	server.setPw(av[2]);
 
 	server.startServer();
 	server.startEpoll();
-	while (true) {
+	while (serverLife) {
 		server.runEpoll();
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:58:07 by mnegro            #+#    #+#             */
-/*   Updated: 2024/03/16 18:52:24 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/13 13:00:37 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <unistd.h>
 #include <vector>
 
 class Channel;

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:10:17 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/13 16:22:01 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 #include <iostream>
 #include <map>
 #include "numReplies.hpp"
+#include <signal.h>
 #include <stdlib.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
-#include <unistd.h>
 #include <sstream>
+#include <unistd.h>
 
 #define MAX_BUFFER	512
 #define MAX_EVENTS	128
@@ -43,8 +44,12 @@ public:
 	void	setPort(const in_port_t &port);
 	void	setPw(const std::string &pw);
 
-	in_port_t	getPort() const;
-	std::string	getPw() const;
+	in_port_t						getPort() const;
+	std::string						getPw() const;
+	int								getSocket() const;
+	int								getEpollFd() const;
+	std::map<int, Client*>			getClients() const;
+	std::map<std::string, Channel*>	getChannels() const;
 
 	void	startServer();
 	void	startEpoll();
@@ -127,6 +132,8 @@ private:
 bool		checkNick(const std::string &nick);
 std::string fixChannelName(const std::string &channelName);
 void		ftSend(int fd, std::string &msg);
+void		serverStatus(bool *serverSwitch);
 bool 		isChannelValid(const std::string &channel);
 bool 		isNicknameValid(const std::string &nickname);
+void		signalHandler(int signal);
 std::string	trimChannelName(const std::string &channel);

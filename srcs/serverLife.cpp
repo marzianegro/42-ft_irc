@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/13 16:16:51 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	Server::runEpoll() {
 		if (this->_current_event.data.fd == this->_serverSock) { // new client connection
 			this->newClientConnection();
 		} else if (this->_current_event.data.fd == STDIN_FILENO) {
-			this->consoleEvent(); //FIXME:
+			this->consoleEvent(); // FIXME:
 		} else {
 			this->clientEvent(this->_events[i]);
 		}
