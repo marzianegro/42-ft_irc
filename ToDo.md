@@ -26,7 +26,7 @@
 	```
 - [ ] `kick` kicks but not in client
 - [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
-- [ ] implement ctrl-C, ctrl-D, ctrl-Z to avoid memory leaks
+- [x] implement ctrl-C
 - [ ] if `RPL_TOPIC` is returned to the client sending this command, `RPL_TOPICWHOTIME` SHOULD also be sent to that client.
 - [ ] implement notice for `part` -> found out it's implemented but doesn't work
 - [x] implement notice for `nick`
@@ -49,7 +49,3 @@
 
 ## Done
 - [x] do not permit to set limit over 2142
-
-- chiudere ogni client socket
-- chiudere il server socket
-- gestire ctrl-c
