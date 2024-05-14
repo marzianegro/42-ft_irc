@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setUtils.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 12:23:14 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 23:56:08 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void 	Server::lModeSet(const std::vector<std::string> &mode, Channel *channel, C
 		unsigned int	tryUInt = 0;
 		if (iss >> tryUInt) {
 			if (tryUInt < channel->getCount() || tryUInt > 2142) {
-				this->_msg = ""; // FIXME:
+				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Te limits must be between " + toString(channel->getCount()) + " and 2142";
 			} else {
 				channel->lModeSet(tryUInt);
 				this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +l " + *it_mode;

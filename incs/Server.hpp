@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/13 16:22:01 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 23:55:33 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ public:
 	void	runEpoll();
 
 	void	invite(Client *inviter, Client *invited, const std::string &channel);
-	void	quit(Client *client, const std::string &reason);
+	void	quit(Client *client, std::string reason);
 	
 private:  
 	void	newClientConnection();
@@ -66,13 +66,14 @@ private:
 	bool	checkPw(const std::string &pw);
 	bool	checkNicknames(const std::string &nickname);
 	bool	checkUsernames(const std::string &username);
-	void	clientDisconnect(Client *client);
+	void	clientDisconnect(Client *client, bool fromQuit);
 	void	sendToChannel(const std::string &chName, Client *exclude, bool onlyOps);
+	void	sendToEveryone(Client *exclude);
 
 	void	sendMsgToClient(Client *client, const std::string &target, std::string &msg);
 	void	sendMsgToChannel(Client *client, std::string channel, std::string &msg, bool onlyOps);
 	void	join(Client *user, std::string &chName, const std::string &key);
-	void	part(Client *user, std::string &chName, const std::string &reason);
+	void	part(Client *user, std::string &chName, std::string reason);
 	void	kick(Client *kicker, Client *kicked, std::string &chName, const std::string &reason);
 	void	topic(Client *user, const std::string &channel, const std::string &topic);
 	void	mode(Client *user, const std::string &channel, const std::vector<std::string> &mode);
@@ -137,3 +138,5 @@ bool 		isChannelValid(const std::string &channel);
 bool 		isNicknameValid(const std::string &nickname);
 void		signalHandler(int signal);
 std::string	trimChannelName(const std::string &channel);
+std::string toString(int n);
+std::string toString(unsigned int n);

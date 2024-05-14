@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverLife.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/13 16:16:51 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 22:13:40 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../incs/Client.hpp"
 #include "../incs/Server.hpp"
 
-void Server::clientDisconnect(Client *client) {
+void Server::clientDisconnect(Client *client, bool fromQuit) {
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), &this->_current_event);
 	this->_clients.erase(client->getSocket());
 	close(client->getSocket());
@@ -22,7 +22,15 @@ void Server::clientDisconnect(Client *client) {
 	// REVIEW: quit from channels
 	std::vector<std::string>::iterator	it = client->getChannels().begin();
 	while (it != client->getChannels().end()) {
-		this->_channels[*it]->removeUser(client);
+		Channel *channel = this->_channels[*it];
+		
+		channel->removeUser(client);
+		channel->downCount();
+		if (!fromQuit) {
+			this->_msg = ":" + client->getNickname() + " PART #" + channel->getName() + " :Disconnected";
+			sendToChannel(channel->getName(), NULL, false);
+		}
+		client->removeChannel(channel->getName());
 		it++;
 	}
 
@@ -70,7 +78,7 @@ void Server::clientEvent(epoll_event &event) {
 	// std::cout << "1 buffer: " << buffer << std::endl;
 	if (byteRecv == 0) {
 		std::cout << "Connection closed by the client\n";
-		this->clientDisconnect(this->_clients[event.data.fd]);
+		this->clientDisconnect(this->_clients[event.data.fd], false);
 	} else if (byteRecv == -1) {
 		std::cerr << "Error while receiving the message\n";
 	} else {
@@ -126,12 +134,12 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			if (this->checkPw(msg.substr(pos + 1))) {
 				client->setAuth(true);
 			} else {
-				this->clientDisconnect(client);
+				this->clientDisconnect(client, false);
 			}
 		} else {
 			this->_msg = errNotRegistered();
 			ftSend(client->getSocket(), this->_msg);
-			this->clientDisconnect(client);
+			this->clientDisconnect(client, false);
 		}
 		return ;
 	}

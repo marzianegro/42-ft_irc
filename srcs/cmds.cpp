@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/13 15:16:30 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 23:49:29 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 		this->_channels[chName] = new Channel(user, chName, key);
 		chanExist = false;
 	} else if (it_chan->second->findUser(user)) {
-		this->_msg = errUserOnChannel(chName, user->getNickname(), NULL); // REVIEW: numReply
+		this->_msg = errUserOnChannel(chName, user->getNickname(), NULL);
 	} else if (it_chan->second->getKModeStatus() && key != it_chan->second->getKey()) {
 		this->_msg = errBadChannelKey(chName, user->getNickname());
 	} else if (it_chan->second->getCount() >= it_chan->second->getLimit()) {
@@ -108,11 +108,12 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 	}
 }
 
-void	Server::part(Client *user, std::string &chName, const std::string &reason) {
+void	Server::part(Client *user, std::string &chName, std::string reason) {
 	Channel *channel = this->_channels[chName];
 
-	(void)reason;
-	//TODO: implementare reason
+	if (reason.empty()) {
+		reason = "Leaving";
+	}
 
 	if (chName.empty()) {
 		this->_msg = errNeedMoreParams(user->getNickname(), "PART");
@@ -125,9 +126,9 @@ void	Server::part(Client *user, std::string &chName, const std::string &reason) 
 	if (this->_msg.empty()) {
 		channel->removeUser(user);
 		channel->downCount();
-		user->removeChannel(chName);
-		this->_msg = ":" + user->getNickname() + " is leaving the channel #" + chName; // FIXME: why is this not sent???
+		this->_msg = ":" + user->getNickname() + " PART #" + chName + " :" + reason;
 		sendToChannel(chName, NULL, false);
+		user->removeChannel(chName);
 	}
 }
 
@@ -152,11 +153,12 @@ void Server::kick(Client *kicker, Client *kicked, std::string &chName, const std
 		channel->removeUser(kicked);
 		channel->downCount();
 		kicked->removeChannel(chName);
-		this->_msg = ":" + kicker->getNickname() + " KICK #" + chName + kicked->getNickname() + " " + reason;
+		this->_msg = ":" + kicker->getNickname() + " KICK #" + chName + " " + kicked->getNickname() + " " + reason;
 	}
 
 	if (hasBeenKicked) {
-		sendToChannel(chName, NULL, false); // REVIEW: kicker escluso?
+		ftSend(kicked->getSocket(), this->_msg);
+		sendToChannel(chName, NULL, false);
 	} else {
 		ftSend(kicker->getSocket(), this->_msg);
 	}
@@ -178,7 +180,7 @@ void Server::topic(Client *user, const std::string &chName, const std::string &t
 		this->_msg = channel->getTopic(user);
 	} else {
 		channel->setTopic(topic);
-		this->_msg = rplTopic(channel->getName(), user->getNickname(), topic);
+		this->_msg = ":" + user->getNickname() + " TOPIC #" + chName + " " + topic;
 		sendToChannel(chName, NULL, false);
 		return ;
 	}
@@ -209,11 +211,13 @@ void Server::mode(Client *user, const std::string &chName, const std::vector<std
 			++it_mode;
 		}
 		this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
-		// FIXME: is this sent to everyone in the channel?
-		// REVIEW: this doesn't print correctly with +/-o; should be something like :NickName!~UserName@host MODE #channel +o TargetUserName
+		sendToChannel(chName, NULL, false);
+		this->_msg = "";
 	}
 
-	ftSend(user->getSocket(), this->_msg);
+	if (!this->_msg.empty()) {
+		ftSend(user->getSocket(), this->_msg);
+	}	
 }
 
 void Server::nick(Client *client, const std::string &newNick) {
@@ -228,9 +232,15 @@ void Server::nick(Client *client, const std::string &newNick) {
 	}
 	
 	if (this->_msg.empty()) {
-		// this->_msg = client->getNickname() + " changed their nickname to " + newNick;
-		// FIXME: ONLY if the client is already registered
-		// FIXME: must be sent to everyone i suppose
+		if (!client->getNickname().empty()) {
+			this->_msg = ":" + client->getNickname() + " NICK " + newNick;
+			this->sendToEveryone(NULL);
+		} else {
+			this->_msg = ":" + newNick + " NICK " + newNick;
+			ftSend(client->getSocket(), this->_msg);
+			this->_msg = rplWelcome(newNick);
+		}
+
 		client->setNickname(newNick);
 	}
 	ftSend(client->getSocket(), this->_msg);
@@ -242,12 +252,14 @@ void Server::user(Client *client, const std::string &username, const std::string
 	if (username.empty() || realname.empty()) {
 		this->_msg = errNeedMoreParams(client->getNickname(), "USER");
 	} else if (!client->getUsername().empty()) {
-		this->_msg = errAlreadyRegistered(client->getNickname()); // FIXME: this doesn't work
+		this->_msg = errAlreadyRegistered(client->getNickname());
 	}
 
 	if (this->_msg.empty()) {
 		client->setUsername(username);
 		client->setRealname(realname);
+	} else {
+		ftSend(client->getSocket(), this->_msg);
 	}
 }
 

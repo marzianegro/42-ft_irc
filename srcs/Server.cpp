@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/13 16:17:41 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 22:47:25 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,21 +164,22 @@ void	Server::invite(Client *inviter, Client *invited, const std::string &channel
 	this->_msg = rplInviting(channel, inviter->getNickname(), invited->getNickname());
 }
 
-void	Server::quit(Client *client, const std::string &reason) {
-	std::map<int, Client*>::iterator	it_client = this->_clients.find(client->getSocket());
+void	Server::quit(Client *client, std::string reason) {
+	// std::map<int, Client*>::iterator	it_client = this->_clients.find(client->getSocket());
 	
-	this->_msg = ":" + client->getNickname() + " QUIT :Quit";
 	if (!reason.empty()) {
-		this->_msg += ": " + reason;
+		reason = "kthxbye!";
 	}
+	this->_msg = ":" + client->getNickname() + " QUIT :Quit: " + reason;
 
-	std::map<int, Client*>::iterator	it_msg = this->_clients.begin();
-	for (; it_msg != this->_clients.end(); it_msg++) {
-		send(it_msg->first, this->_msg.c_str(), this->_msg.length(), 0);
-	}
-	this->_clients.erase(it_client);
-	close(it_client->first);
-	delete it_client->second;
+	// std::map<int, Client*>::iterator	it_msg = this->_clients.begin();
+	// for (; it_msg != this->_clients.end(); it_msg++) {
+	// 	ftSend(it_msg->first, this->_msg);
+	// }
+
+	this->sendToEveryone(NULL);
+
+	clientDisconnect(client, true);
 }
 
 bool	Server::checkPw(const std::string &pw) {

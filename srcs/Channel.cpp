@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 12:24:05 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 23:25:40 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ std::vector<Client*>	Channel::getInvs() const {
 void	Channel::setName(const std::string &name) {
 	this->_name = name;
 }
-
-// FIXME: add this->_msg
+ 
+// FIXME: add this->_msg ????????????????????????????????
 void	Channel::setTopic(const std::string &topic) {
 	std::cout << "topic gets here as: " << topic << '\n';
 	if (topic.length() == 1 && topic[0] == ':') {

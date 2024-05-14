@@ -23,6 +23,7 @@ std::string errInviteOnlyChan(const std::string &channelName, const std::string 
 std::string errBadChannelKey(const std::string &channelName, const std::string &clientName);
 std::string errChanOPrivsNeeded(const std::string &channelName, const std::string &clientName);
 
+std::string rplWelcome(const std::string &clientName);
 std::string rplChannelModeIs(const std::string &channelName, const std::string &clientName, Channel *channel);
 std::string rplNoTopic(const std::string &channelName, const std::string &clientName);
 std::string rplTopic(const std::string &channelName, const std::string &clientName, const std::string &topic);

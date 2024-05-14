@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:01:06 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/13 16:25:35 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 23:55:06 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,19 @@ std::string trimChannelName(const std::string &channel) {
 	return (trimmed);
 }
 
+std::string toString(int n) {
+	std::stringstream ss;
+	ss << n;
+	return (ss.str());
+}
+
+std::string toString(unsigned int n) {
+	std::stringstream ss;
+	ss << n;
+	return (ss.str());
+}
+
+
 // Server utils
 void	Server::sendToChannel(const std::string &chName, Client *exclude, bool onlyOps) {
 	Channel *channel = this->_channels[chName];
@@ -104,6 +117,19 @@ void	Server::sendToChannel(const std::string &chName, Client *exclude, bool only
 			continue;
 		}
 		ftSend((*it_reg)->getSocket(), this->_msg);
+	}
+}
+
+void	Server::sendToEveryone(Client *exclude) { //REVIEW: to be tested
+	std::map<int, Client*>::iterator	it = this->_clients.begin();
+
+	while (it != this->_clients.end()) {
+		if (it->second == exclude) {
+			it++;
+			continue;
+		}
+		ftSend(it->first, this->_msg);
+		it++;
 	}
 }
 

@@ -11,12 +11,14 @@
 - [x] port check doesn't work with letters						-> added check in checkPort, now passing it av[i] instead of atoi(av[1])
 - [x] fix & when joining a channel								 -> straight up guessed lol (added check for '&' in check for '#')
 - [ ] check conflicts between I mode and K mode
+		if I -> K is disabled
+		cant set K if I is set
 - [x] add WHO command
 - [x] make & possible in channel name							-> to be tested, but was already setup for it
-- [ ] check how clients are cancelled (`nc` still receives message from channel after killing it)
-- [ ] when user exits, make sure everythig is clean
+- [x] check how clients are cancelled (`nc` still receives message from channel after killing it)
+- [X] when user exits, make sure everythig is clean
 	```
-	in execution: JOIN #culo  
+	in executiÍon: JOIN #culo  
 	CALLING JOIN: #culo  
 	JOINING: #culo WITH KEY:   
 	User gigetto found in _opUsers  
@@ -24,13 +26,16 @@
 	what():  basic_string: construction from null is not valid  
 	[1]    4921 IOT instruction (core dumped)  ./ircserv 8080 topolo  
 	```
-- [ ] `kick` kicks but not in client
-- [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
+- [x] `kick` kicks but not in client
+- [x] run `valgrind --leak-check=full --show-leak-kinds=all`
 - [x] implement ctrl-C
-- [ ] if `RPL_TOPIC` is returned to the client sending this command, `RPL_TOPICWHOTIME` SHOULD also be sent to that client.
-- [ ] implement notice for `part` -> found out it's implemented but doesn't work
+- [x] implement notice for `part` -> found out it's implemented but doesn't work
 - [x] implement notice for `nick`
-- [ ] implement notice for `user` -> If a client tries to send the USER command after they have already completed registration with the server, the ERR_ALREADYREGISTERED reply should be sent and the attempt should fail // FIXME: implemented but doesn't work???
+- [x] implement notice for `user` -> If a client tries to send the USER command after they have already completed registration with the server, the ERR_ALREADYREGISTERED reply should be sent and the attempt should fail
+- [ ] print mode non printa bene
+
+## Side quests
+- [ ] if `RPL_TOPIC` is returned to the client sending this command, `RPL_TOPICWHOTIME` SHOULD also be sent to that client.
 
 ## Things to check
 - [x] mode +i

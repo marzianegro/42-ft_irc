@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   numReplies.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:34:28 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 11:45:03 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/14 23:48:32 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ std::string errPasswdMismatch(const std::string &clientName) {
 
 std::string errNeedMoreParams(const std::string &clientName, const std::string &command) {
 	return (":gerboa 461 " + clientName + " " + command + " :Not enough parameters");
-}
+} // REVIEW: Da aggiungere il nome canale?
 
 std::string errChannelIsFull(const std::string &channelName, const std::string &clientName) {
 	return (":gerboa 471 " + clientName + " #" + channelName + " :Cannot join channel (+l)");
@@ -120,22 +120,29 @@ std::string errChanOPrivsNeeded(const std::string &channelName, const std::strin
 }
 
 // RPL
+std::string rplWelcome(const std::string &clientName) {
+	return (":gerboa 001 " + clientName + " :Welcome to GERBOA, we are happy to see you, " + clientName + "!");
+}
 
 std::string rplChannelModeIs(const std::string &channelName, const std::string &clientName, Channel *channel) {
+	bool add = false;
 	std::string msg = ":gerboa 324 " + clientName + " #" + channelName;
 
 	if (channel->getIModeStatus()) {
 		msg += " i";
-		msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
+		add = true;
 	}
 	if (channel->getKModeStatus()) {
+		if (add)
+			msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
 		msg += " k " + channel->getKey();
-		msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
+		add = true;
 	}
 	if (channel->getLimit() != 2142) {
+		if (add)
+			msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
 		msg += " l " + channel->getLimit();
-		msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
-	}
+		}
 
 	return (msg); //REVIEW: check if this is correct
 }
