@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setUtils.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/14 23:56:08 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:41:15 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ void Server::modeSet(const std::vector<std::string> &mode, Channel *channel, Cli
 
 void 	Server::iModeSet(Channel *channel, Client *user) {
 	channel->iModeSet();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +i";
+	this->_msg = ":" + user->getNickname() + " set Invite-Only (+i) MODE for #" + channel->getName();
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
 void 	Server::tModeSet(Channel *channel, Client *user) {
 	channel->tModeSet();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +t";
+	this->_msg = ":" + user->getNickname() + " set Protected Topic (+t) MODE for #" + channel->getName();
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
@@ -46,7 +46,7 @@ void 	Server::kModeSet(const std::vector<std::string> &mode, Channel *channel, C
 	++it_mode;
 	if (it_mode != mode.end() && it_mode->length() > 0 && ((*it_mode)[0] != '+' && (*it_mode)[0] != '-')) {
 		channel->kModeSet(*it_mode);
-		this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +k " + *it_mode;
+		this->_msg = ":" + user->getNickname() + " set Key (+k) MODE as " + *it_mode + " for #" + channel->getName();
 		this->sendToChannel(channel->getName(), NULL, false);
 	} else {
 		--it_mode;
@@ -93,7 +93,7 @@ void 	Server::lModeSet(const std::vector<std::string> &mode, Channel *channel, C
 		unsigned int	tryUInt = 0;
 		if (iss >> tryUInt) {
 			if (tryUInt < channel->getCount() || tryUInt > 2142) {
-				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Te limits must be between " + toString(channel->getCount()) + " and 2142";
+				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :User limit must be between " + toString(channel->getCount()) + " and 2142";
 			} else {
 				channel->lModeSet(tryUInt);
 				this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +l " + *it_mode;
