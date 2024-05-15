@@ -41,8 +41,10 @@
 		* mnegro sets mode +i on #test
 		* Channel #test modes: i
 - [ ] setting mode L through button on hexchat does not work
-- [ ] if K mode is set, i can still set mode I
+- [ ] if K mode is set, i can still set mode I (they are in a queue, if i unset K, then I is valid)
 - [ ] PART does not work if channel name does not have #
+- [ ] you can do `/mode -o` on yourself, is it correct?
+- [ ] `mode +l 1` does not work BUT i think only if the user count > user limit BUT this does not print anything, maybe it should for clarity's sake
 
 
 ## Side quests

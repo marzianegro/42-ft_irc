@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 10:53:21 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/15 15:18:25 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ Server::~Server() {
 
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, this->_serverSock, NULL);
 	close(this->_serverSock);
-	std::cout << "Server destructor done\n";
+	std::cout << "Server destructor done" << std::endl;
 }
 
 Server&	Server::operator=(const Server &src) {
