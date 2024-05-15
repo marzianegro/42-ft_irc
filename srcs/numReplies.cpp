@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   numReplies.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:34:28 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/14 23:48:32 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/15 10:53:22 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,17 +133,18 @@ std::string rplChannelModeIs(const std::string &channelName, const std::string &
 		add = true;
 	}
 	if (channel->getKModeStatus()) {
-		if (add)
+		if (add) {
 			msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
+		}
 		msg += " k " + channel->getKey();
 		add = true;
 	}
 	if (channel->getLimit() != 2142) {
-		if (add)
+		if (add) {
 			msg += "\r\n:gerboa 324 " + clientName + " #" + channelName;
-		msg += " l " + channel->getLimit();
 		}
-
+		msg += " l " + toString(channel->getLimit());
+	}
 	return (msg); //REVIEW: check if this is correct
 }
 

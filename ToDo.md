@@ -13,6 +13,9 @@
 - [ ] check conflicts between I mode and K mode
 		if I -> K is disabled
 		cant set K if I is set
+
+		if I is set, when i try to set K, it keeps saying mode I, not sure this is how it's supposed to work
+
 - [x] add WHO command
 - [x] make & possible in channel name							-> to be tested, but was already setup for it
 - [x] check how clients are cancelled (`nc` still receives message from channel after killing it)
@@ -33,6 +36,14 @@
 - [x] implement notice for `nick`
 - [x] implement notice for `user` -> If a client tries to send the USER command after they have already completed registration with the server, the ERR_ALREADYREGISTERED reply should be sent and the attempt should fail
 - [ ] print mode non printa bene
+- [ ] PART shows that user left channel for other people but not for who's leaving + channel remains visible
+- [ ] `/mode +i` prints on channel, doesn't look that good, so consider adding numRpl for mode setting and unsetting
+		* mnegro sets mode +i on #test
+		* Channel #test modes: i
+- [ ] setting mode L through button on hexchat does not work
+- [ ] if K mode is set, i can still set mode I
+- [ ] PART does not work if channel name does not have #
+
 
 ## Side quests
 - [ ] if `RPL_TOPIC` is returned to the client sending this command, `RPL_TOPICWHOTIME` SHOULD also be sent to that client.

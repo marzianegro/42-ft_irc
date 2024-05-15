@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverLife.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/14 22:13:40 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/15 10:26:23 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ void Server::clientDisconnect(Client *client, bool fromQuit) {
 	close(client->getSocket());
 	
 	// REVIEW: quit from channels
-	std::vector<std::string>::iterator	it = client->getChannels().begin();
-	while (it != client->getChannels().end()) {
+	std::vector<std::string> clientchans = client->getChannels();
+	std::vector<std::string>::iterator it = clientchans.begin();
+	while (it != clientchans.end()) {
 		Channel *channel = this->_channels[*it];
 		
 		channel->removeUser(client);
@@ -31,7 +32,7 @@ void Server::clientDisconnect(Client *client, bool fromQuit) {
 			sendToChannel(channel->getName(), NULL, false);
 		}
 		client->removeChannel(channel->getName());
-		it++;
+		++it;
 	}
 
 	delete client;

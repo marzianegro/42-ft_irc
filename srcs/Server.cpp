@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/14 22:47:25 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/15 10:53:21 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	Server::startEpoll() {
 	}
 	std::cout << "Epoll instance created\n";
 
+	memset(&this->_event, 0, sizeof(this->_event));
 	this->_event.events = EPOLLIN;
 	this->_event.data.fd = this->_serverSock;
 
