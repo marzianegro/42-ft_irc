@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 10:53:22 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:54:41 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,11 @@ void	Server::part(Client *user, std::string &chName, std::string reason) {
 	}
 
 	if (this->_msg.empty()) {
-		channel->removeUser(user);
-		channel->downCount();
-		this->_msg = ":" + user->getNickname() + " PART #" + chName + " :" + reason;
+		this->_msg = ":" + user->getNickname() + " PART #" + chName + " " + reason;
 		sendToChannel(chName, NULL, false);
+		channel->downCount();
+		channel->removeUser(user);
+		this->checkChOperators(channel);
 		user->removeChannel(chName);
 	}
 }
@@ -146,11 +147,12 @@ void Server::kick(Client *kicker, Client *kicked, std::string &chName, const std
 		this->_msg = errNotOnChannel(chName, kicker->getNickname());
 	} else if (!channel->isOperator(kicker)) {
 		this->_msg = errChanOPrivsNeeded(chName, kicker->getNickname());
-	} else if (!kicked || !channel->removeUser(kicked)) {
+	} else if (!kicked || !channel->removeUser(kicked)) { //FIXME: siamo sicuri??? forse meglio un "isUserInChannel"
 		this->_msg = errUserNotInChannel(chName, kicker->getNickname(), kicked->getNickname());
 	} else {
 		hasBeenKicked = true;
 		channel->removeUser(kicked);
+		this->checkChOperators(channel);
 		channel->downCount();
 		kicked->removeChannel(chName);
 		this->_msg = ":" + kicker->getNickname() + " KICK #" + chName + " " + kicked->getNickname() + " " + reason;
@@ -210,8 +212,8 @@ void Server::mode(Client *user, const std::string &chName, const std::vector<std
 			}
 			++it_mode;
 		}
-		this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
-		sendToChannel(chName, NULL, false);
+		// this->_msg = rplChannelModeIs(chName, user->getNickname(), channel);
+		// sendToChannel(chName, NULL, false);
 		this->_msg = "";
 	}
 

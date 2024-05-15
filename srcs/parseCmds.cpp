@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseCmds.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:59 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 12:23:18 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:02:21 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ void Server::parseMode(Client *client, std::string msg) {
 void Server::parseQuit(Client *client, std::string msg) {
 	if (msg.empty()) {
 		msg = "Client quit";
-	this->quit(client, msg);
 	}
+	this->quit(client, msg);
 }
 
 void Server::parseUser(Client *client, std::string msg) {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:01:06 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 16:41:16 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:39:25 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ std::string fixChannelName(const std::string &channelName) {
 
 void ftSend(int fd, std::string &msg) {
 	msg += "\r\n";
-	std::cout << "SENDING: " << msg << std::endl;
+	std::cout << "TO " << toString(fd) << " SEND -> " << msg;
 	send(fd, msg.c_str(), msg.size(), 0);
 }
 

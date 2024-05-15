@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 15:18:25 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:51:48 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,18 +166,11 @@ void	Server::invite(Client *inviter, Client *invited, const std::string &channel
 }
 
 void	Server::quit(Client *client, std::string reason) {
-	// std::map<int, Client*>::iterator	it_client = this->_clients.find(client->getSocket());
-	
 	if (!reason.empty()) {
 		reason = "kthxbye!";
 	}
+
 	this->_msg = ":" + client->getNickname() + " QUIT :Quit: " + reason;
-
-	// std::map<int, Client*>::iterator	it_msg = this->_clients.begin();
-	// for (; it_msg != this->_clients.end(); it_msg++) {
-	// 	ftSend(it_msg->first, this->_msg);
-	// }
-
 	this->sendToEveryone(NULL);
 
 	clientDisconnect(client, true);
@@ -205,4 +198,11 @@ bool	Server::checkUsernames(const std::string &username) {
 		}
 	}
 	return (true);
+}
+
+void	Server::checkChOperators(Channel *channel) {
+	this->_msg = channel->noModeOp();
+	if (!this->_msg.empty()) {
+		this->sendToChannel(channel->getName(), NULL, false);
+	}
 }

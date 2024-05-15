@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverLife.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 10:26:23 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:52:32 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,19 @@ void Server::clientDisconnect(Client *client, bool fromQuit) {
 	this->_clients.erase(client->getSocket());
 	close(client->getSocket());
 	
-	// REVIEW: quit from channels
 	std::vector<std::string> clientchans = client->getChannels();
 	std::vector<std::string>::iterator it = clientchans.begin();
 	while (it != clientchans.end()) {
 		Channel *channel = this->_channels[*it];
 		
-		channel->removeUser(client);
-		channel->downCount();
+		std::cout << "Disconnect: " << client->getNickname() << " is leaving " << channel->getName() << '\n';
 		if (!fromQuit) {
 			this->_msg = ":" + client->getNickname() + " PART #" + channel->getName() + " :Disconnected";
 			sendToChannel(channel->getName(), NULL, false);
 		}
+		channel->downCount();
+		channel->removeUser(client);
+		this->checkChOperators(channel);
 		client->removeChannel(channel->getName());
 		++it;
 	}

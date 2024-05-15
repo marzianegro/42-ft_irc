@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 16:03:01 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:48:25 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ bool	Channel::removeUser(Client *user) {
 		this->_opUsers.erase(it_op);
 		return (true);
 	}
+
 	return (false);
 }
 
@@ -230,4 +231,15 @@ void	Channel::oModeUnset(Client *user) {
 void	Channel::lModeUnset() {
 	this->_lModeOn = false;
 	this->_userLimit = 2142;
+}
+
+std::string Channel::noModeOp() {
+	std::string msg = "";
+	
+	if (this->_opUsers.empty() && !this->_regUsers.empty()) {
+		Client *newOp = this->_regUsers.front();
+		this->oModeSet(newOp);
+		msg = ":gerboa MODE #" + this->getName() + " +o " + newOp->getNickname();
+	}
+	return (msg);
 }

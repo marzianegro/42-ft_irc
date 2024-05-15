@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setUtils.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 16:41:15 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:36:43 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,41 @@ void Server::modeSet(const std::vector<std::string> &mode, Channel *channel, Cli
 	} else if (((*it_mode)[1] == 'l')) {
 		this->lModeSet(mode, channel, user, it_mode);
 	}
+	this->_msg = "";
 }
 
 void 	Server::iModeSet(Channel *channel, Client *user) {
+	std::string kModeAdd = "";
+
 	channel->iModeSet();
-	this->_msg = ":" + user->getNickname() + " set Invite-Only (+i) MODE for #" + channel->getName();
+	if (channel->getKModeStatus()) {
+		channel->kModeUnset();
+		kModeAdd = " (key disabled)";
+	}
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +i :-> Invite-only enabled" + kModeAdd;
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
 void 	Server::tModeSet(Channel *channel, Client *user) {
 	channel->tModeSet();
-	this->_msg = ":" + user->getNickname() + " set Protected Topic (+t) MODE for #" + channel->getName();
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +t :-> Protected Topic enabled";
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
 void 	Server::kModeSet(const std::vector<std::string> &mode, Channel *channel, Client *user, std::vector<std::string>::const_iterator it_mode) {
 	++it_mode;
 	if (it_mode != mode.end() && it_mode->length() > 0 && ((*it_mode)[0] != '+' && (*it_mode)[0] != '-')) {
-		channel->kModeSet(*it_mode);
-		this->_msg = ":" + user->getNickname() + " set Key (+k) MODE as " + *it_mode + " for #" + channel->getName();
-		this->sendToChannel(channel->getName(), NULL, false);
+		if (channel->getKModeStatus()) {
+			this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Channel key is already set";
+			ftSend(user->getSocket(), this->_msg);
+		} else if (channel->getIModeStatus()) {
+			this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Channel is invite-only";
+			ftSend(user->getSocket(), this->_msg);
+		} else {
+			channel->kModeSet(*it_mode);
+			this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +k :-> Key enabled (" + *it_mode + ")";
+			this->sendToChannel(channel->getName(), NULL, false);
+		}
 	} else {
 		--it_mode;
 	}
@@ -80,7 +95,6 @@ void 	Server::oModeSet(const std::vector<std::string> &mode, Channel *channel, C
 		} else if (!this->_msg.empty()) {
 			this->sendToChannel(channel->getName(), NULL, false);
 		}
-		this->_msg = "";
 	} else {
 		--it_mode;
 	}
@@ -94,9 +108,10 @@ void 	Server::lModeSet(const std::vector<std::string> &mode, Channel *channel, C
 		if (iss >> tryUInt) {
 			if (tryUInt < channel->getCount() || tryUInt > 2142) {
 				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :User limit must be between " + toString(channel->getCount()) + " and 2142";
+				ftSend(user->getSocket(), this->_msg);
 			} else {
 				channel->lModeSet(tryUInt);
-				this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +l " + *it_mode;
+				this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +l " + *it_mode + " :-> User limit enabled";
 				this->sendToChannel(channel->getName(), NULL, false);
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/14 23:55:33 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/16 00:49:21 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ private:
 	void	clientDisconnect(Client *client, bool fromQuit);
 	void	sendToChannel(const std::string &chName, Client *exclude, bool onlyOps);
 	void	sendToEveryone(Client *exclude);
+	void	checkChOperators(Channel *channel);
 
 	void	sendMsgToClient(Client *client, const std::string &target, std::string &msg);
 	void	sendMsgToChannel(Client *client, std::string channel, std::string &msg, bool onlyOps);

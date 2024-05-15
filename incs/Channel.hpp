@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/09 10:56:57 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/16 00:48:17 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,14 @@ public:
 	void	upCount();
 	void	downCount();
 
-	void	addUser(Client *user);
-	void	addInvited(Client *user);
-	bool	removeUser(Client *user);
-	bool	findUser(Client *user);
-	bool	isOperator(Client *user);
-	bool	isInvited(Client *user);
-	void	invitedJoining(Client *user);
+	void		addUser(Client *user);
+	void		addInvited(Client *user);
+	bool		removeUser(Client *user);
+	bool		findUser(Client *user);
+	bool		isOperator(Client *user);
+	bool		isInvited(Client *user);
+	void		invitedJoining(Client *user);
+	std::string	noModeOp();
 
 	// void		genaralMsg(Client *user, const std::string &msg); TODO: maybe
 	// void		operatorMsg(Client *user, const std::string &msg); TODO: maybe
