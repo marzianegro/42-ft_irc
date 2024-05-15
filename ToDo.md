@@ -45,6 +45,7 @@
 - [ ] PART does not work if channel name does not have #
 - [ ] you can do `/mode -o` on yourself, is it correct?
 - [ ] `mode +l 1` does not work BUT i think only if the user count > user limit BUT this does not print anything, maybe it should for clarity's sake
+- [ ] if the channel operator leaves and there are no more operators, there's no operator left
 
 
 ## Side quests
