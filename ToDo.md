@@ -6,18 +6,17 @@
 		cant set K if I is set
 
 		if I is set, when i try to set K, it keeps saying mode I, not sure this is how it's supposed to work
-- [?] print mode non printa bene
+- [ ] "Channel #name modes: " printa male, non si capisce niente
 - [x] PART shows that user left channel for other people but not for who's leaving + channel remains visible
 - [x] `/mode +i` prints on channel, doesn't look that good, so consider adding numRpl for mode setting and unsetting [ora dovrebbe essere carino]
 		* mnegro sets mode +i on #test
 		* Channel #test modes: i
-- [?] setting mode L through button on hexchat does not work [ricontrolla per favore, non trovo il bottone su hexchat]
+- [ ] setting mode L through button on hexchat does not work
 - [x] if K mode is set, i can still set mode I (they are in a queue, if i unset K, then I is valid) [testalo ma dovrebbe essere okay]
-- [?] PART does not work if channel name does not have # [in che senso? serve una replica]
-- [x] you can do `/mode -o` on yourself, is it correct? [tutto okay, giusto cosi, se vuoi puoi mettere che se la lista di op e' == 1 allora non puoi fare deop]
+- [ ] you can do `/mode -o` on yourself, is it correct? [tutto okay, giusto cosi, se vuoi puoi mettere che se la lista di op e' == 1 allora non puoi fare deop]
 - [x] `mode +l 1` does not work BUT i think only if the user count > user limit BUT this does not print anything, maybe it should for clarity's sake [should be okay, but check it please]
 - [x] if the channel operator leaves and there are no more operators, there's no operator left [dovrebbe essere okay, ho aggiunto la funzione server->checkChOperators(channel)]
-- [ ] check cmds.cpp:150
+- [x] check cmds.cpp:150
 - [ ] memory leaks post modifiche eheheh ma non ci dovrebbero essere
 
 
@@ -72,7 +71,7 @@
 	```
 
 ## FixMe
-- [ ] remove additional comment for setting mode +k (already handled by client)
+- [x] remove additional comment for setting mode +k (already handled by client)
 - [ ] setting channel limit through button also prints active modes in channel
-- [ ] add "Error: " to "User limit must be between 2 and 2142"
-- [ ] add a message that you can't deop yourself if you're the only operator in channel
+- [x] add "Error: " to "User limit must be between 2 and 2142"
+- [x] add a message that you can't deop yourself if you're the only operator in channel

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/16 00:54:41 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/17 18:05:54 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void Server::kick(Client *kicker, Client *kicked, std::string &chName, const std
 		this->_msg = errNotOnChannel(chName, kicker->getNickname());
 	} else if (!channel->isOperator(kicker)) {
 		this->_msg = errChanOPrivsNeeded(chName, kicker->getNickname());
-	} else if (!kicked || !channel->removeUser(kicked)) { //FIXME: siamo sicuri??? forse meglio un "isUserInChannel"
+	} else if (!kicked || !channel->findUser(kicked)) {
 		this->_msg = errUserNotInChannel(chName, kicker->getNickname(), kicked->getNickname());
 	} else {
 		hasBeenKicked = true;

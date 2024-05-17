@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/17 10:41:18 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/17 19:05:10 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void 	Server::kModeSet(const std::vector<std::string> &mode, Channel *channel, C
 			ftSend(user->getSocket(), this->_msg);
 		} else {
 			channel->kModeSet(*it_mode);
-			this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +k" + *it_mode;
+			this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +k " + *it_mode;
 			this->sendToChannel(channel->getName(), NULL, false);
 		}
 	} else {
@@ -107,7 +107,7 @@ void 	Server::lModeSet(const std::vector<std::string> &mode, Channel *channel, C
 		unsigned int	tryUInt = 0;
 		if (iss >> tryUInt) {
 			if (tryUInt < channel->getCount() || tryUInt > 2142) {
-				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :User limit must be between " + toString(channel->getCount()) + " and 2142";
+				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Error: User limit must be between " + toString(channel->getCount()) + " and 2142";
 				ftSend(user->getSocket(), this->_msg);
 			} else {
 				channel->lModeSet(tryUInt);

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:58:43 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/17 10:41:11 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/17 19:05:09 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ void 	Server::oModeUnset(const std::vector<std::string> &mode, Channel *channel,
 
 		while (it_user != this->_clients.end()) {
 			if (it_user->second->getNickname().compare(*it_mode) == 0) {
-				if (channel->findUser(it_user->second) && channel->isOperator(it_user->second)) {
+				if (channel->getOps().size() == 1) {
+					this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :You're the last operator left in channel, can't DeOp yourself";
+				} else if (channel->findUser(it_user->second) && channel->isOperator(it_user->second)) {
 					channel->oModeUnset(it_user->second);
 					this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -o " + it_user->second->getNickname();
 				} else if (channel->findUser(it_user->second) && !channel->isOperator(it_user->second)) {
