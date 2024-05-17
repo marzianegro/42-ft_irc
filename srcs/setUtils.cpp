@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setUtils.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/16 00:36:43 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/17 10:41:18 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void 	Server::iModeSet(Channel *channel, Client *user) {
 		channel->kModeUnset();
 		kModeAdd = " (key disabled)";
 	}
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +i :-> Invite-only enabled" + kModeAdd;
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +i :-> Invite-Only enabled" + kModeAdd;
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
@@ -60,7 +60,7 @@ void 	Server::kModeSet(const std::vector<std::string> &mode, Channel *channel, C
 			ftSend(user->getSocket(), this->_msg);
 		} else {
 			channel->kModeSet(*it_mode);
-			this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +k :-> Key enabled (" + *it_mode + ")";
+			this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +k" + *it_mode;
 			this->sendToChannel(channel->getName(), NULL, false);
 		}
 	} else {
@@ -111,7 +111,7 @@ void 	Server::lModeSet(const std::vector<std::string> &mode, Channel *channel, C
 				ftSend(user->getSocket(), this->_msg);
 			} else {
 				channel->lModeSet(tryUInt);
-				this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +l " + *it_mode + " :-> User limit enabled";
+				this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +l " + *it_mode;
 				this->sendToChannel(channel->getName(), NULL, false);
 			}
 		}

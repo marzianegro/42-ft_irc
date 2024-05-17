@@ -22,7 +22,7 @@
 
 
 ## Side quests
-- [ ] rifare tutti gli errori fanno cacare su questo client		[boh non sono in realta' cosi sbaglati]
+- [ ] rifare tutti gli errori fanno cacare su questo client [boh non sono in realta' cosi sbaglati]
 - [ ] if `RPL_TOPIC` is returned to the client sending this command, `RPL_TOPICWHOTIME` SHOULD also be sent to that client.
 
 ## Things to check
@@ -70,3 +70,9 @@
 	what():  basic_string: construction from null is not valid  
 	[1]    4921 IOT instruction (core dumped)  ./ircserv 8080 topolo  
 	```
+
+## FixMe
+- [ ] remove additional comment for setting mode +k (already handled by client)
+- [ ] setting channel limit through button also prints active modes in channel
+- [ ] add "Error: " to "User limit must be between 2 and 2142"
+- [ ] add a message that you can't deop yourself if you're the only operator in channel

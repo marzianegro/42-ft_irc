@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unsetUtils.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:58:43 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/16 00:36:57 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/17 10:41:11 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ void Server::modeUnset(const std::vector<std::string> &mode, Channel *channel, C
 
 void 	Server::iModeUnset(Channel *channel, Client *user) {
 	channel->iModeUnset();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -i :-> Invite-only disabled";
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -i :-> Invite-Only disabled";
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
 void 	Server::tModeUnset(Channel *channel, Client *user) {
 	channel->tModeUnset();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -t :-> Topic protection disabled";
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -t :-> Protected Topic disabled";
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
 void 	Server::kModeUnset(Channel *channel, Client *user) {
 	channel->kModeUnset();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -k :-> Key removed";
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -k";
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
@@ -82,6 +82,6 @@ void 	Server::oModeUnset(const std::vector<std::string> &mode, Channel *channel,
 
 void 	Server::lModeUnset(Channel *channel, Client *user) {
 	channel->lModeUnset();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -l :-> Limit removed";
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -l";
 	this->sendToChannel(channel->getName(), NULL, false);
 }

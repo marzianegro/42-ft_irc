@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseCmds.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:59 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/16 00:02:21 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/17 10:39:27 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void Server::parseUser(Client *client, std::string msg) {
 }
 
 void Server::parseOper(Client *client, std::string msg) {
-	// TODO: lo implentiamo?
+	// TODO: lo implentiamo? // REVIEW: cos'è?
 	(void)client;
 	(void)msg;
 }
