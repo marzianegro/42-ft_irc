@@ -1,45 +1,40 @@
 # To-Do's for `ft_irc`
 
-## Things to fix
-- [x] check conflicts between I mode and K mode [dovrei aver gestito questa cosa ma e' da testare]
-		if I -> K is disabled
-		cant set K if I is set
-
-		if I is set, when i try to set K, it keeps saying mode I, not sure this is how it's supposed to work
+## Fix 🛠️
 - [ ] "Channel #name modes: " printa male, non si capisce niente
-- [x] PART shows that user left channel for other people but not for who's leaving + channel remains visible
-- [x] `/mode +i` prints on channel, doesn't look that good, so consider adding numRpl for mode setting and unsetting [ora dovrebbe essere carino]
-		* mnegro sets mode +i on #test
-		* Channel #test modes: i
-- [ ] setting mode L through button on hexchat does not work
-- [x] if K mode is set, i can still set mode I (they are in a queue, if i unset K, then I is valid) [testalo ma dovrebbe essere okay]
-- [ ] you can do `/mode -o` on yourself, is it correct? [tutto okay, giusto cosi, se vuoi puoi mettere che se la lista di op e' == 1 allora non puoi fare deop]
-- [x] `mode +l 1` does not work BUT i think only if the user count > user limit BUT this does not print anything, maybe it should for clarity's sake [should be okay, but check it please]
-- [x] if the channel operator leaves and there are no more operators, there's no operator left [dovrebbe essere okay, ho aggiunto la funzione server->checkChOperators(channel)]
-- [x] check cmds.cpp:150
 - [ ] memory leaks post modifiche eheheh ma non ci dovrebbero essere
+- [ ] setting channel limit through button also prints active modes in channel
 
+## Check 🔍
+- [x] mode +i
+- [x] mode -i
+- [x] mode +o
+- [x] mode -o
+- [x] mode +k
+- [x] mode -k
+- [x] mode +t
+- [x] mode -t
+- [x] mode +l
+- [x] mode -l
+- [x] Server::setTopic
+	TOPIC #test :New topic          ; Setting the topic on "#test" to
+									"New topic".
+	TOPIC #test :                   ; Clearing the topic on "#test"	
+	TOPIC #test                     ; Checking the topic for "#test"
+- [x] Server::getTopic
+- [x] WHO command (only for channel, to be tested) -> this is what it prints (command has to be precisely
+	/WHO #test)
+	WHO #test
+	:gerboa 353 fakegigi = #test :@debtopo  fakegigi 
+	:gerboa 366 fakegigi #test :End of /NAMES list
+	:debtopo PRIVMSG #test :WHO
+	:debtopo PRIVMSG #test :WHO #test
 
-## Side quests
+## Side quests 🚥
 - [ ] rifare tutti gli errori fanno cacare su questo client [boh non sono in realta' cosi sbaglati]
 - [ ] if `RPL_TOPIC` is returned to the client sending this command, `RPL_TOPICWHOTIME` SHOULD also be sent to that client.
 
-## Things to check
-- [ ] mode +i
-- [ ] mode -i
-- [ ] mode +o
-- [ ] mode -o
-- [ ] mode +k
-- [ ] mode -k
-- [ ] mode +t
-- [ ] mode -t
-- [ ] mode +l
-- [ ] mode -l
-- [ ] Server::setTopic
-- [ ] Server::getTopic
-- [ ] WHO command (only for channel, to be tested)
-
-## Done
+## Done 👏
 - [x] port check doesn't work with letters						-> added check in checkPort, now passing it av[i] instead of atoi(av[1])
 - [x] fix & when joining a channel								 -> straight up guessed lol (added check for '&' in check for '#')
 - [x] do not permit to set limit over 2142
@@ -69,9 +64,21 @@
 	what():  basic_string: construction from null is not valid  
 	[1]    4921 IOT instruction (core dumped)  ./ircserv 8080 topolo  
 	```
-
-## FixMe
 - [x] remove additional comment for setting mode +k (already handled by client)
-- [ ] setting channel limit through button also prints active modes in channel
 - [x] add "Error: " to "User limit must be between 2 and 2142"
 - [x] add a message that you can't deop yourself if you're the only operator in channel
+- [x] check conflicts between I mode and K mode [dovrei aver gestito questa cosa ma e' da testare]
+		if I -> K is disabled
+		cant set K if I is set
+
+		if I is set, when i try to set K, it keeps saying mode I, not sure this is how it's supposed to work
+- [x] PART shows that user left channel for other people but not for who's leaving + channel remains visible
+- [x] `/mode +i` prints on channel, doesn't look that good, so consider adding numRpl for mode setting and unsetting [ora dovrebbe essere carino]
+		* mnegro sets mode +i on #test
+		* Channel #test modes: i
+- [x] if K mode is set, i can still set mode I (they are in a queue, if i unset K, then I is valid) [testalo ma dovrebbe essere okay]
+- [x] `mode +l 1` does not work BUT i think only if the user count > user limit BUT this does not print anything, maybe it should for clarity's sake [should be okay, but check it please]
+- [x] if the channel operator leaves and there are no more operators, there's no operator left [dovrebbe essere okay, ho aggiunto la funzione server->checkChOperators(channel)]
+- [x] check cmds.cpp:150
+- [x] you can do `/mode -o` on yourself, is it correct? [tutto okay, giusto cosi, se vuoi puoi mettere che se la lista di op e' == 1 allora non puoi fare deop]
+- [x] setting mode L through button on hexchat does not work -> jk, it works

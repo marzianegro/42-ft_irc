@@ -18,19 +18,16 @@ The `ft_irc` project at 42 is a networking project that involves creating an IRC
 
 ### Installation
 1. Clone the repository:
-
     ```bash
     git clone https://github.com/marzianegro/42-ft_irc.git
     ```
 
 2. Navigate to the project directory:
-
     ```bash
     cd ft_irc
     ```
 
 3. Compile the project:
-
     ```bash
     make
     ```
@@ -39,44 +36,49 @@ The `ft_irc` project at 42 is a networking project that involves creating an IRC
 1. Start the IRC server with the desired port and password:
 
     ```bash
-    ./ircserver [port] [password]
+    ./ircserver <port> <password>
     ```
 
-    For example:
+2. Connect to the server using an IRC client (e.g., `nc`):
     ```bash
-    ./ircserver 6667 mypassword
+    nc -C <port> <password>
     ```
 
-2. Connect to the server using an IRC client (e.g., `irssi`, `weechat`, `mIRC`):
-
+3. Request a list of capabilities that the server supports:
     ```bash
-    /connect localhost 6667
+    CAP LS 302
     ```
 
-3. Authenticate with the server using the password provided:
-
+4. Authenticate with the server using the password provided:
     ```bash
-    /pass mypassword
+    PASS <password>
+    ```
+
+5. Set your username with the `USER` command:
+    ```bash
+    USER <username> 0 * :realname
+    ```
+
+6. Set your nickname with the `NICK` command:
+    ```bash
+    NICK <nickname>
     ```
 
 ### Example Commands
 
 - **Join a Channel**:
-
     ```bash
-    /join #channelname
+    JOIN #channelname
     ```
 
 - **Leave a Channel**:
-
     ```bash
-    /part #channelname
+    PART #channelname
     ```
 
 - **Send a Private Message**:
-
     ```bash
-    /msg username message
+    PRIVMSG <username> <message>
     ```
 
 ## Contributors
