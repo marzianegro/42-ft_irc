@@ -34,7 +34,7 @@ TO 6 SEND -> :debratto QUIT :Quit: kthxbye!
 ==97480==    at 0x11F468: Server::clientEvent(epoll_event&) (serverLife.cpp:96)
 ==97480==    by 0x11F6BE: Server::runEpoll() (serverLife.cpp:115)
 ==97480==    by 0x116FF9: main (main.cpp:62)
-==97480==  Address 0x4de3338 is 40 bytes inside a block of size 48 free'd
+FIXME: ==97480==  Address 0x4de3338 is 40 bytes inside a block of size 48 free'd
 ==97480==    at 0x484B8AF: operator delete(void*) (vg_replace_malloc.c:923)
 ==97480==    by 0x11E6B1: __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<int const, Client*> > >::deallocate(std::_Rb_tree_node<std::pair<int const, Client*> >*, unsigned long) (new_allocator.h:145)
 ==97480==    by 0x11E21D: __gnu_cxx::__alloc_traits<std::allocator<std::_Rb_tree_node<std::pair<int const, Client*> > >, std::_Rb_tree_node<std::pair<int const, Client*> > >::deallocate(std::allocator<std::_Rb_tree_node<std::pair<int const, Client*> > >&, std::_Rb_tree_node<std::pair<int const, Client*> >*, unsigned long) (alloc_traits.h:141)
@@ -44,7 +44,7 @@ TO 6 SEND -> :debratto QUIT :Quit: kthxbye!
 ==97480==    by 0x120D09: std::_Rb_tree<int, std::pair<int const, Client*>, std::_Select1st<std::pair<int const, Client*> >, std::less<int>, std::allocator<std::pair<int const, Client*> > >::_M_erase_aux(std::_Rb_tree_const_iterator<std::pair<int const, Client*> >, std::_Rb_tree_const_iterator<std::pair<int const, Client*> >) (stl_tree.h:2501)
 ==97480==    by 0x120914: std::_Rb_tree<int, std::pair<int const, Client*>, std::_Select1st<std::pair<int const, Client*> >, std::less<int>, std::allocator<std::pair<int const, Client*> > >::erase(int const&) (stl_tree.h:2512)
 ==97480==    by 0x120712: std::map<int, Client*, std::less<int>, std::allocator<std::pair<int const, Client*> > >::erase(int const&) (stl_map.h:1069)
-==97480==    by 0x11EA53: Server::clientDisconnect(Client*, bool) (serverLife.cpp:19)
+FIXME: ==97480==    by 0x11EA53: Server::clientDisconnect(Client*, bool) (serverLife.cpp:19)
 ==97480==    by 0x11CC15: Server::quit(Client*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (Server.cpp:176)
 ==97480==    by 0x11B147: Server::parseQuit(Client*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (parseCmds.cpp:124)
 ==97480==  Block was alloc'd at
@@ -67,9 +67,9 @@ TO 6 SEND -> :debratto QUIT :Quit: kthxbye!
 ==97480==    by 0x11F47D: Server::clientEvent(epoll_event&) (serverLife.cpp:96)
 ==97480==    by 0x11F6BE: Server::runEpoll() (serverLife.cpp:115)
 ==97480==    by 0x116FF9: main (main.cpp:62)
-==97480==  Address 0x4de32b0 is 144 bytes inside a block of size 168 free'd
+FIXME: ==97480==  Address 0x4de32b0 is 144 bytes inside a block of size 168 free'd
 ==97480==    at 0x484B8AF: operator delete(void*) (vg_replace_malloc.c:923)
-==97480==    by 0x11EDAA: Server::clientDisconnect(Client*, bool) (serverLife.cpp:39)
+FIXME: ==97480==    by 0x11EDAA: Server::clientDisconnect(Client*, bool) (serverLife.cpp:39)
 ==97480==    by 0x11CC15: Server::quit(Client*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (Server.cpp:176)
 ==97480==    by 0x11B147: Server::parseQuit(Client*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (parseCmds.cpp:124)
 ==97480==    by 0x11FFBC: Server::execCmd(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Client*) (serverLife.cpp:177)

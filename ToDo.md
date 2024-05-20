@@ -1,9 +1,9 @@
 # To-Do's for `ft_irc`
 
 ## Fix 🛠️
-- [ ] "Channel #name modes: " printa male, non si capisce niente
+- [ ] "Channel #name modes: " printa male, non si capisce niente -> automatico???
 - [ ] memory leaks post modifiche eheheh ma non ci dovrebbero essere
-- [ ] setting channel limit through button also prints active modes in channel
+- [ ] setting channel limit through button also prints active modes in channel -> check
 
 ## Check 🔍
 - [x] mode +i

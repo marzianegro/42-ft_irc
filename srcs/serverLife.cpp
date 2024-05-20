@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/17 10:39:27 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/20 23:26:09 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,7 @@
 #include "../incs/Client.hpp"
 #include "../incs/Server.hpp"
 
-void Server::clientDisconnect(Client *client, bool fromQuit) {
-	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), &this->_current_event);
-	this->_clients.erase(client->getSocket());
-	close(client->getSocket());
-	
+void Server::clientDisconnect(Client *client, bool fromQuit) {	
 	std::vector<std::string> clientchans = client->getChannels();
 	std::vector<std::string>::iterator it = clientchans.begin();
 	while (it != clientchans.end()) {
@@ -35,6 +31,11 @@ void Server::clientDisconnect(Client *client, bool fromQuit) {
 		client->removeChannel(channel->getName());
 		++it;
 	}
+
+	// NOTES: changed order here, check for invalid read
+	this->_clients.erase(client->getSocket());
+	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), &this->_current_event);
+	close(client->getSocket());
 
 	delete client;
 }
