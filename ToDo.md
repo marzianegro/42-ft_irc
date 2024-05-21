@@ -2,9 +2,8 @@
 
 ## Fix 🛠️
 - [ ] "Channel #name modes: " printa male, non si capisce niente -> automatico???
-- [ ] memory leaks post modifiche eheheh ma non ci dovrebbero essere
 - [ ] setting channel limit through button also prints active modes in channel -> check
-- [x] run `valgrind --leak-check=full --show-leak-kinds=all`
+- [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
 
 ## Check 🔍
 - [x] mode +i

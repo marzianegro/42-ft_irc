@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/21 12:47:10 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/21 14:40:05 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void 	Server::oModeSet(const std::vector<std::string> &mode, Channel *channel, C
 
 		while (it_user != this->_clients.end()) {
 			if (it_user->second->getNickname().compare(*it_mode) == 0) {
-				if (channel->findUser(it_user->second) && !channel->isOperator(it_user->second)) { // REVIEW: no error msg for already being operator
+				if (channel->findUser(it_user->second) && !channel->isOperator(it_user->second)) {
 					channel->oModeSet(it_user->second);
 					this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +o " + it_user->second->getNickname();
 				} else if (channel->findUser(it_user->second) && channel->isOperator(it_user->second)) {

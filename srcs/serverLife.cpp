@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/21 12:25:04 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/21 14:38:13 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void Server::clientDisconnect(Client *client, bool fromQuit) {
 	std::vector<std::string>::iterator it_chan = channels.begin();
 	while (it_chan != channels.end()) {
 		Channel *channel = this->_channels[*it_chan];
-		
+
 		std::cout << "Disconnect: " << client->getNickname() << " is leaving " << channel->getName() << '\n';
 		// REVIEW: is this part? part is already implemented though
 		if (!fromQuit) {
