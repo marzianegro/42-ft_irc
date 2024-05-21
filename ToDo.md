@@ -4,6 +4,7 @@
 - [ ] "Channel #name modes: " printa male, non si capisce niente -> automatico???
 - [ ] memory leaks post modifiche eheheh ma non ci dovrebbero essere
 - [ ] setting channel limit through button also prints active modes in channel -> check
+- [x] run `valgrind --leak-check=full --show-leak-kinds=all`
 
 ## Check 🔍
 - [x] mode +i
@@ -49,7 +50,6 @@
 - [x] check how clients are cancelled (`nc` still receives message from channel after killing it)
 - [X] when user exits, make sure everythig is clean
 - [x] `kick` kicks but not in client
-- [x] run `valgrind --leak-check=full --show-leak-kinds=all`
 - [x] implement ctrl-C
 - [x] implement notice for `part` -> found out it's implemented but doesn't work
 - [x] implement notice for `nick`

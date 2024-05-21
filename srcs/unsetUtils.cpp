@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:58:43 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/17 19:05:09 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/21 12:46:00 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ void Server::modeUnset(const std::vector<std::string> &mode, Channel *channel, C
 
 void 	Server::iModeUnset(Channel *channel, Client *user) {
 	channel->iModeUnset();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -i :-> Invite-Only disabled";
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -i : | Invite-Only disabled";
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
 void 	Server::tModeUnset(Channel *channel, Client *user) {
 	channel->tModeUnset();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -t :-> Protected Topic disabled";
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -t : | Protected Topic disabled";
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 

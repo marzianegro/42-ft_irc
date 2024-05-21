@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/17 19:05:10 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/21 12:47:10 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ void 	Server::iModeSet(Channel *channel, Client *user) {
 	channel->iModeSet();
 	if (channel->getKModeStatus()) {
 		channel->kModeUnset();
-		kModeAdd = " (key disabled)";
+		kModeAdd = " (Channel Key disabled)";
 	}
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +i :-> Invite-Only enabled" + kModeAdd;
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +i : | Invite-Only enabled" + kModeAdd;
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
 void 	Server::tModeSet(Channel *channel, Client *user) {
 	channel->tModeSet();
-	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +t :-> Protected Topic enabled";
+	this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +t : | Protected Topic enabled";
 	this->sendToChannel(channel->getName(), NULL, false);
 }
 
@@ -107,7 +107,7 @@ void 	Server::lModeSet(const std::vector<std::string> &mode, Channel *channel, C
 		unsigned int	tryUInt = 0;
 		if (iss >> tryUInt) {
 			if (tryUInt < channel->getCount() || tryUInt > 2142) {
-				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Error: User limit must be between " + toString(channel->getCount()) + " and 2142";
+				this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :User limit must be between " + toString(channel->getCount()) + " and 2142";
 				ftSend(user->getSocket(), this->_msg);
 			} else {
 				channel->lModeSet(tryUInt);

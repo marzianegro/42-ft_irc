@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/20 23:26:09 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/21 12:25:04 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 #include "../incs/Server.hpp"
 
 void Server::clientDisconnect(Client *client, bool fromQuit) {	
-	std::vector<std::string> clientchans = client->getChannels();
-	std::vector<std::string>::iterator it = clientchans.begin();
-	while (it != clientchans.end()) {
-		Channel *channel = this->_channels[*it];
+	std::vector<std::string> channels = client->getChannels();
+	std::vector<std::string>::iterator it_chan = channels.begin();
+	while (it_chan != channels.end()) {
+		Channel *channel = this->_channels[*it_chan];
 		
 		std::cout << "Disconnect: " << client->getNickname() << " is leaving " << channel->getName() << '\n';
+		// REVIEW: is this part? part is already implemented though
 		if (!fromQuit) {
 			this->_msg = ":" + client->getNickname() + " PART #" + channel->getName() + " :Disconnected";
 			sendToChannel(channel->getName(), NULL, false);
@@ -29,15 +30,14 @@ void Server::clientDisconnect(Client *client, bool fromQuit) {
 		channel->removeUser(client);
 		this->checkChOperators(channel);
 		client->removeChannel(channel->getName());
-		++it;
+		++it_chan;
 	}
 
-	// NOTES: changed order here, check for invalid read
-	this->_clients.erase(client->getSocket());
-	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), &this->_current_event);
-	close(client->getSocket());
-
+	int clientSocket = client->getSocket();
+	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, clientSocket, &this->_current_event);
+	this->_clients.erase(clientSocket);
 	delete client;
+	close(clientSocket);
 }
 
 void Server::newClientConnection() {
@@ -78,21 +78,25 @@ void Server::clientEvent(epoll_event &event) {
 	bzero(buffer, sizeof(buffer));
 
 	ssize_t byteRecv = recv(event.data.fd, buffer, sizeof(buffer), 0);
-	// std::cout << "1 buffer: " << buffer << std::endl;
 	if (byteRecv == 0) {
 		std::cout << "Connection closed by the client\n";
-		this->clientDisconnect(this->_clients[event.data.fd], false);
+		std::map<int, Client*>::iterator	it = this->_clients.find(event.data.fd);
+        if (it != this->_clients.end()) {
+			this->clientDisconnect(it->second, false);
+		}
 	} else if (byteRecv == -1) {
 		std::cerr << "Error while receiving the message\n";
 	} else {
-		// handle string
 		std::string msg;
 		std::map<int, Client*>::iterator	it = this->_clients.find(event.data.fd);
-		
-		
+		if (it == this->_clients.end()) {
+			return;
+		}
+
 		it->second->fillBuffer(buffer);
 		msg = it->second->readBuffer();
 		while (!msg.empty()) {
+			// FIXME: problem is here!!!
 			this->execCmd(msg, it->second);
 			msg = it->second->readBuffer();
 		}
