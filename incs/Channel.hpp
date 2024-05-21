@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/16 00:48:17 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/21 15:36:54 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ public:
 	void		invitedJoining(Client *user);
 	std::string	noModeOp();
 
-	// void		genaralMsg(Client *user, const std::string &msg); TODO: maybe
-	// void		operatorMsg(Client *user, const std::string &msg); TODO: maybe
+	// void		genaralMsg(Client *user, const std::string &msg); // TODO: maybe
+	// void		operatorMsg(Client *user, const std::string &msg); // TODO: maybe
 
 	void		iModeSet();
 	void		tModeSet();

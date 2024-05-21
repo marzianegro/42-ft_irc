@@ -11,11 +11,6 @@ The `ft_irc` project at 42 is a networking project that involves creating an IRC
 - **Authentication**: Handles user registration and authentication.
 
 ## Getting Started
-### Prerequisites
-- A Unix-like operating system (Linux, macOS).
-- GCC compiler.
-- Make utility.
-
 ### Installation
 1. Clone the repository:
     ```bash
