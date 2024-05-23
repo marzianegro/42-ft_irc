@@ -4,22 +4,8 @@
 - [ ] "Channel #name modes: " printa male, non si capisce niente -> automatico???
 - [ ] setting channel limit through button also prints active modes in channel -> check
 - [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
-- [x] add NOTICE for +k without a key
-- [x] add NOTICE for +k when +i is already enabled
-- [x] add NOTICE for trying to disable modes when they're not enabled
-- [ ] no issues if -k has a key specified, is it correct?
-- [x] no issues if -i even when +i is not set, is it correct?
-- [x] missing space here: mnegrois already a channel operator
-- [x] ho fatto /part da #chan, poi ho joinato di nuovo #chan dalla schermata principale,
-		poi ho fatto /part di nuovo e /join di nuovo ma questa volta dalla schermata del canale
-
-		in execution: JOIN chan
-		CALLING JOIN: chan
-		JOINING: #chan WITH KEY: 
-		User mnegro found in _regUsers
-		terminate called after throwing an instance of 'std::logic_error'
-		what():  basic_string::_M_construct null not valid
-		[1]    69739 abort (core dumped)  ./ircserv 8080 topolo
+- [ ] no issues if -k has a key specified, is it correct? should we add some sort of notice?
+- [ ] go over all highlighted comments and fix them
 
 ## Check 🔍
 - [x] mode +i
@@ -97,3 +83,18 @@
 - [x] check cmds.cpp:150
 - [x] you can do `/mode -o` on yourself, is it correct? [tutto okay, giusto cosi, se vuoi puoi mettere che se la lista di op e' == 1 allora non puoi fare deop]
 - [x] setting mode L through button on hexchat does not work -> jk, it works
+- [x] add NOTICE for +k without a key
+- [x] add NOTICE for +k when +i is already enabled
+- [x] add NOTICE for trying to disable modes when they're not enabled
+- [x] no issues if -i even when +i is not set, is it correct?
+- [x] missing space here: mnegrois already a channel operator
+- [x] ho fatto /part da #chan, poi ho joinato di nuovo #chan dalla schermata principale,
+		poi ho fatto /part di nuovo e /join di nuovo ma questa volta dalla schermata del canale
+
+		in execution: JOIN chan
+		CALLING JOIN: chan
+		JOINING: #chan WITH KEY: 
+		User mnegro found in _regUsers
+		terminate called after throwing an instance of 'std::logic_error'
+		what():  basic_string::_M_construct null not valid
+		[1]    69739 abort (core dumped)  ./ircserv 8080 topolo
