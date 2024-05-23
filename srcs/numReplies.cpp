@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:34:28 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/15 16:43:23 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/23 12:17:04 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,4 +184,9 @@ std::string rplNamReply(const Channel &channel, const std::string &clientName) {
 
 std::string rplEndOfNames(const std::string &channelName, const std::string &clientName) {
 	return (":gerboa 366 " + clientName + " #" + channelName + " :End of /NAMES list");
+}
+
+// Custom RPL
+std::string rplYoureInChannel(const std::string &channelName, const std::string &clientName) {
+	return (":gerboa 476 " + clientName + " #" + channelName + " :You're already on that channel");
 }

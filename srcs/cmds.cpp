@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/17 18:05:54 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/23 12:17:07 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 		this->_channels[chName] = new Channel(user, chName, key);
 		chanExist = false;
 	} else if (it_chan->second->findUser(user)) {
-		this->_msg = errUserOnChannel(chName, user->getNickname(), NULL);
+		this->_msg = rplYoureInChannel(chName, user->getNickname());
 	} else if (it_chan->second->getKModeStatus() && key != it_chan->second->getKey()) {
 		this->_msg = errBadChannelKey(chName, user->getNickname());
 	} else if (it_chan->second->getCount() >= it_chan->second->getLimit()) {

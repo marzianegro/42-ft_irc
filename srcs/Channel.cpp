@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/21 14:37:29 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/23 11:39:13 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,10 @@ bool	Channel::getKModeStatus() const {
 
 bool	Channel::getTModeStatus() const {
 	return (this->_tModeOn);
+}
+
+bool	Channel::getLModeStatus() const {
+	return (this->_lModeOn);
 }
 
 std::vector<Client*>	Channel::getOps() const {

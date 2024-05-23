@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/21 14:40:05 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/23 11:39:21 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void 	Server::kModeSet(const std::vector<std::string> &mode, Channel *channel, C
 			this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Channel key is already set";
 			ftSend(user->getSocket(), this->_msg);
 		} else if (channel->getIModeStatus()) {
-			this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Channel is invite-only";
+			this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Channel is aready Invite-Only";
 			ftSend(user->getSocket(), this->_msg);
 		} else {
 			channel->kModeSet(*it_mode);
@@ -64,6 +64,8 @@ void 	Server::kModeSet(const std::vector<std::string> &mode, Channel *channel, C
 			this->sendToChannel(channel->getName(), NULL, false);
 		}
 	} else {
+		this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :Please specify a channel key";
+		ftSend(user->getSocket(), this->_msg);
 		--it_mode;
 	}
 }
@@ -79,7 +81,7 @@ void 	Server::oModeSet(const std::vector<std::string> &mode, Channel *channel, C
 					channel->oModeSet(it_user->second);
 					this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " +o " + it_user->second->getNickname();
 				} else if (channel->findUser(it_user->second) && channel->isOperator(it_user->second)) {
-					this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :" + it_user->second->getNickname() + "is already a channel operator";
+					this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :" + it_user->second->getNickname() + " is already a channel operator";
 				} else if (!channel->findUser(it_user->second)) {
 					this->_msg = errUserNotInChannel(channel->getName(), user->getNickname(), it_user->second->getNickname());
 					ftSend(user->getSocket(), this->_msg);

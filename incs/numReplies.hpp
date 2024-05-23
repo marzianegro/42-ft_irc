@@ -30,3 +30,5 @@ std::string rplTopic(const std::string &channelName, const std::string &clientNa
 std::string rplInviting(const std::string &channelName, const std::string &clientName, const std::string &invitedClientName);
 std::string rplNamReply(const Channel &channel, const std::string &clientName);
 std::string rplEndOfNames(const std::string &channelName, const std::string &clientName);
+
+std::string rplYoureInChannel(const std::string &channelName, const std::string &clientName);

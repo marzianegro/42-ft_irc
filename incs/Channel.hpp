@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/21 15:36:54 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/23 11:39:13 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ public:
 	bool					getIModeStatus() const;
 	bool					getKModeStatus() const;
 	bool					getTModeStatus() const;
+	bool					getLModeStatus() const;
 	std::vector<Client*>	getOps() const;
 	std::vector<Client*>	getRegs() const;
 	std::vector<Client*>	getInvs() const;
