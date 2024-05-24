@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setUtils.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:52 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 11:39:21 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/25 00:26:03 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void 	Server::oModeSet(const std::vector<std::string> &mode, Channel *channel, C
 			++it_user;
 		}
 		if (it_user == this->_clients.end()) {
-			this->_msg = errNoSuchNick(user->getNickname(), it_user->second->getNickname());
+			this->_msg = errNoSuchNick(user->getNickname(), *it_mode);
 			ftSend(user->getSocket(), this->_msg);
 		} else if (!this->_msg.empty()) {
 			this->sendToChannel(channel->getName(), NULL, false);

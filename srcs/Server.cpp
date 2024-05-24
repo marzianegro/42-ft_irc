@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 23:43:52 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/25 00:27:29 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ void	Server::startEpoll() {
 }
 
 void	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
-	
+	this->_msg = "";
+
 	if (channel.empty()) {
 		this->_msg = errNeedMoreParams(inviter->getNickname(), "INVITE");
 		ftSend(inviter->getSocket(), this->_msg);
@@ -145,7 +146,7 @@ void	Server::invite(Client *inviter, Client *invited, const std::string &channel
 	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(channel);
 
 	if (it_chan == this->_channels.end()) {
-		this->_msg = errNoSuchChannel(it_chan->second->getName(), inviter->getNickname());
+		this->_msg = errNoSuchChannel(channel, inviter->getNickname());
 	} else if (!(it_chan->second->findUser(inviter))) {
 		this->_msg = errNotOnChannel(it_chan->first, inviter->getNickname());
 	} else if (!it_chan->second->isOperator(inviter)) {
@@ -156,8 +157,13 @@ void	Server::invite(Client *inviter, Client *invited, const std::string &channel
 		this->_msg = errChannelIsFull(channel,invited->getNickname());
 	}
 
-	it_chan->second->addInvited(invited);
-	this->_msg = rplInviting(channel, inviter->getNickname(), invited->getNickname());
+	if (this->_msg.empty()) {
+		it_chan->second->addInvited(invited);
+		this->_msg = rplInviting(channel, inviter->getNickname(), invited->getNickname());
+	}
+
+	ftSend(inviter->getSocket(), this->_msg);
+	this->_msg = "";
 }
 
 void	Server::quit(Client *client, std::string reason) {
