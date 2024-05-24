@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/21 14:38:13 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:17:59 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void Server::clientDisconnect(Client *client, bool fromQuit) {
 		Channel *channel = this->_channels[*it_chan];
 
 		std::cout << "Disconnect: " << client->getNickname() << " is leaving " << channel->getName() << '\n';
-		// REVIEW: is this part? part is already implemented though
 		if (!fromQuit) {
 			this->_msg = ":" + client->getNickname() + " PART #" + channel->getName() + " :Disconnected";
 			sendToChannel(channel->getName(), NULL, false);
@@ -115,7 +114,7 @@ void	Server::runEpoll() {
 		if (this->_current_event.data.fd == this->_serverSock) { // new client connection
 			this->newClientConnection();
 		} else if (this->_current_event.data.fd == STDIN_FILENO) {
-			this->consoleEvent(); // FIXME: ???
+			this->consoleEvent();
 		} else {
 			this->clientEvent(this->_events[i]);
 		}
@@ -206,34 +205,3 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 	}
 }
-
-/*
-**		channel.kick
-**		channel.invite
-
-
-	server ascolta -> riceve un messaggio -> controlla se è autenticato -> guardo se conosce il comando -> chiama il parsing
-	della stringa ricevuta -> check parametri -> esegue il comando
-
-	il comando prevede:
-		- check se i parametri sono corretti e sono TUTTI (altrimenti needmodeparams)
-		- check se l'utente è autorizzato a fare l'azione
-		- altri check puntuali
-		- esegue quel che deve fare
-	
-	ci sono dei comandi che agiscono sul channel, altri no:
-
-	sul channel:
-		- invite
-		- kick
-		- mode
-		- topic
-	
-	altri no:
-		- msg
-		- join
-		- quit
-		- nick
-		- user
-		etc.
-*/

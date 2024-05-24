@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 12:00:00 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 12:21:52 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 20:57:34 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,9 @@ void	Channel::setName(const std::string &name) {
 	this->_name = name;
 }
  
-// FIXME: add this->_msg ????????????????????????????????
 void	Channel::setTopic(const std::string &topic) {
 	if (topic.length() == 1 && topic[0] == ':') {
-		this->_topic = ""; // REVIEW: not sure about this // REVIEW: jk i think it's because of this SENDING: :mnegro TOPIC #test :
+		this->_topic = "";
 	} else if (topic.compare(this->_topic) != 0) {
 		this->_topic = topic;
 	}

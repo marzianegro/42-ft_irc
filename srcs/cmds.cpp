@@ -6,15 +6,13 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 12:48:41 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:17:59 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Channel.hpp"
 #include "../incs/Client.hpp"
 #include "../incs/Server.hpp"
-
-// FIXME: remember that all msg, topic reason etc have ':' at the beginning
 
 void Server::sendMsgToClient(Client *client, const std::string &target, std::string &msg) {
 	std::map<int, Client*>::iterator	clientIT = this->_clients.begin();

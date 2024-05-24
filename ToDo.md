@@ -1,11 +1,10 @@
 # To-Do's for `ft_irc`
 
 ## Fix 🛠️
-- [ ] "Channel #name modes: " printa male, non si capisce niente -> automatico???
+- [x] "Channel #name modes: " printa male, non si capisce niente -> automatico???
 - [ ] setting channel limit through button also prints active modes in channel -> check
 - [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
-- [ ] no issues if -k has a key specified, is it correct? should we add some sort of notice?
-- [ ] go over all highlighted comments and fix them
+- [ ] test /INVITE with wrong username and also with no channel name
 
 ## Check 🔍
 - [x] mode +i
@@ -98,3 +97,5 @@
 		terminate called after throwing an instance of 'std::logic_error'
 		what():  basic_string::_M_construct null not valid
 		[1]    69739 abort (core dumped)  ./ircserv 8080 topolo
+- [x] go over all highlighted comments and fix them
+- [x] no issues if -k has a key specified, is it correct?

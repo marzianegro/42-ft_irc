@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:59 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/17 10:39:27 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:18:01 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,6 @@ void Server::parseUser(Client *client, std::string msg) {
 	std::getline(ssmsg, realname);
 
 	this->user(client, username, realname);
-}
-
-void Server::parseOper(Client *client, std::string msg) {
-	// TODO: lo implentiamo? // REVIEW: cos'è?
-	(void)client;
-	(void)msg;
 }
 
 void Server::parsePart(Client *client, std::string msg) {

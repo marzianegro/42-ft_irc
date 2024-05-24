@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 12:21:09 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:13:42 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ private:
 	void	parseMode(Client *client, std::string msg);
 	void	parseQuit(Client *client, std::string msg);
 	void	parseUser(Client *client, std::string msg);
-	void	parseOper(Client *client, std::string msg);
 	void	parsePart(Client *client, std::string msg);
 	void	parseWho(Client *client, std::string mask);
 

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:34:28 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 12:48:40 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 20:59:31 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ std::string errPasswdMismatch(const std::string &clientName) {
 
 std::string errNeedMoreParams(const std::string &clientName, const std::string &command) {
 	return (":gerboa 461 " + clientName + " " + command + " :Not enough parameters");
-} // REVIEW: Da aggiungere il nome canale?
+}
 
 std::string errChannelIsFull(const std::string &channelName, const std::string &clientName) {
 	return (":gerboa 471 " + clientName + " #" + channelName + " :Cannot join channel (+l)");

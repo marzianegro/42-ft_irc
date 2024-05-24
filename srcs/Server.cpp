@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/21 15:32:08 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:06:22 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ void	Server::startEpoll() {
 }
 
 void	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
-	// REVIEW: is this done in parser? if not, is it correct?
 	if (!invited || channel.empty()) {
 		this->_msg = errNeedMoreParams(inviter->getNickname(), "INVITE");
 	}
@@ -144,9 +143,8 @@ void	Server::invite(Client *inviter, Client *invited, const std::string &channel
 	std::map<int, Client*>::iterator			it_client = this->_clients.find(invited->getSocket());
 
 	if (it_client == this->_clients.end()) {
-		// REVIEW: if invited is null, it means they're not connected (to the server?)
 		this->findClientByNick(invited->getNickname());
-		this->_msg = "Invited client is not on server";
+		this->_msg = errNoSuchNick(inviter->getNickname(), invited->getNickname());
 	}
 
 	if (it_chan == this->_channels.end()) {

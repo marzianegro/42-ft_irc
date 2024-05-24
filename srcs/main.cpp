@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 10:34:21 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 11:27:25 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 16:34:55 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ int	checkPort(std::string portStr) {
 	}
 	return (port);
 }
-
-// bool serverOn;
 
 int	main(int ac, char **av) {
 	checkArgs(ac);

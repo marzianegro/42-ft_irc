@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:58:43 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 12:08:01 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:09:27 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void 	Server::oModeUnset(const std::vector<std::string> &mode, Channel *channel,
 					channel->oModeUnset(it_user->second);
 					this->_msg = ":" + user->getNickname() + " MODE #" + channel->getName() + " -o " + it_user->second->getNickname();
 				} else if (channel->findUser(it_user->second) && !channel->isOperator(it_user->second)) {
-					this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :" + it_user->second->getNickname() + "is not a channel operator";
+					this->_msg = ":" + user->getNickname() + " NOTICE #" + channel->getName() + " :" + it_user->second->getNickname() + " is not a channel operator";
 				} else if (!channel->findUser(it_user->second)) {
 					this->_msg = errUserNotInChannel(channel->getName(), user->getNickname(), it_user->second->getNickname());
 				}

@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:05:47 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/23 12:20:19 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 21:13:42 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ class Client;
 class	Channel {
 
 public:
-	// REVIEW: for these constructors whoOperator cannot be const, as we need to be able to modify its data in Channel -> wtf?
 	Channel(Client *creator, const std::string &name);
 	Channel(Client *creator, const std::string &name, const std::string &key);
 	Channel(const Channel &src); // ocf copy constructor
@@ -56,9 +55,6 @@ public:
 	bool		isInvited(Client *user);
 	void		invitedJoining(Client *user);
 	std::string	noModeOp();
-
-	// void		genaralMsg(Client *user, const std::string &msg); // TODO: maybe
-	// void		operatorMsg(Client *user, const std::string &msg); // TODO: maybe
 
 	void		iModeSet();
 	void		tModeSet();
