@@ -1,10 +1,6 @@
 # To-Do's for `ft_irc`
 
 ## Fix 🛠️
-- [x] "Channel #name modes: " printa male, non si capisce niente -> automatico???
-- [ ] setting channel limit through button also prints active modes in channel -> check
-- [ ] run `valgrind --leak-check=full --show-leak-kinds=all`
-- [ ] test /INVITE with wrong username and also with no channel name
 
 ## Check 🔍
 - [x] mode +i
@@ -99,3 +95,7 @@
 		[1]    69739 abort (core dumped)  ./ircserv 8080 topolo
 - [x] go over all highlighted comments and fix them
 - [x] no issues if -k has a key specified, is it correct?
+- [x] "Channel #name modes: " printa male, non si capisce niente -> automatico???
+- [x] setting channel limit through button also prints active modes in channel -> check
+- [x] test /INVITE with wrong username and also with no channel name
+- [x] run `valgrind --leak-check=full --show-leak-kinds=all`

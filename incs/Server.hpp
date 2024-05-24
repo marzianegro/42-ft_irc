@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:21:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 21:13:42 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 23:10:44 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ private:
 	void	newClientConnection();
 	void	clientEvent(epoll_event &event);
 	void	consoleEvent();
-	void	execCmd(const std::string &msg, Client *client);
+	bool	execCmd(const std::string &msg, Client *client);
 	bool	checkPw(const std::string &pw);
 	bool	checkNicknames(const std::string &nickname);
 	bool	checkUsernames(const std::string &username);

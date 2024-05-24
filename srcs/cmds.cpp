@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 21:17:59 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 23:43:56 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ void Server::mode(Client *user, const std::string &chName, const std::vector<std
 
 	if (!this->_msg.empty()) {
 		ftSend(user->getSocket(), this->_msg);
-	}	
+	}
 }
 
 void Server::nick(Client *client, const std::string &newNick) {

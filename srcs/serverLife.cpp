@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverLife.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 21:17:59 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 23:09:59 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,9 @@ void Server::clientEvent(epoll_event &event) {
 		it->second->fillBuffer(buffer);
 		msg = it->second->readBuffer();
 		while (!msg.empty()) {
-			// FIXME: problem is here!!!
-			this->execCmd(msg, it->second);
+			if (this->execCmd(msg, it->second)) {
+				break;
+			}
 			msg = it->second->readBuffer();
 		}
 	}
@@ -121,7 +122,7 @@ void	Server::runEpoll() {
 	}
 }
 
-void Server::execCmd(const std::string &msg, Client *client) {
+bool Server::execCmd(const std::string &msg, Client *client) {
 	this->_msg = "";
 
 	std::cout << "in execution: " << msg << std::endl;
@@ -134,7 +135,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 	cmd = msg.substr(0, pos);
 
 	if (cmd == "CAP") {
-		return ;
+		return false;
 	} else if (!client->getAuth()) {
 		if (cmd == "PASS") {
 			if (this->checkPw(msg.substr(pos + 1))) {
@@ -147,7 +148,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			ftSend(client->getSocket(), this->_msg);
 			this->clientDisconnect(client, false);
 		}
-		return ;
+		return false;
 	}
 
 	int cmdPos = 0;
@@ -179,7 +180,7 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			break;
 		case 6:
 			this->parseQuit(client, msg.substr(pos+1));
-			break;
+			return true;
 		case 7:
 			this->nick(client, msg.substr(pos+1));
 			break;
@@ -204,4 +205,5 @@ void Server::execCmd(const std::string &msg, Client *client) {
 			ftSend(client->getSocket(), this->_msg);
 			break;
 	}
+	return false;
 }

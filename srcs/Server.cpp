@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 21:06:22 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 23:43:52 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,17 +135,14 @@ void	Server::startEpoll() {
 }
 
 void	Server::invite(Client *inviter, Client *invited, const std::string &channel) {
-	if (!invited || channel.empty()) {
+	
+	if (channel.empty()) {
 		this->_msg = errNeedMoreParams(inviter->getNickname(), "INVITE");
+		ftSend(inviter->getSocket(), this->_msg);
+		return;
 	}
 	
 	std::map<std::string, Channel*>::iterator	it_chan = this->_channels.find(channel);
-	std::map<int, Client*>::iterator			it_client = this->_clients.find(invited->getSocket());
-
-	if (it_client == this->_clients.end()) {
-		this->findClientByNick(invited->getNickname());
-		this->_msg = errNoSuchNick(inviter->getNickname(), invited->getNickname());
-	}
 
 	if (it_chan == this->_channels.end()) {
 		this->_msg = errNoSuchChannel(it_chan->second->getName(), inviter->getNickname());

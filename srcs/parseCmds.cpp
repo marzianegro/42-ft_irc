@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:59 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 21:18:01 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/24 23:43:52 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,11 @@ void Server::parseInvite(Client *client, std::string msg) {
 	std::getline(ssmsg, channel);
 
 	invited = this->findClientByNick(nickname);
-	
-	if (!isChannelValid(channel)) {
+
+	if (!invited) {
+		this->_msg = errNoSuchNick(client->getNickname(), nickname);
+		ftSend(client->getSocket(), this->_msg);
+	} else if (!isChannelValid(channel)) {
 		this->_msg = errNoSuchChannel(channel, client->getNickname());
 		ftSend(client->getSocket(), this->_msg);
 	} else {
