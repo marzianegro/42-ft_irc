@@ -6,7 +6,7 @@
 /*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:00:37 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 23:43:56 by mnegro           ###   ########.fr       */
+/*   Updated: 2024/05/25 13:34:27 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void	Server::join(Client *user, std::string &chName, const std::string &key) {
 
 	if (this->_msg.empty()) {
 		it_chan = this->_channels.find(chName);
+		user->addChannel(chName);
 		if (chanExist) {
-			user->addChannel(chName);
 			it_chan->second->upCount();
 			it_chan->second->invitedJoining(user);
 			it_chan->second->addUser(user);

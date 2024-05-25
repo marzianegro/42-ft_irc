@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverLife.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiannit <ggiannit@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: mnegro <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 11:28:10 by mnegro            #+#    #+#             */
-/*   Updated: 2024/05/24 23:09:59 by ggiannit         ###   ########.fr       */
+/*   Updated: 2024/05/25 13:34:26 by mnegro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void Server::clientEvent(epoll_event &event) {
 		std::cout << "Connection closed by the client\n";
 		std::map<int, Client*>::iterator	it = this->_clients.find(event.data.fd);
         if (it != this->_clients.end()) {
+			std::cout << "Now disconnect the client " << it->second->getNickname() << "\n";
 			this->clientDisconnect(it->second, false);
 		}
 	} else if (byteRecv == -1) {
@@ -141,12 +142,15 @@ bool Server::execCmd(const std::string &msg, Client *client) {
 			if (this->checkPw(msg.substr(pos + 1))) {
 				client->setAuth(true);
 			} else {
+				this->_msg = errPasswdMismatch("unknown user");
+				ftSend(client->getSocket(), this->_msg);
 				this->clientDisconnect(client, false);
+				return true;
 			}
 		} else {
 			this->_msg = errNotRegistered();
 			ftSend(client->getSocket(), this->_msg);
-			this->clientDisconnect(client, false);
+			// this->clientDisconnect(client, false);
 		}
 		return false;
 	}
